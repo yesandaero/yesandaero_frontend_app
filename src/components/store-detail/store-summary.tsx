@@ -17,9 +17,6 @@ export function StoreSummary({ distance }: StoreSummaryProps) {
         <InfoBadge>
           <InfoText>{distance}</InfoText>
         </InfoBadge>
-        <DiscountBadge>
-          <DiscountText>🏷️ 할인 진행중</DiscountText>
-        </DiscountBadge>
         <InfoBadge>
           <InfoText>혼밥 가능</InfoText>
         </InfoBadge>

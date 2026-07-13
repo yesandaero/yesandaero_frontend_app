@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
 
-export type AppTab = "home" | "coupon" | "like";
+export type AppTab = "home" | "coupon";
 
 type AppBottomNavigationProps = {
   activeTab?: AppTab;
@@ -15,11 +15,10 @@ const TAB_ITEMS: {
   key: AppTab;
   icon: string;
   label: string;
-  route: "/tab/FoodStores" | "/tab/Coupon" | "/tab/Like";
+  route: "/tab/FoodStores" | "/tab/Coupon";
 }[] = [
   { key: "home", icon: "🏠", label: "홈", route: "/tab/FoodStores" },
   { key: "coupon", icon: "🎟️", label: "쿠폰함", route: "/tab/Coupon" },
-  { key: "like", icon: "❤️", label: "좋아요", route: "/tab/Like" },
 ];
 
 export function AppBottomNavigation({ activeTab }: AppBottomNavigationProps) {
@@ -61,7 +60,7 @@ const Navigation = styled.View<{ $bottomInset: number }>`
 `;
 
 const NavigationItem = styled.Pressable`
-  min-width: 76px;
+  flex: 1;
   align-items: center;
   justify-content: center;
 `;
