@@ -83,15 +83,12 @@ export default function Location() {
               onStartEditing={handleStartEditing}
             />
           </CardOverlap>
-
-          <FlexibleSpace />
-
-          <LocationNextButton
-            disabled={!selectedLocation || isLocating}
-            onPress={handleNext}
-          />
         </Content>
       </ScreenScroll>
+      <LocationNextButton
+        disabled={!selectedLocation || isLocating}
+        onPress={handleNext}
+      />
       <LocationBottomNavigation />
     </Page>
   );
@@ -121,9 +118,4 @@ const CardOverlap = styled.View`
   z-index: 2;
   margin-top: -38px;
   padding: 0 18px;
-`;
-
-const FlexibleSpace = styled.View`
-  flex: 1;
-  min-height: 18px;
 `;

@@ -20,14 +20,18 @@ export function LocationNextButton({
         onPress={onPress}
         $disabled={disabled}
       >
-        <ButtonText>다음: 예산 설정</ButtonText>
+        <ButtonText>다음 단계</ButtonText>
       </Button>
     </Container>
   );
 }
 
 const Container = styled.View`
-  padding: 0 20px 12px;
+  width: 100%;
+  max-width: 460px;
+  align-self: center;
+  padding: 10px 20px 12px;
+  background-color: ${locationColors.background};
 `;
 
 const Button = styled.Pressable<{ $disabled: boolean }>`
