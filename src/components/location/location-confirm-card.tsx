@@ -2,7 +2,7 @@ import React from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 
-import { locationColors } from "./location-theme";
+import { colors } from "@/constants/color";
 
 type LocationConfirmCardProps = {
   address: string;
@@ -38,7 +38,7 @@ export function LocationConfirmCard({
           onChangeText={onDraftAddressChange}
           onSubmitEditing={onConfirm}
           placeholder="예: 대학로 99"
-          placeholderTextColor="#AA9C7A"
+          placeholderTextColor={colors.neutral500}
           returnKeyType="done"
           value={draftAddress}
         />
@@ -54,7 +54,7 @@ export function LocationConfirmCard({
           $disabled={isConfirmDisabled}
         >
           {isLoading ? (
-            <ActivityIndicator color="#FFFFFF" />
+            <ActivityIndicator color={colors.neutral0} />
           ) : (
             <ConfirmButtonText>
               {isEditing ? "주소 검색" : "현재 위치 새로고침"}
@@ -79,12 +79,12 @@ const Card = styled.View`
   min-height: 140px;
   padding: 17px 18px 16px;
   border-radius: 20px;
-  background-color: ${locationColors.card};
-  box-shadow: 0 12px 28px rgba(100, 70, 12, 0.13);
+  background-color: ${colors.neutral0};
+  box-shadow: 0 12px 28px ${colors.primary200};
 `;
 
 const Label = styled.Text`
-  color: ${locationColors.muted};
+  color: ${colors.primary700};
   font-size: 13px;
   font-weight: 600;
   line-height: 18px;
@@ -93,7 +93,7 @@ const Label = styled.Text`
 
 const Address = styled.Text`
   margin-top: 4px;
-  color: ${locationColors.goldDark};
+  color: ${colors.primary900};
   font-size: 19px;
   font-weight: 800;
   line-height: 25px;
@@ -104,10 +104,10 @@ const AddressInput = styled.TextInput`
   height: 40px;
   margin-top: 5px;
   padding: 0 12px;
-  border: 1px solid ${locationColors.outline};
+  border: 1px solid ${colors.primary200};
   border-radius: 12px;
-  color: ${locationColors.text};
-  background-color: #fffdf8;
+  color: ${colors.neutral900};
+  background-color: ${colors.neutral50};
   font-size: 15px;
   font-weight: 600;
 `;
@@ -126,11 +126,11 @@ const ConfirmButton = styled.Pressable<{ $disabled: boolean }>`
   padding: 0 10px;
   border-radius: 24px;
   opacity: ${({ $disabled }) => ($disabled ? 0.45 : 1)};
-  background-color: ${locationColors.gold};
+  background-color: ${colors.primary700};
 `;
 
 const ConfirmButtonText = styled.Text`
-  color: #ffffff;
+  color: ${colors.neutral0};
   font-size: 14px;
   font-weight: 800;
   line-height: 19px;
@@ -143,13 +143,13 @@ const ManualButton = styled.Pressable`
   align-items: center;
   justify-content: center;
   padding: 0 10px;
-  border: 2px solid ${locationColors.outline};
+  border: 2px solid ${colors.primary200};
   border-radius: 24px;
-  background-color: #ffffff;
+  background-color: ${colors.neutral0};
 `;
 
 const ManualButtonText = styled.Text`
-  color: ${locationColors.muted};
+  color: ${colors.primary700};
   font-size: 14px;
   font-weight: 800;
   line-height: 19px;

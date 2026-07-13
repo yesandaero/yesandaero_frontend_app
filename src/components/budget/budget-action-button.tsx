@@ -3,15 +3,15 @@ import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
 
-type LocationNextButtonProps = {
+type BudgetActionButtonProps = {
   disabled?: boolean;
   onPress: () => void;
 };
 
-export function LocationNextButton({
+export function BudgetActionButton({
   disabled = false,
   onPress,
-}: LocationNextButtonProps) {
+}: BudgetActionButtonProps) {
   return (
     <Container>
       <Button
@@ -20,7 +20,7 @@ export function LocationNextButton({
         onPress={onPress}
         $disabled={disabled}
       >
-        <ButtonText>다음 단계</ButtonText>
+        <ButtonText>이 설정으로 맛집 찾기</ButtonText>
       </Button>
     </Container>
   );
@@ -28,9 +28,9 @@ export function LocationNextButton({
 
 const Container = styled.View`
   width: 100%;
-  max-width: 460px;
+  max-width: 400px;
   align-self: center;
-  padding: 10px 20px 12px;
+  padding: 8px 20px 10px;
   background-color: ${colors.primary50};
 `;
 
@@ -45,7 +45,7 @@ const Button = styled.Pressable<{ $disabled: boolean }>`
 
 const ButtonText = styled.Text`
   color: ${colors.neutral0};
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 800;
   line-height: 23px;
 `;

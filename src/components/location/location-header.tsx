@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 
-import { locationColors } from "./location-theme";
+import { colors } from "@/constants/color";
 
 export function LocationHeader() {
   return (
@@ -14,11 +14,11 @@ export function LocationHeader() {
 
 const Header = styled.View`
   padding: 16px 20px 13px;
-  background-color: ${locationColors.background};
+  background-color: ${colors.primary50};
 `;
 
 const Title = styled.Text`
-  color: ${locationColors.goldDark};
+  color: ${colors.primary900};
   font-size: 25px;
   font-weight: 800;
   line-height: 32px;
@@ -27,7 +27,7 @@ const Title = styled.Text`
 
 const Description = styled.Text`
   margin-top: 2px;
-  color: ${locationColors.muted};
+  color: ${colors.primary700};
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;

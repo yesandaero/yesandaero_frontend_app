@@ -8,7 +8,7 @@ import { LocationConfirmCard } from "@/components/location/location-confirm-card
 import { LocationHeader } from "@/components/location/location-header";
 import { LocationMapPreview } from "@/components/location/location-map-preview";
 import { LocationNextButton } from "@/components/location/location-next-button";
-import { locationColors } from "@/components/location/location-theme";
+import { colors } from "@/constants/color";
 import { useRoadAddress } from "@/hooks/use-road-address";
 
 export default function Location() {
@@ -96,14 +96,14 @@ export default function Location() {
 
 const Page = styled.View`
   flex: 1;
-  background-color: ${locationColors.background};
+  background-color: ${colors.primary50};
 `;
 
 const ScreenScroll = styled(ScrollView).attrs({
   contentContainerStyle: { flexGrow: 1 },
 })`
   flex: 1;
-  background-color: ${locationColors.background};
+  background-color: ${colors.primary50};
 `;
 
 const Content = styled.View`
@@ -111,7 +111,7 @@ const Content = styled.View`
   width: 100%;
   max-width: 460px;
   align-self: center;
-  background-color: ${locationColors.background};
+  background-color: ${colors.primary50};
 `;
 
 const CardOverlap = styled.View`

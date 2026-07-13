@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
 
-import { locationColors } from "./location-theme";
+import { colors } from "@/constants/color";
 
 type LocationMapPreviewProps = {
   coordinate: {
@@ -25,7 +25,7 @@ const MapFallback = styled.View`
   align-items: center;
   justify-content: center;
   gap: 5px;
-  background-color: ${locationColors.map};
+  background-color: ${colors.primary50};
 `;
 
 const Pin = styled.Text`
@@ -33,7 +33,7 @@ const Pin = styled.Text`
 `;
 
 const FallbackText = styled.Text`
-  color: ${locationColors.muted};
+  color: ${colors.primary700};
   font-size: 14px;
   font-weight: 600;
 `;

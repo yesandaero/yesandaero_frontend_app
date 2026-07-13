@@ -2,6 +2,8 @@ import type { PropsWithChildren, ReactNode } from "react";
 import { KeyboardAvoidingView, ScrollView } from "react-native";
 import styled from "styled-components/native";
 
+import { colors } from "@/constants/color";
+
 interface AuthPageLayoutProps extends PropsWithChildren {
   title: ReactNode;
   footer: ReactNode;
@@ -15,7 +17,7 @@ export default function AuthPageLayout({
   return (
     <KeyboardAvoidingView
       behavior={process.env.EXPO_OS === "ios" ? "padding" : undefined}
-      style={{ flex: 1, backgroundColor: "#FFFFFF" }}
+      style={{ flex: 1, backgroundColor: colors.neutral0 }}
     >
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"

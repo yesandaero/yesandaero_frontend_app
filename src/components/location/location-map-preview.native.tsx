@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import MapView, { Circle, Marker } from "react-native-maps";
 import styled from "styled-components/native";
 
-import { locationColors } from "./location-theme";
+import { colors } from "@/constants/color";
 
 type LocationMapPreviewProps = {
   coordinate: {
@@ -57,14 +57,14 @@ export function LocationMapPreview({ coordinate }: LocationMapPreviewProps) {
       >
         <Circle
           center={coordinate}
-          fillColor="rgba(155, 98, 0, 0.12)"
+          fillColor={colors.primary100}
           radius={80}
-          strokeColor="rgba(155, 98, 0, 0.32)"
+          strokeColor={colors.primary300}
           strokeWidth={1}
         />
         <Marker
           coordinate={coordinate}
-          pinColor={locationColors.gold}
+          pinColor={colors.primary700}
           title="대덕소프트웨어마이스터고등학교"
         />
       </MapView>
@@ -75,18 +75,18 @@ export function LocationMapPreview({ coordinate }: LocationMapPreviewProps) {
 const MapContainer = styled.View`
   height: 250px;
   overflow: hidden;
-  background-color: ${locationColors.map};
+  background-color: ${colors.primary50};
 `;
 
 const LoadingMap = styled.View`
   height: 250px;
   align-items: center;
   justify-content: center;
-  background-color: ${locationColors.map};
+  background-color: ${colors.primary50};
 `;
 
 const LoadingText = styled.Text`
-  color: ${locationColors.muted};
+  color: ${colors.primary700};
   font-size: 14px;
   font-weight: 600;
 `;

@@ -26,7 +26,7 @@ const ErrorCard = styled.View`
   padding: 14px 18px;
   border-radius: 14px;
   background-color: ${colors.primary800};
-  box-shadow: 0 8px 24px rgba(156, 28, 28, 0.28);
+  box-shadow: 0 8px 24px ${colors.primary300};
 `;
 
 const ErrorIcon = styled.View`
@@ -35,7 +35,7 @@ const ErrorIcon = styled.View`
   align-items: center;
   justify-content: center;
   border-radius: 13px;
-  background-color: rgba(255, 255, 255, 0.18);
+  background-color: ${colors.primary600};
 `;
 
 const ErrorIconText = styled.Text`

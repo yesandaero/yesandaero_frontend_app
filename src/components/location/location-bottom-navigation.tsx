@@ -2,7 +2,7 @@ import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
-import { locationColors } from "./location-theme";
+import { colors } from "@/constants/color";
 
 export function LocationBottomNavigation() {
   const insets = useSafeAreaInsets();
@@ -29,8 +29,8 @@ const Navigation = styled.View<{ $bottomInset: number }>`
   justify-content: space-around;
   padding: 6px 32px ${({ $bottomInset }) => Math.max($bottomInset, 6)}px;
   border-top-width: 1px;
-  border-top-color: ${locationColors.outline};
-  background-color: #ffffff;
+  border-top-color: ${colors.primary200};
+  background-color: ${colors.neutral0};
 `;
 
 const NavigationItem = styled.View`
@@ -46,14 +46,14 @@ const Icon = styled.Text`
 
 const InactiveLabel = styled.Text`
   margin-top: 2px;
-  color: ${locationColors.muted};
+  color: ${colors.neutral600};
   font-size: 12px;
   font-weight: 700;
 `;
 
 const ActiveLabel = styled.Text`
   margin-top: 2px;
-  color: ${locationColors.goldDark};
+  color: ${colors.primary800};
   font-size: 12px;
   font-weight: 800;
 `;
