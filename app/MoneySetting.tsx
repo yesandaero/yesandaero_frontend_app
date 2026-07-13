@@ -42,6 +42,10 @@ export default function MoneySetting() {
     });
   };
 
+  const handleBackPress = () => {
+    router.replace(isSettingsFlow ? "/tab/Setting" : "/Location");
+  };
+
   return (
     <Page>
       <ContentScroll
@@ -51,7 +55,7 @@ export default function MoneySetting() {
         showsVerticalScrollIndicator={false}
       >
         <Content>
-          <BudgetHeader onBackPress={() => router.back()} />
+          <BudgetHeader onBackPress={handleBackPress} />
           <BudgetSelector budget={budget} onBudgetChange={handleBudgetChange} />
         </Content>
       </ContentScroll>

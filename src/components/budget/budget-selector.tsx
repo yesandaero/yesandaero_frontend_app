@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
 
-const BUDGET_PRESETS = [8000, 15000, 25000, 40000];
+const BUDGET_PRESETS = [5000, 10000, 15000, 20000, 25000];
 
 type BudgetSelectorProps = {
   budget: string;
@@ -76,8 +76,8 @@ const AmountInput = styled.TextInput`
   flex: 1;
   padding: 0;
   color: ${colors.primary700};
-  font-size: 26px;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 700;
   display: flex;
   justify-content: center;
   text-align: right;
