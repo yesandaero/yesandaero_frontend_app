@@ -15,7 +15,12 @@ export function FoodCategoryFilter({
   onSelectCategory,
 }: FoodCategoryFilterProps) {
   return (
-    <CategoryScroll horizontal showsHorizontalScrollIndicator={false}>
+    <CategoryScroll
+      directionalLockEnabled
+      horizontal
+      nestedScrollEnabled
+      showsHorizontalScrollIndicator={false}
+    >
       {FOOD_CATEGORIES.map((category) => {
         const isSelected = category === selectedCategory;
 
@@ -36,8 +41,13 @@ export function FoodCategoryFilter({
 }
 
 const CategoryScroll = styled(ScrollView).attrs({
-  contentContainerStyle: { gap: 8 },
+  contentContainerStyle: {
+    flexGrow: 1,
+    gap: 8,
+    paddingRight: 16,
+  },
 })`
+  width: 100%;
   flex-grow: 0;
   margin-bottom: 12px;
 `;

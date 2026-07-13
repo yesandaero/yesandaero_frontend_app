@@ -70,10 +70,14 @@ export default function FoodStores() {
             onSelectCategory={setSelectedCategory}
           />
           <FoodSearchField value={query} onChangeText={setQuery} />
-          <FoodSortFilter
-            selectedSort={selectedSort}
-            onSelectSort={setSelectedSort}
-          />
+          {viewMode === "list" ? (
+            <FoodSortFilter
+              selectedSort={selectedSort}
+              onSelectSort={setSelectedSort}
+            />
+          ) : (
+            <FilterSpacer />
+          )}
           <FoodViewToggle viewMode={viewMode} onChangeViewMode={setViewMode} />
 
           {viewMode === "map" ? (
@@ -106,4 +110,8 @@ const Content = styled.View`
   max-width: 460px;
   align-self: center;
   padding: 14px 16px 24px;
+`;
+
+const FilterSpacer = styled.View`
+  height: 10px;
 `;

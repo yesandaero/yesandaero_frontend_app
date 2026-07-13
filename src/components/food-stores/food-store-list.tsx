@@ -12,7 +12,6 @@ export function FoodStoreList({ stores }: FoodStoreListProps) {
   if (stores.length === 0) {
     return (
       <EmptyCard>
-        <EmptyEmoji>🍽️</EmptyEmoji>
         <EmptyTitle>조건에 맞는 맛집이 없어요</EmptyTitle>
         <EmptyDescription>카테고리나 검색어를 바꿔보세요.</EmptyDescription>
       </EmptyCard>

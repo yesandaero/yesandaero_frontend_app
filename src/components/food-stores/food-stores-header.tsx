@@ -8,20 +8,19 @@ type FoodStoresHeaderProps = {
   onBackPress: () => void;
 };
 
-export function FoodStoresHeader({ budget, onBackPress }: FoodStoresHeaderProps) {
+export function FoodStoresHeader({
+  budget,
+  onBackPress,
+}: FoodStoresHeaderProps) {
   return (
     <Header>
-      <BackButton accessibilityLabel="이전 화면으로 이동" onPress={onBackPress}>
-        <BackIcon>‹</BackIcon>
-      </BackButton>
-
       <TitleGroup>
         <Title>근처 맛집</Title>
         <Subtitle>{budget.toLocaleString()}원 이하 · 거리순 정렬</Subtitle>
       </TitleGroup>
 
       <BudgetBadge accessibilityLabel={`예산 ${budget.toLocaleString()}원`}>
-        <BudgetText>💰 {budget.toLocaleString()}원</BudgetText>
+        <BudgetText> {budget.toLocaleString()}원</BudgetText>
       </BudgetBadge>
     </Header>
   );

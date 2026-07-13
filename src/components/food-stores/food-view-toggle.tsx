@@ -20,14 +20,14 @@ export function FoodViewToggle({
         $selected={viewMode === "map"}
         onPress={() => onChangeViewMode("map")}
       >
-        <ToggleText $selected={viewMode === "map"}>🗺️ 지도로 보기</ToggleText>
+        <ToggleText $selected={viewMode === "map"}>지도로 보기</ToggleText>
       </ToggleButton>
       <ToggleButton
         accessibilityState={{ selected: viewMode === "list" }}
         $selected={viewMode === "list"}
         onPress={() => onChangeViewMode("list")}
       >
-        <ToggleText $selected={viewMode === "list"}>📋 목록으로 보기</ToggleText>
+        <ToggleText $selected={viewMode === "list"}>목록으로 보기</ToggleText>
       </ToggleButton>
     </Container>
   );
