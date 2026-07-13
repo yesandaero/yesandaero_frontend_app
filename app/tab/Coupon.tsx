@@ -16,7 +16,6 @@ export default function Coupon() {
   const [isScannerVisible, setIsScannerVisible] = useState(false);
   const [isSuccessVisible, setIsSuccessVisible] = useState(false);
   const [isCouponRegistered, setIsCouponRegistered] = useState(false);
-  const [isCouponUsed, setIsCouponUsed] = useState(false);
 
   const handleRecognizeQr = () => {
     setIsScannerVisible(false);
@@ -26,7 +25,6 @@ export default function Coupon() {
   const handleRegisterCoupon = () => {
     setIsSuccessVisible(false);
     setIsCouponRegistered(true);
-    setIsCouponUsed(false);
 
     if (process.env.EXPO_OS === "ios") {
       void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -34,9 +32,7 @@ export default function Coupon() {
   };
 
   const handleUseCoupon = () => {
-    if (isCouponUsed) return;
-
-    setIsCouponUsed(true);
+    setIsCouponRegistered(false);
     Toast.show({ type: "success", text1: "사용됐습니다!" });
 
     if (process.env.EXPO_OS === "ios") {
@@ -54,7 +50,7 @@ export default function Coupon() {
           <CouponHeader onScanPress={() => setIsScannerVisible(true)} />
 
           {isCouponRegistered ? (
-            <CouponCard isUsed={isCouponUsed} onUsePress={handleUseCoupon} />
+            <CouponCard onUsePress={handleUseCoupon} />
           ) : (
             <CouponEmptyState />
           )}
