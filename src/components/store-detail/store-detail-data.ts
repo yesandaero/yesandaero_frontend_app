@@ -29,7 +29,7 @@ export const STORE_DETAIL: StoreDetailResponse = {
   storeId: 10,
   name: "시흔식당",
   category: "KOREAN",
-  address: "대전시 유성구 ...",
+  address: "대전시 유성구 유성북로",
   latitude: 36.3624,
   longitude: 127.3568,
   phone: "042-000-0000",

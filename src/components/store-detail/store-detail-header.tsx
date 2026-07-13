@@ -24,7 +24,6 @@ export function StoreDetailHeader({
         >
           <BackIcon>‹</BackIcon>
         </BackButton>
-        <FoodEmoji accessibilityLabel="대표 메뉴">🍚</FoodEmoji>
       </TopRow>
 
       <TitleGroup>
@@ -36,7 +35,7 @@ export function StoreDetailHeader({
 }
 
 const Header = styled.View`
-  min-height: 284px;
+  min-height: 200px;
   justify-content: space-between;
   padding: ${screenLayout.topPadding}px ${screenLayout.horizontalPadding}px 30px;
   background-color: ${colors.primary900};

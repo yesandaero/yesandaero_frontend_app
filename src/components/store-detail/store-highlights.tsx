@@ -35,7 +35,7 @@ export function StoreHighlights({
       <BadgeRow>
         <Badge>
           <BadgeText selectable>
-            🕘 {openTime} ~ {closeTime}
+            {openTime} ~ {closeTime}
           </BadgeText>
         </Badge>
         <Badge>
@@ -48,7 +48,7 @@ export function StoreHighlights({
       {maxDiscountRate > 0 ? (
         <DiscountBanner>
           <DiscountText selectable>
-            🏷️ 메뉴 최대 {maxDiscountRate}% 할인
+            메뉴 최대 {maxDiscountRate}% 할인
           </DiscountText>
         </DiscountBanner>
       ) : null}
@@ -56,7 +56,7 @@ export function StoreHighlights({
       {usableCouponCount > 0 ? (
         <CouponBadge>
           <CouponText selectable>
-            🎟️ 사용 가능한 쿠폰 {usableCouponCount}장
+            사용 가능한 쿠폰 {usableCouponCount}장
           </CouponText>
         </CouponBadge>
       ) : null}
@@ -101,6 +101,7 @@ const DiscountText = styled.Text`
   color: ${colors.primary900};
   font-size: 17px;
   font-weight: 900;
+  padding-left: 10px;
 `;
 
 const CouponBadge = styled.View`

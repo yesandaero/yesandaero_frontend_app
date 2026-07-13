@@ -21,7 +21,7 @@ export function StoreDirections({
     <Section>
       <SectionTitle>길찾기</SectionTitle>
       <ButtonRow>
-        <MapButton
+        <NaverButton
           accessibilityLabel="네이버 지도에서 길찾기"
           onPress={() =>
             void Linking.openURL(
@@ -30,8 +30,8 @@ export function StoreDirections({
           }
         >
           <ButtonText>네이버 지도</ButtonText>
-        </MapButton>
-        <MapButton
+        </NaverButton>
+        <CaCaoButton
           accessibilityLabel="카카오맵에서 길찾기"
           onPress={() =>
             void Linking.openURL(
@@ -40,7 +40,7 @@ export function StoreDirections({
           }
         >
           <ButtonText>카카오맵</ButtonText>
-        </MapButton>
+        </CaCaoButton>
       </ButtonRow>
     </Section>
   );
@@ -62,13 +62,22 @@ const ButtonRow = styled.View`
   gap: 10px;
 `;
 
-const MapButton = styled.Pressable`
+const CaCaoButton = styled.Pressable`
   min-height: 54px;
   flex: 1;
   align-items: center;
   justify-content: center;
   border-radius: 16px;
-  background-color: ${colors.primary700};
+  background-color: #ffd900;
+`;
+
+const NaverButton = styled.Pressable`
+  min-height: 54px;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background-color: #00c900;
 `;
 
 const ButtonText = styled.Text`

@@ -54,6 +54,7 @@ const Section = styled.View`
 const SectionTitle = styled.Text`
   color: ${colors.primary900};
   font-size: 20px;
+  margin-top: 10px;
   font-weight: 900;
 `;
 

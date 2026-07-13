@@ -76,6 +76,7 @@ const SectionTitle = styled.Text`
   color: ${colors.primary900};
   font-size: 20px;
   font-weight: 900;
+  margin-top: 10px;
 `;
 
 const InformationCard = styled.View`
