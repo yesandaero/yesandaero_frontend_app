@@ -18,7 +18,6 @@ export function LogoutButton({ isLoading, onPress }: LogoutButtonProps) {
       onPress={onPress}
       $disabled={isLoading}
     >
-      <Icon>↪</Icon>
       <ButtonText>{isLoading ? "로그아웃 중..." : "로그아웃"}</ButtonText>
     </Button>
   );
