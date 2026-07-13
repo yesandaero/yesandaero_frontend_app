@@ -2,7 +2,6 @@ import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
-
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { StoreBudgetCard } from "@/components/store-detail/store-budget-card";
 import { STORE_DETAIL } from "@/components/store-detail/store-detail-data";

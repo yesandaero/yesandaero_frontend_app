@@ -23,3 +23,7 @@ export const loginUser = async ({ email, password }: LoginProps) => {
   });
   return response.data;
 };
+
+export const logoutUser = async (): Promise<void> => {
+  await api.post<void>("/auth/logout");
+};

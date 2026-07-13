@@ -3,11 +3,15 @@ import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
+import { LogoutButton } from "@/components/settings/logout-button";
 import { SettingsHeader } from "@/components/settings/settings-header";
 import { SettingsOptionCard } from "@/components/settings/settings-option-card";
 import { screenLayout } from "@/constants/layout";
+import { useLogout } from "@/hooks/use-logout";
 
 export default function Setting() {
+  const { logout, isLoggingOut } = useLogout();
+
   return (
     <Page>
       <ContentScroll
@@ -33,6 +37,7 @@ export default function Setting() {
               title="가격 다시 설정"
             />
           </OptionList>
+          <LogoutButton isLoading={isLoggingOut} onPress={logout} />
         </Content>
       </ContentScroll>
 
