@@ -1,9 +1,12 @@
-import React from 'react'
-import { View } from 'react-native'
+import { router } from "expo-router";
+import { useEffect } from "react";
 
 export default function index() {
-  return (
-    <View>index</View>
-  )
-}
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.replace("/Signup");
+    }, 1000);
 
+    return () => clearTimeout(timer);
+  }, []);
+}
