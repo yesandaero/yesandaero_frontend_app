@@ -34,6 +34,18 @@ export default function StoreDetail() {
       CAFE: "카페",
     }[STORE_DETAIL.category] ?? STORE_DETAIL.category;
 
+  const handleBackPress = () => {
+    if (router.canGoBack()) {
+      router.back();
+      return;
+    }
+
+    router.replace({
+      pathname: "/tab/FoodStores",
+      params: { budget: String(budget) },
+    });
+  };
+
   return (
     <Page>
       <ScreenScroll
@@ -44,7 +56,7 @@ export default function StoreDetail() {
           <StoreDetailHeader
             category={categoryLabel}
             name={STORE_DETAIL.name}
-            onBackPress={() => router.back()}
+            onBackPress={handleBackPress}
           />
           <StoreHighlights
             closeTime={STORE_DETAIL.closeTime}

@@ -49,6 +49,7 @@ export function AppBottomNavigation({ activeTab }: AppBottomNavigationProps) {
         return (
           <NavigationItem
             key={item.key}
+            $active={isActive}
             accessibilityLabel={item.label}
             accessibilityRole="tab"
             accessibilityState={{ selected: isActive }}

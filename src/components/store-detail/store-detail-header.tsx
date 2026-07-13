@@ -20,6 +20,8 @@ export function StoreDetailHeader({
       <TopRow>
         <BackButton
           accessibilityLabel="이전 화면으로 이동"
+          accessibilityRole="button"
+          hitSlop={12}
           onPress={onBackPress}
         >
           <BackIcon>‹</BackIcon>
@@ -61,11 +63,6 @@ const BackIcon = styled.Text`
   color: ${colors.neutral0};
   font-size: 32px;
   line-height: 34px;
-`;
-
-const FoodEmoji = styled.Text`
-  padding-right: 18px;
-  font-size: 70px;
 `;
 
 const TitleGroup = styled.View`
