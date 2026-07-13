@@ -7,20 +7,17 @@ import { colors } from "@/constants/color";
 type SettingsOptionCardProps = {
   description: string;
   href: Href;
-  icon: string;
   title: string;
 };
 
 export function SettingsOptionCard({
   description,
   href,
-  icon,
   title,
 }: SettingsOptionCardProps) {
   return (
     <Link href={href} asChild>
       <Card accessibilityLabel={title}>
-        <Icon>{icon}</Icon>
         <TextGroup>
           <Title>{title}</Title>
           <Description>{description}</Description>
@@ -36,17 +33,11 @@ const Card = styled.Pressable`
   flex-direction: row;
   align-items: center;
   gap: 14px;
-  padding: 18px;
+  padding: 25px;
   border-width: 1px;
   border-color: ${colors.primary200};
   border-radius: 18px;
   background-color: ${colors.neutral0};
-`;
-
-const Icon = styled.Text`
-  width: 42px;
-  font-size: 30px;
-  text-align: center;
 `;
 
 const TextGroup = styled.View`

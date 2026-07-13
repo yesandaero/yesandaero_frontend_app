@@ -24,7 +24,6 @@ export default function Setting() {
             <SettingsOptionCard
               description="도로명 주소와 지도 위치를 다시 선택해요."
               href={{ pathname: "/Location", params: { source: "settings" } }}
-              icon="📍"
               title="위치 다시 설정"
             />
             <SettingsOptionCard
@@ -33,7 +32,6 @@ export default function Setting() {
                 pathname: "/MoneySetting",
                 params: { source: "settings" },
               }}
-              icon="💰"
               title="가격 다시 설정"
             />
           </OptionList>

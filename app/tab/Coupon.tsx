@@ -18,8 +18,9 @@ import { useMyCoupons, useRegisterCoupon } from "@/hooks/use-coupons";
 
 export default function Coupon() {
   const [isScannerVisible, setIsScannerVisible] = useState(false);
-  const [registeredCoupon, setRegisteredCoupon] =
-    useState<CouponData | null>(null);
+  const [registeredCoupon, setRegisteredCoupon] = useState<CouponData | null>(
+    null,
+  );
   const [selectedCouponId, setSelectedCouponId] = useState<number | null>(null);
   const [usedCouponIds, setUsedCouponIds] = useState<number[]>([]);
   const { coupons, isError, isLoading, isRefetching, refetch } =
@@ -27,8 +28,7 @@ export default function Coupon() {
   const { registerCoupon, isRegistering } = useRegisterCoupon();
 
   const visibleCoupons = useMemo(
-    () =>
-      coupons.filter((coupon) => !usedCouponIds.includes(coupon.couponId)),
+    () => coupons.filter((coupon) => !usedCouponIds.includes(coupon.couponId)),
     [coupons, usedCouponIds],
   );
 
