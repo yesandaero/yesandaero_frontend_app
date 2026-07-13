@@ -71,9 +71,9 @@ const SuccessCard = styled.View`
 
 const Title = styled.Text`
   margin-top: 10px;
-  color: ${colors.primary900};
+  color: black;
   font-size: 19px;
-  font-weight: 900;
+  font-weight: 800;
   text-align: center;
 `;
 

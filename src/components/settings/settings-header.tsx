@@ -17,6 +17,7 @@ export function SettingsHeader() {
 const Header = styled.View`
   gap: 6px;
   padding: 12px 2px 18px;
+  background-color: white;
 `;
 
 const Title = styled.Text`

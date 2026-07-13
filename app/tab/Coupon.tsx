@@ -9,12 +9,14 @@ import { CouponEmptyState } from "@/components/coupon/coupon-empty-state";
 import { CouponHeader } from "@/components/coupon/coupon-header";
 import { CouponScanModal } from "@/components/coupon/coupon-scan-modal";
 import { CouponSuccessModal } from "@/components/coupon/coupon-success-modal";
+import { CouponUseConfirmModal } from "@/components/coupon/coupon-use-confirm-modal";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 
 export default function Coupon() {
   const [isScannerVisible, setIsScannerVisible] = useState(false);
   const [isSuccessVisible, setIsSuccessVisible] = useState(false);
   const [isCouponRegistered, setIsCouponRegistered] = useState(false);
+  const [isUseConfirmVisible, setIsUseConfirmVisible] = useState(false);
 
   const handleRecognizeQr = () => {
     setIsScannerVisible(false);
@@ -31,6 +33,7 @@ export default function Coupon() {
   };
 
   const handleUseCoupon = () => {
+    setIsUseConfirmVisible(false);
     setIsCouponRegistered(false);
     Toast.show({ type: "success", text1: "사용됐습니다!" });
 
@@ -49,7 +52,7 @@ export default function Coupon() {
           <CouponHeader onScanPress={() => setIsScannerVisible(true)} />
 
           {isCouponRegistered ? (
-            <CouponCard onUsePress={handleUseCoupon} />
+            <CouponCard onUsePress={() => setIsUseConfirmVisible(true)} />
           ) : (
             <CouponEmptyState />
           )}
@@ -66,6 +69,11 @@ export default function Coupon() {
       <CouponSuccessModal
         visible={isSuccessVisible}
         onConfirm={handleRegisterCoupon}
+      />
+      <CouponUseConfirmModal
+        visible={isUseConfirmVisible}
+        onCancel={() => setIsUseConfirmVisible(false)}
+        onConfirm={handleUseCoupon}
       />
     </Page>
   );

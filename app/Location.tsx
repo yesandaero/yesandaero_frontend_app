@@ -8,7 +8,6 @@ import { LocationHeader } from "@/components/location/location-header";
 import { LocationMapPreview } from "@/components/location/location-map-preview";
 import { LocationNextButton } from "@/components/location/location-next-button";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
-import { colors } from "@/constants/color";
 import { useRoadAddress } from "@/hooks/use-road-address";
 
 export default function Location() {
@@ -101,7 +100,6 @@ export default function Location() {
 
 const Page = styled.View`
   flex: 1;
-  background-color: ${colors.primary50};
   display: flex;
   justify-content: space-between;
 `;
@@ -110,7 +108,7 @@ const ScreenScroll = styled(ScrollView).attrs({
   contentContainerStyle: { flexGrow: 1 },
 })`
   flex: 1;
-  background-color: ${colors.primary50};
+  background-color: white;
 `;
 
 const Content = styled.View`
@@ -119,7 +117,7 @@ const Content = styled.View`
   display: flex;
   max-width: 460px;
   display: flex;
-  background-color: ${colors.primary50};
+  background-color: white;
   justify-content: center;
   margin-bottom: 65px;
 `;
