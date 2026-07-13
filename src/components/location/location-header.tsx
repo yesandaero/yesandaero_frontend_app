@@ -18,7 +18,7 @@ const Header = styled.View`
 `;
 
 const Title = styled.Text`
-  color: ${colors.primary900};
+  color: ${colors.primary800};
   font-size: 25px;
   font-weight: 800;
   line-height: 32px;

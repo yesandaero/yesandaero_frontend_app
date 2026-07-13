@@ -1,22 +1,39 @@
 import React from "react";
+import { router } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
 
-export function LocationBottomNavigation() {
+type LocationBottomNavigationProps = {
+  activeTab?: "home" | "settings";
+};
+
+export function LocationBottomNavigation({
+  activeTab = "settings",
+}: LocationBottomNavigationProps) {
   const insets = useSafeAreaInsets();
 
   return (
     <Navigation accessibilityRole="tablist" $bottomInset={insets.bottom}>
-      <NavigationItem accessibilityRole="tab" accessibilityState={{ selected: false }}>
+      <NavigationItem
+        accessibilityRole="tab"
+        accessibilityState={{ selected: activeTab === "home" }}
+        onPress={() => router.push("/tab/FoodStores")}
+      >
         <Icon>🏠</Icon>
-        <InactiveLabel>홈</InactiveLabel>
+        <NavigationLabel $active={activeTab === "home"}>홈</NavigationLabel>
       </NavigationItem>
 
-      <NavigationItem accessibilityRole="tab" accessibilityState={{ selected: true }}>
+      <NavigationItem
+        accessibilityRole="tab"
+        accessibilityState={{ selected: activeTab === "settings" }}
+        onPress={() => router.push("/Location")}
+      >
         <Icon>⚙️</Icon>
-        <ActiveLabel>맛집 설정</ActiveLabel>
+        <NavigationLabel $active={activeTab === "settings"}>
+          맛집 설정
+        </NavigationLabel>
       </NavigationItem>
     </Navigation>
   );
@@ -33,7 +50,7 @@ const Navigation = styled.View<{ $bottomInset: number }>`
   background-color: ${colors.neutral0};
 `;
 
-const NavigationItem = styled.View`
+const NavigationItem = styled.Pressable`
   min-width: 82px;
   align-items: center;
   justify-content: center;
@@ -44,16 +61,10 @@ const Icon = styled.Text`
   line-height: 25px;
 `;
 
-const InactiveLabel = styled.Text`
+const NavigationLabel = styled.Text<{ $active: boolean }>`
   margin-top: 2px;
-  color: ${colors.neutral600};
+  color: ${({ $active }) =>
+    $active ? colors.primary800 : colors.neutral600};
   font-size: 12px;
-  font-weight: 700;
-`;
-
-const ActiveLabel = styled.Text`
-  margin-top: 2px;
-  color: ${colors.primary800};
-  font-size: 12px;
-  font-weight: 800;
+  font-weight: ${({ $active }) => ($active ? 800 : 700)};
 `;
