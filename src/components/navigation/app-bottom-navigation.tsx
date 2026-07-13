@@ -1,3 +1,4 @@
+import { Image } from "expo-image";
 import { router } from "expo-router";
 import React from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -17,9 +18,24 @@ const TAB_ITEMS: {
   label: string;
   route: "/tab/FoodStores" | "/tab/Coupon" | "/tab/Setting";
 }[] = [
-  { key: "home", icon: "🏠", label: "홈", route: "/tab/FoodStores" },
-  { key: "coupon", icon: "🎟️", label: "쿠폰함", route: "/tab/Coupon" },
-  { key: "settings", icon: "⚙️", label: "설정", route: "/tab/Setting" },
+  {
+    key: "home",
+    icon: require("@/assets/tab/home.png"),
+    label: "홈",
+    route: "/tab/FoodStores",
+  },
+  {
+    key: "coupon",
+    icon: require("@/assets/tab/coupon.png"),
+    label: "쿠폰함",
+    route: "/tab/Coupon",
+  },
+  {
+    key: "settings",
+    icon: require("@/assets/tab/setting.png"),
+    label: "설정",
+    route: "/tab/Setting",
+  },
 ];
 
 export function AppBottomNavigation({ activeTab }: AppBottomNavigationProps) {
@@ -40,7 +56,11 @@ export function AppBottomNavigation({ activeTab }: AppBottomNavigationProps) {
               if (!isActive) router.replace(item.route);
             }}
           >
-            <Icon>{item.icon}</Icon>
+            <Image
+              source={item.icon}
+              style={{ width: 23, height: 30 }}
+              contentFit="contain"
+            />
             <Label $active={isActive}>{item.label}</Label>
           </NavigationItem>
         );
@@ -60,15 +80,10 @@ const Navigation = styled.View<{ $bottomInset: number }>`
   background-color: ${colors.neutral0};
 `;
 
-const NavigationItem = styled.Pressable`
+const NavigationItem = styled.Pressable<{ $active: boolean }>`
   flex: 1;
   align-items: center;
   justify-content: center;
-`;
-
-const Icon = styled.Text`
-  font-size: 20px;
-  line-height: 24px;
 `;
 
 const Label = styled.Text<{ $active: boolean }>`
