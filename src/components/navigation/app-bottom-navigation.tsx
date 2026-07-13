@@ -5,37 +5,46 @@ import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
 
-export function CouponBottomNavigation() {
+export type AppTab = "home" | "coupon" | "like";
+
+type AppBottomNavigationProps = {
+  activeTab?: AppTab;
+};
+
+const TAB_ITEMS: {
+  key: AppTab;
+  icon: string;
+  label: string;
+  route: "/tab/FoodStores" | "/tab/Coupon" | "/tab/Like";
+}[] = [
+  { key: "home", icon: "🏠", label: "홈", route: "/tab/FoodStores" },
+  { key: "coupon", icon: "🎟️", label: "쿠폰함", route: "/tab/Coupon" },
+  { key: "like", icon: "❤️", label: "좋아요", route: "/tab/Like" },
+];
+
+export function AppBottomNavigation({ activeTab }: AppBottomNavigationProps) {
   const insets = useSafeAreaInsets();
 
   return (
     <Navigation accessibilityRole="tablist" $bottomInset={insets.bottom}>
-      <NavigationItem
-        accessibilityRole="tab"
-        accessibilityState={{ selected: false }}
-        onPress={() => router.push("/tab/FoodStores")}
-      >
-        <Icon>🏠</Icon>
-        <Label $active={false}>홈</Label>
-      </NavigationItem>
+      {TAB_ITEMS.map((item) => {
+        const isActive = activeTab === item.key;
 
-      <NavigationItem
-        accessibilityRole="tab"
-        accessibilityState={{ selected: true }}
-        onPress={() => router.push("/tab/Coupon")}
-      >
-        <Icon>🎟️</Icon>
-        <Label $active>쿠폰함</Label>
-      </NavigationItem>
-
-      <NavigationItem
-        accessibilityRole="tab"
-        accessibilityState={{ selected: false }}
-        onPress={() => router.push("/tab/Like")}
-      >
-        <Icon>❤️</Icon>
-        <Label $active={false}>좋아요</Label>
-      </NavigationItem>
+        return (
+          <NavigationItem
+            key={item.key}
+            accessibilityLabel={item.label}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: isActive }}
+            onPress={() => {
+              if (!isActive) router.replace(item.route);
+            }}
+          >
+            <Icon>{item.icon}</Icon>
+            <Label $active={isActive}>{item.label}</Label>
+          </NavigationItem>
+        );
+      })}
     </Navigation>
   );
 }

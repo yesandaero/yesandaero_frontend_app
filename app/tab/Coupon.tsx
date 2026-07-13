@@ -4,12 +4,12 @@ import { ScrollView } from "react-native";
 import Toast from "react-native-toast-message";
 import styled from "styled-components/native";
 
-import { CouponBottomNavigation } from "@/components/coupon/coupon-bottom-navigation";
 import { CouponCard } from "@/components/coupon/coupon-card";
 import { CouponEmptyState } from "@/components/coupon/coupon-empty-state";
 import { CouponHeader } from "@/components/coupon/coupon-header";
 import { CouponScanModal } from "@/components/coupon/coupon-scan-modal";
 import { CouponSuccessModal } from "@/components/coupon/coupon-success-modal";
+import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { colors } from "@/constants/color";
 
 export default function Coupon() {
@@ -61,7 +61,7 @@ export default function Coupon() {
         </Content>
       </ContentScroll>
 
-      <CouponBottomNavigation />
+      <AppBottomNavigation activeTab="coupon" />
 
       <CouponScanModal
         visible={isScannerVisible}

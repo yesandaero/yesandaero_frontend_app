@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
-import { LocationBottomNavigation } from "@/components/location/location-bottom-navigation";
 import { LocationConfirmCard } from "@/components/location/location-confirm-card";
 import { LocationHeader } from "@/components/location/location-header";
 import { LocationMapPreview } from "@/components/location/location-map-preview";
 import { LocationNextButton } from "@/components/location/location-next-button";
+import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { colors } from "@/constants/color";
 import { useRoadAddress } from "@/hooks/use-road-address";
 
@@ -89,7 +89,7 @@ export default function Location() {
         disabled={!selectedLocation || isLocating}
         onPress={handleNext}
       />
-      <LocationBottomNavigation />
+      <AppBottomNavigation />
     </Page>
   );
 }

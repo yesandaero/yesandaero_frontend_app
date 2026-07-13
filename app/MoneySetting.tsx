@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 import { BudgetActionButton } from "@/components/budget/budget-action-button";
 import { BudgetHeader } from "@/components/budget/budget-header";
 import { BudgetSelector } from "@/components/budget/budget-selector";
-import { LocationBottomNavigation } from "@/components/location/location-bottom-navigation";
+import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { colors } from "@/constants/color";
 
 const DEFAULT_BUDGET = "10000";
@@ -43,7 +43,7 @@ export default function MoneySetting() {
       </ContentScroll>
 
       <BudgetActionButton disabled={!budget} onPress={handleFindRestaurants} />
-      <LocationBottomNavigation />
+      <AppBottomNavigation />
     </Page>
   );
 }

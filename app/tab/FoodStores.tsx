@@ -16,7 +16,7 @@ import { FoodSortFilter } from "@/components/food-stores/food-sort-filter";
 import { FoodStoresHeader } from "@/components/food-stores/food-stores-header";
 import { FoodStoresMap } from "@/components/food-stores/food-stores-map";
 import { FoodViewToggle } from "@/components/food-stores/food-view-toggle";
-import { LocationBottomNavigation } from "@/components/location/location-bottom-navigation";
+import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { colors } from "@/constants/color";
 
 export default function FoodStores() {
@@ -88,7 +88,7 @@ export default function FoodStores() {
         </Content>
       </ContentScroll>
 
-      <LocationBottomNavigation activeTab="home" />
+      <AppBottomNavigation activeTab="home" />
     </Page>
   );
 }
