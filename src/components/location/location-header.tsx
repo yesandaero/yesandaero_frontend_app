@@ -13,7 +13,7 @@ export function LocationHeader() {
 }
 
 const Header = styled.View`
-  padding: 16px 20px 13px;
+  padding: 50px 20px 13px;
   background-color: ${colors.primary50};
 `;
 

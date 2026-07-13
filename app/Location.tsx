@@ -10,12 +10,10 @@ import { LocationNextButton } from "@/components/location/location-next-button";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { colors } from "@/constants/color";
 import { useRoadAddress } from "@/hooks/use-road-address";
-import { useSettingsStore } from "@/stores/settings-store";
 
 export default function Location() {
   const { source } = useLocalSearchParams<{ source?: string }>();
   const isSettingsFlow = source === "settings";
-  const setLocation = useSettingsStore((state) => state.setLocation);
   const {
     address,
     getCurrentRoadAddress,
@@ -54,23 +52,13 @@ export default function Location() {
   const handleNext = () => {
     if (!selectedLocation) return;
 
-    setLocation({
-      address: selectedLocation.address,
-      latitude: selectedLocation.latitude,
-      longitude: selectedLocation.longitude,
-    });
-
-    if (isSettingsFlow) {
-      router.replace("/tab/Setting");
-      return;
-    }
-
     router.push({
       pathname: "/MoneySetting",
       params: {
         latitude: String(selectedLocation.latitude),
         longitude: String(selectedLocation.longitude),
         roadAddress: selectedLocation.address,
+        ...(isSettingsFlow ? { source: "settings" } : {}),
       },
     });
   };
@@ -82,9 +70,10 @@ export default function Location() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
+        <LocationHeader />
         <Content>
-          <LocationHeader />
           <LocationMapPreview coordinate={selectedLocation} />
+
           <CardOverlap>
             <LocationConfirmCard
               address={address}
@@ -101,7 +90,6 @@ export default function Location() {
       </ScreenScroll>
       <LocationNextButton
         disabled={!selectedLocation || isLocating}
-        label={isSettingsFlow ? "위치 저장완료" : "다음 단계"}
         onPress={handleNext}
       />
       <AppBottomNavigation
@@ -128,17 +116,16 @@ const ScreenScroll = styled(ScrollView).attrs({
 const Content = styled.View`
   flex: 1;
   width: 100%;
-  border: 1px solid black;
+  display: flex;
   max-width: 460px;
   display: flex;
-  justify-content: center;
-
-  align-self: center;
   background-color: ${colors.primary50};
+  justify-content: center;
+  margin-bottom: 65px;
 `;
 
 const CardOverlap = styled.View`
   z-index: 2;
-  margin-top: -38px;
+  margin-top: -60px;
   padding: 0 18px;
 `;
