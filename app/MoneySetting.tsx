@@ -22,7 +22,7 @@ export default function MoneySetting() {
   const handleFindRestaurants = () => {
     if (!budget) return;
 
-    router.push({
+    router.replace({
       pathname: "/tab/FoodStores",
       params: { budget },
     });

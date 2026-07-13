@@ -43,6 +43,7 @@ export default function Login() {
         text1: "로그인 완료",
         text2: "정상적으로 로그인되었습니다.",
       });
+      router.replace("/Location");
     } catch {
       // API 오류는 useLogin의 Toast에서 표시한다.
     }

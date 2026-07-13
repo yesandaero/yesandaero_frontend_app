@@ -11,9 +11,6 @@ export function StoreSummary({ distance }: StoreSummaryProps) {
   return (
     <Summary>
       <BadgeRow>
-        <StatusBadge>
-          <StatusText>● 지금 영업중</StatusText>
-        </StatusBadge>
         <InfoBadge>
           <InfoText>{distance}</InfoText>
         </InfoBadge>

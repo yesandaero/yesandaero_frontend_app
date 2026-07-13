@@ -17,10 +17,12 @@ export function StoreDetailHeader({
   return (
     <Header>
       <TopRow>
-        <BackButton accessibilityLabel="이전 화면으로 이동" onPress={onBackPress}>
+        <BackButton
+          accessibilityLabel="이전 화면으로 이동"
+          onPress={onBackPress}
+        >
           <BackIcon>‹</BackIcon>
         </BackButton>
-        <FoodEmoji>🍚</FoodEmoji>
       </TopRow>
 
       <TitleGroup>
