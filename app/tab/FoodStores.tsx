@@ -18,7 +18,6 @@ import { FoodStoresHeader } from "@/components/food-stores/food-stores-header";
 import { FoodStoresMap } from "@/components/food-stores/food-stores-map";
 import { FoodViewToggle } from "@/components/food-stores/food-view-toggle";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
-import { colors } from "@/constants/color";
 import { useSettingsStore } from "@/stores/settings-store";
 
 export default function FoodStores() {
@@ -108,14 +107,13 @@ export default function FoodStores() {
 
 const Page = styled.View`
   flex: 1;
-  background-color: ${colors.primary50};
 `;
 
 const ContentScroll = styled(ScrollView).attrs({
   contentContainerStyle: { flexGrow: 1 },
 })`
   flex: 1;
-  background-color: ${colors.primary50};
+  background-color: white;
 `;
 
 const Content = styled.View`
