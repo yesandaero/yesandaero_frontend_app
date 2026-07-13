@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
 
-export type AppTab = "home" | "coupon";
+export type AppTab = "home" | "coupon" | "settings";
 
 type AppBottomNavigationProps = {
   activeTab?: AppTab;
@@ -15,10 +15,11 @@ const TAB_ITEMS: {
   key: AppTab;
   icon: string;
   label: string;
-  route: "/tab/FoodStores" | "/tab/Coupon";
+  route: "/tab/FoodStores" | "/tab/Coupon" | "/tab/Setting";
 }[] = [
   { key: "home", icon: "🏠", label: "홈", route: "/tab/FoodStores" },
   { key: "coupon", icon: "🎟️", label: "쿠폰함", route: "/tab/Coupon" },
+  { key: "settings", icon: "⚙️", label: "설정", route: "/tab/Setting" },
 ];
 
 export function AppBottomNavigation({ activeTab }: AppBottomNavigationProps) {

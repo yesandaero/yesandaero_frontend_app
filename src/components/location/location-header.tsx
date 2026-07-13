@@ -18,7 +18,7 @@ const Header = styled.View`
 `;
 
 const Title = styled.Text`
-  color: ${colors.primary800};
+  color: ${colors.primary900};
   font-size: 25px;
   font-weight: 800;
   line-height: 32px;
@@ -27,7 +27,7 @@ const Title = styled.Text`
 
 const Description = styled.Text`
   margin-top: 2px;
-  color: ${colors.primary700};
+  color: ${colors.primary800};
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;

@@ -80,7 +80,7 @@ const Card = styled.View`
   padding: 17px 18px 16px;
   border-radius: 20px;
   background-color: ${colors.neutral0};
-  box-shadow: 0 12px 28px ${colors.primary200};
+  border: 1px solid ${colors.primary400};
 `;
 
 const Label = styled.Text`

@@ -73,7 +73,7 @@ export function LocationMapPreview({ coordinate }: LocationMapPreviewProps) {
 }
 
 const MapContainer = styled.View`
-  height: 250px;
+  height: 320px;
   overflow: hidden;
   background-color: ${colors.primary50};
 `;

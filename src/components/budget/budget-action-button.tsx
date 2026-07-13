@@ -5,11 +5,13 @@ import { colors } from "@/constants/color";
 
 type BudgetActionButtonProps = {
   disabled?: boolean;
+  label?: string;
   onPress: () => void;
 };
 
 export function BudgetActionButton({
   disabled = false,
+  label = "이 설정으로 맛집 찾기",
   onPress,
 }: BudgetActionButtonProps) {
   return (
@@ -20,7 +22,7 @@ export function BudgetActionButton({
         onPress={onPress}
         $disabled={disabled}
       >
-        <ButtonText>이 설정으로 맛집 찾기</ButtonText>
+        <ButtonText>{label}</ButtonText>
       </Button>
     </Container>
   );

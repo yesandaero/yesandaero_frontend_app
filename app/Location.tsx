@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
@@ -10,8 +10,12 @@ import { LocationNextButton } from "@/components/location/location-next-button";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { colors } from "@/constants/color";
 import { useRoadAddress } from "@/hooks/use-road-address";
+import { useSettingsStore } from "@/stores/settings-store";
 
 export default function Location() {
+  const { source } = useLocalSearchParams<{ source?: string }>();
+  const isSettingsFlow = source === "settings";
+  const setLocation = useSettingsStore((state) => state.setLocation);
   const {
     address,
     getCurrentRoadAddress,
@@ -50,6 +54,17 @@ export default function Location() {
   const handleNext = () => {
     if (!selectedLocation) return;
 
+    setLocation({
+      address: selectedLocation.address,
+      latitude: selectedLocation.latitude,
+      longitude: selectedLocation.longitude,
+    });
+
+    if (isSettingsFlow) {
+      router.replace("/tab/Setting");
+      return;
+    }
+
     router.push({
       pathname: "/MoneySetting",
       params: {
@@ -70,7 +85,6 @@ export default function Location() {
         <Content>
           <LocationHeader />
           <LocationMapPreview coordinate={selectedLocation} />
-
           <CardOverlap>
             <LocationConfirmCard
               address={address}
@@ -87,9 +101,12 @@ export default function Location() {
       </ScreenScroll>
       <LocationNextButton
         disabled={!selectedLocation || isLocating}
+        label={isSettingsFlow ? "위치 저장완료" : "다음 단계"}
         onPress={handleNext}
       />
-      <AppBottomNavigation />
+      <AppBottomNavigation
+        activeTab={isSettingsFlow ? "settings" : undefined}
+      />
     </Page>
   );
 }
@@ -97,6 +114,8 @@ export default function Location() {
 const Page = styled.View`
   flex: 1;
   background-color: ${colors.primary50};
+  display: flex;
+  justify-content: space-between;
 `;
 
 const ScreenScroll = styled(ScrollView).attrs({
@@ -109,7 +128,11 @@ const ScreenScroll = styled(ScrollView).attrs({
 const Content = styled.View`
   flex: 1;
   width: 100%;
+  border: 1px solid black;
   max-width: 460px;
+  display: flex;
+  justify-content: center;
+
   align-self: center;
   background-color: ${colors.primary50};
 `;

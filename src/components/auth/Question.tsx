@@ -36,5 +36,5 @@ const Button = styled.Pressable`
 `;
 
 const Go = styled.Text`
-  color: ${colors.primary300};
+  color: ${colors.primary800};
 `;

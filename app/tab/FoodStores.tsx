@@ -19,9 +19,11 @@ import { FoodStoresMap } from "@/components/food-stores/food-stores-map";
 import { FoodViewToggle } from "@/components/food-stores/food-view-toggle";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { colors } from "@/constants/color";
+import { useSettingsStore } from "@/stores/settings-store";
 
 export default function FoodStores() {
   const { budget: budgetParam } = useLocalSearchParams<{ budget?: string }>();
+  const savedBudget = useSettingsStore((state) => state.budget);
   const [selectedCategory, setSelectedCategory] =
     useState<FoodCategory>("전체");
   const [selectedSort, setSelectedSort] =
@@ -33,7 +35,9 @@ export default function FoodStores() {
     Array.isArray(budgetParam) ? budgetParam[0] : budgetParam,
   );
   const budget =
-    Number.isFinite(parsedBudget) && parsedBudget > 0 ? parsedBudget : 10000;
+    Number.isFinite(parsedBudget) && parsedBudget > 0
+      ? parsedBudget
+      : savedBudget;
 
   const visibleStores = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase("ko-KR");

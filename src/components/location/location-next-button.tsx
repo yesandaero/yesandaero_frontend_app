@@ -5,11 +5,13 @@ import { colors } from "@/constants/color";
 
 type LocationNextButtonProps = {
   disabled?: boolean;
+  label?: string;
   onPress: () => void;
 };
 
 export function LocationNextButton({
   disabled = false,
+  label = "다음 단계",
   onPress,
 }: LocationNextButtonProps) {
   return (
@@ -20,7 +22,7 @@ export function LocationNextButton({
         onPress={onPress}
         $disabled={disabled}
       >
-        <ButtonText>다음 단계</ButtonText>
+        <ButtonText>{label}</ButtonText>
       </Button>
     </Container>
   );
