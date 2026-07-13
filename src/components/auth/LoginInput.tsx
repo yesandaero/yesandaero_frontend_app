@@ -51,7 +51,7 @@ export default function LoginInput({
 
 const Container = styled.View`
   background-color: ${colors.neutral100};
-  width: 353px;
+  width: 100%;
   height: 48px;
   border-radius: 12px;
   border: 1px solid ${colors.neutral100};

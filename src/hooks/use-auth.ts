@@ -5,32 +5,21 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import Toast from "react-native-toast-message";
 
-interface ApiErrorBody {
-  message?: string;
-  detail?: string;
-  title?: string;
-  data?: {
-    message?: string;
-  };
-}
-
 type AuthAction = "login" | "signup";
 
 const getAuthErrorMessage = (error: unknown, action: AuthAction) => {
   if (!(error instanceof AxiosError)) {
-    return error instanceof Error
-      ? error.message
-      : "요청을 처리하지 못했습니다. 다시 시도해 주세요.";
+    return "요청을 처리하지 못했습니다.";
   }
 
   const status = error.response?.status;
 
   if (!error.response) {
-    return "서버에 연결할 수 없습니다. 네트워크 상태를 확인해 주세요.";
+    return "서버에 연결할 수 없습니다.";
   }
 
   if (action === "login" && status === 401) {
-    return "이메일 또는 비밀번호가 일치하지 않습니다.";
+    return "비밀번호가 틀렸습니다.";
   }
 
   if (action === "signup" && status === 400) {
@@ -41,21 +30,15 @@ const getAuthErrorMessage = (error: unknown, action: AuthAction) => {
     return "이미 사용 중인 이메일입니다.";
   }
 
-  const responseData = error.response.data as ApiErrorBody | undefined;
-  return (
-    responseData?.detail ??
-    responseData?.message ??
-    responseData?.data?.message ??
-    responseData?.title ??
-    "요청을 처리하지 못했습니다. 다시 시도해 주세요."
-  );
+  return action === "login"
+    ? "로그인에 실패했습니다."
+    : "회원가입에 실패했습니다.";
 };
 
 const showAuthErrorToast = (error: unknown, action: AuthAction) => {
   Toast.show({
     type: "error",
-    text1: action === "login" ? "로그인 실패" : "회원가입 실패",
-    text2: getAuthErrorMessage(error, action),
+    text1: getAuthErrorMessage(error, action),
   });
 };
 

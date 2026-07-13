@@ -21,13 +21,13 @@ export default function AuthButton({
 
 const Wrapper = styled.TouchableOpacity<Omit<AuthButtonProps, "text">>`
   height: 48px;
-  width: 353px;
+  width: 100%;
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: ${({ isActive }) =>
-    isActive ? colors.primary300 : colors.neutral400};
+    isActive ? colors.primary600 : colors.neutral400};
 `;
 
 const ButtonText = styled.Text`

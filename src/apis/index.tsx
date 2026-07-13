@@ -88,8 +88,7 @@ let currentRefreshPromise: Promise<string> | null = null;
 const showSessionExpiredToast = () => {
   Toast.show({
     type: "error",
-    text1: "세션 만료",
-    text2: "토큰이 만료되었거나 올바르지 않습니다. 다시 로그인해 주세요.",
+    text1: "세션이 만료되었습니다.",
   });
 };
 

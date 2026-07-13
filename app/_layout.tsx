@@ -1,3 +1,4 @@
+import { toastConfig } from "@/components/toast/toast-config";
 import { queryClient } from "@/lib/query-client";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
@@ -9,7 +10,12 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <Stack screenOptions={{ headerShown: false }} />
       </QueryClientProvider>
-      <Toast position="top" topOffset={56} visibilityTime={3000} />
+      <Toast
+        config={toastConfig}
+        position="top"
+        topOffset={56}
+        visibilityTime={3000}
+      />
     </>
   );
 }

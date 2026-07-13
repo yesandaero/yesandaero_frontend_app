@@ -11,7 +11,9 @@ export default function Question({ question, button, onPress }: QuestionProps) {
   return (
     <Wrapper>
       <No>{question}</No>
-      <Go onPress={onPress}>{button}</Go>
+      <Button onPress={onPress} hitSlop={8} accessibilityRole="button">
+        <Go>{button}</Go>
+      </Button>
     </Wrapper>
   );
 }
@@ -27,6 +29,10 @@ const Wrapper = styled.View`
 
 const No = styled.Text`
   color: ${colors.neutral600};
+`;
+
+const Button = styled.Pressable`
+  padding: 4px 0;
 `;
 
 const Go = styled.Text`

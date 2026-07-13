@@ -1,3 +1,4 @@
+import AuthPageLayout from "@/components/auth/auth-page-layout";
 import { AuthButton, Question } from "@/components/auth/index";
 import CodeInput from "@/components/Signup/CodeInput";
 import Input from "@/components/Signup/Input";
@@ -7,7 +8,6 @@ import { useSignupStore } from "@/stores/SignupStore";
 import { isValidEmail } from "@/utils/isValidEmail";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import styled from "styled-components/native";
 
 interface InputWrapperProps {
@@ -90,113 +90,91 @@ export default function Signup() {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
+    <AuthPageLayout
+      title={
+        <>
+          <LineText>
+            <Name>예산대로</Name>의
+          </LineText>
+          <LineText>회원이 되어주세요!</LineText>
+        </>
+      }
+      footer={
+        <>
+          <AuthButton
+            text={isLoading ? "가입 중..." : "가입하기"}
+            isActive={isSubmitActive && !isLoading}
+            onPress={handleSubmit}
+          />
+          <Question
+            question="계정이 있으신가요?"
+            button="로그인"
+            onPress={() => router.push("/Login")}
+          />
+        </>
+      }
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} bounces={false}>
-        <Container>
-          <TitleWrapper>
-            <LineText>
-              <Name>예산대로</Name>의
-            </LineText>
-            <LineText>회원이 되어주세요!</LineText>
-          </TitleWrapper>
-
-          <Wrapper>
-            <InputListContainer>
-              <FormGroup>
-                <InputWrapper isError={isIdDuplication}>
-                  <Input
-                    placeholder="아이디를 입력해주세요."
-                    value={id}
-                    onChangeText={handleIdChange}
-                  />
-                </InputWrapper>
-                {isIdDuplication && (
-                  <ErrorText>이미 사용중인 아이디입니다.</ErrorText>
-                )}
-              </FormGroup>
-              <FormGroup>
-                <InputWrapper isError={isEmailError}>
-                  <Input
-                    placeholder="이메일을 입력해주세요."
-                    value={email}
-                    type="email"
-                    onChangeText={handleEmailChange}
-                  />
-                </InputWrapper>
-                {isEmailError && (
-                  <ErrorText>이메일 형식이 올바르지 않습니다.</ErrorText>
-                )}
-              </FormGroup>
-              <FormGroup>
-                <InputWrapper>
-                  <CodeInput
-                    placeholder="비밀번호를 입력해주세요."
-                    type="password"
-                    onChangeText={handlePasswordChange}
-                    value={password}
-                  />
-                </InputWrapper>
-              </FormGroup>
-              <FormGroup>
-                <InputWrapper isError={isPasswordError}>
-                  <CodeInput
-                    placeholder="비밀번호를 다시 입력해주세요."
-                    type="password"
-                    onChangeText={handleRePasswordChange}
-                    value={rePassword}
-                  />
-                </InputWrapper>
-                {!isLengthFull ? (
-                  <ErrorText>8자 이상 입력해주세요.</ErrorText>
-                ) : isPasswordError ? (
-                  <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
-                ) : null}
-              </FormGroup>
-            </InputListContainer>
-
-            <Footer>
-              <AuthButton
-                text={isLoading ? "가입 중..." : "가입하기"}
-                isActive={isSubmitActive && !isLoading}
-                onPress={handleSubmit}
-              />
-              <Question
-                question="계정이 있으신가요?"
-                button="로그인"
-                onPress={() => router.push("/Login")}
-              />
-            </Footer>
-          </Wrapper>
-        </Container>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      <InputListContainer>
+        <FormGroup>
+          <InputWrapper isError={isIdDuplication}>
+            <Input
+              placeholder="아이디를 입력해주세요."
+              value={id}
+              onChangeText={handleIdChange}
+            />
+          </InputWrapper>
+          {isIdDuplication && (
+            <ErrorText>이미 사용중인 아이디입니다.</ErrorText>
+          )}
+        </FormGroup>
+        <FormGroup>
+          <InputWrapper isError={isEmailError}>
+            <Input
+              placeholder="이메일을 입력해주세요."
+              value={email}
+              type="email"
+              onChangeText={handleEmailChange}
+            />
+          </InputWrapper>
+          {isEmailError && (
+            <ErrorText>이메일 형식이 올바르지 않습니다.</ErrorText>
+          )}
+        </FormGroup>
+        <FormGroup>
+          <InputWrapper>
+            <CodeInput
+              placeholder="비밀번호를 입력해주세요."
+              type="password"
+              onChangeText={handlePasswordChange}
+              value={password}
+            />
+          </InputWrapper>
+        </FormGroup>
+        <FormGroup>
+          <InputWrapper isError={isPasswordError}>
+            <CodeInput
+              placeholder="비밀번호를 다시 입력해주세요."
+              type="password"
+              onChangeText={handleRePasswordChange}
+              value={rePassword}
+            />
+          </InputWrapper>
+          {!isLengthFull ? (
+            <ErrorText>8자 이상 입력해주세요.</ErrorText>
+          ) : isPasswordError ? (
+            <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
+          ) : null}
+        </FormGroup>
+      </InputListContainer>
+    </AuthPageLayout>
   );
 }
-
-const Container = styled.View`
-  flex: 1;
-  padding: 10px;
-  background-color: white;
-`;
-
-const TitleWrapper = styled.View`
-  margin: 24px 0 16px 15px;
-`;
 
 const LineText = styled.Text`
   color: ${colors.neutral800};
   font-size: 28px;
   font-weight: 700;
-`;
-
-const Wrapper = styled.View`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex: 1;
+  line-height: 38px;
 `;
 
 const InputListContainer = styled.View`
@@ -214,7 +192,7 @@ const FormGroup = styled.View`
 const InputWrapper = styled.View<InputWrapperProps>`
   flex-direction: row;
   align-items: center;
-  width: 93%;
+  width: 100%;
   border-width: 1px;
   border-color: ${({ isError }) => (isError ? colors.errorRed : "transparent")};
   border-radius: 12px;
@@ -226,13 +204,6 @@ const ErrorText = styled.Text`
   font-weight: 400;
   line-height: 18px;
   align-self: flex-start;
-  margin-left: 4%;
-`;
-
-const Footer = styled.View`
-  margin-top: 24px;
-  width: 100%;
-  align-items: center;
 `;
 
 const Name = styled.Text`
