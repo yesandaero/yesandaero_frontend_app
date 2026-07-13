@@ -8,7 +8,10 @@ type LocationNextButtonProps = {
   onPress: () => void;
 };
 
-export function LocationNextButton({ disabled = false, onPress }: LocationNextButtonProps) {
+export function LocationNextButton({
+  disabled = false,
+  onPress,
+}: LocationNextButtonProps) {
   return (
     <Container>
       <Button

@@ -13,7 +13,6 @@ type LocationMapPreviewProps = {
 export function LocationMapPreview({ coordinate }: LocationMapPreviewProps) {
   return (
     <MapFallback accessibilityLabel="현재 위치 지도">
-      <Pin>📍</Pin>
       <FallbackText>
         {coordinate ? "현재 위치를 확인했습니다" : "현재 위치 지도를 불러오고 있어요"}
       </FallbackText>

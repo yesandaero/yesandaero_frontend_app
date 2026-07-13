@@ -57,7 +57,7 @@ export function LocationConfirmCard({
             <ActivityIndicator color="#FFFFFF" />
           ) : (
             <ConfirmButtonText>
-              {isEditing ? "주소 검색" : "📍 현재 위치 새로고침"}
+              {isEditing ? "주소 검색" : "현재 위치 새로고침"}
             </ConfirmButtonText>
           )}
         </ConfirmButton>
@@ -66,7 +66,9 @@ export function LocationConfirmCard({
           accessibilityRole="button"
           onPress={isEditing ? onCancelEditing : onStartEditing}
         >
-          <ManualButtonText>{isEditing ? "취소" : "도로명 주소 검색"}</ManualButtonText>
+          <ManualButtonText>
+            {isEditing ? "취소" : "도로명 주소 검색"}
+          </ManualButtonText>
         </ManualButton>
       </ButtonRow>
     </Card>

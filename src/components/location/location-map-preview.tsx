@@ -10,14 +10,13 @@ type LocationMapPreviewProps = {
   } | null;
 };
 
-// TypeScript 및 지원되지 않는 플랫폼에서 사용하는 대체 화면입니다.
-// iOS/Android에서는 location-map-preview.native.tsx가 자동 선택됩니다.
 export function LocationMapPreview({ coordinate }: LocationMapPreviewProps) {
   return (
     <MapFallback accessibilityLabel="현재 위치 지도">
-      <Pin>📍</Pin>
       <FallbackText>
-        {coordinate ? "현재 위치를 확인했습니다" : "현재 위치 지도를 불러오고 있어요"}
+        {coordinate
+          ? "현재 위치를 확인했습니다"
+          : "현재 위치 지도를 불러오고 있어요"}
       </FallbackText>
     </MapFallback>
   );
