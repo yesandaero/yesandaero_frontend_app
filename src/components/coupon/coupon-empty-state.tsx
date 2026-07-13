@@ -6,10 +6,9 @@ import { colors } from "@/constants/color";
 export function CouponEmptyState() {
   return (
     <EmptyState>
-      <EmptyIcon>🎟️</EmptyIcon>
-      <EmptyTitle>아직 쿠폰이 없어요</EmptyTitle>
+      <EmptyTitle>아직 쿠폰이 없어요...</EmptyTitle>
       <EmptyDescription>
-        가게 사장님 화면의 QR을 스캔하면 다른 식당에서도 쓸 수 있는 쿠폰이
+        가게 사장님 화면의 QR을 스캔하면 다른 식당에서 사용 가능한 쿠폰이
         생겨요!
       </EmptyDescription>
     </EmptyState>
@@ -22,10 +21,6 @@ const EmptyState = styled.View`
   align-items: center;
   justify-content: center;
   padding: 36px 22px;
-`;
-
-const EmptyIcon = styled.Text`
-  font-size: 50px;
 `;
 
 const EmptyTitle = styled.Text`

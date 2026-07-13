@@ -16,7 +16,7 @@ export function CouponHeader({ onScanPress }: CouponHeaderProps) {
       </TitleGroup>
 
       <ScanButton accessibilityRole="button" onPress={onScanPress}>
-        <ScanButtonText>쿠폰 받기 (QR 스캔)</ScanButtonText>
+        <ScanButtonText>QR 스캔하기</ScanButtonText>
       </ScanButton>
     </Header>
   );

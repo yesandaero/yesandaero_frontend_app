@@ -36,7 +36,6 @@ const SuccessCard = styled.View`
   padding: 10px 14px;
   border-radius: 12px;
   background-color: ${colors.primary700};
-  box-shadow: 0 8px 24px ${colors.primary300};
 `;
 
 const SuccessIcon = styled.View`

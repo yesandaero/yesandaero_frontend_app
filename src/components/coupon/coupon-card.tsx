@@ -20,7 +20,8 @@ export function CouponCard({ isUsed, onUsePress }: CouponCardProps) {
       </CardTopRow>
 
       <CouponTitle selectable>아메리카노 무료 쿠폰</CouponTitle>
-      <Store selectable>사용처 · 스덕컴 카페</Store>
+      <Store selectable>사용처: 스덕컴 카페</Store>
+      <Expired selectable>발급일: 2026-7-13</Expired>
 
       <Divider />
 
@@ -43,16 +44,16 @@ const Card = styled.View`
   margin-top: 22px;
   padding: 20px;
   border-width: 1px;
-  border-color: ${colors.primary200};
+  border-color: ${colors.neutral200};
   border-radius: 20px;
   background-color: ${colors.neutral0};
-  box-shadow: 0 8px 20px ${colors.primary200};
 `;
 
 const CardTopRow = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+    margin-bottom: 5px;
 `;
 
 const StatusBadge = styled.View<{ $used: boolean }>`
@@ -78,6 +79,13 @@ const CouponTitle = styled.Text`
 const Store = styled.Text`
   margin-top: 7px;
   color: ${colors.neutral700};
+  font-size: 14px;
+  font-weight: 600;
+`;
+
+const Expired = styled.Text`
+  margin-top: 7px;
+  color: #959595;
   font-size: 14px;
   font-weight: 600;
 `;
