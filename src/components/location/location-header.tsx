@@ -13,23 +13,23 @@ export function LocationHeader() {
 }
 
 const Header = styled.View`
-  padding: 26px 24px 20px;
+  padding: 16px 20px 13px;
   background-color: ${locationColors.background};
 `;
 
 const Title = styled.Text`
   color: ${locationColors.goldDark};
-  font-size: 29px;
+  font-size: 25px;
   font-weight: 800;
-  line-height: 38px;
+  line-height: 32px;
   letter-spacing: -0.7px;
 `;
 
 const Description = styled.Text`
   margin-top: 2px;
   color: ${locationColors.muted};
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 24px;
+  line-height: 20px;
   letter-spacing: -0.3px;
 `;

@@ -1,6 +1,6 @@
 import * as Location from "expo-location";
 import { useMutation } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Toast from "react-native-toast-message";
 
 export type RoadAddressLocation = {
@@ -9,7 +9,11 @@ export type RoadAddressLocation = {
   longitude: number;
 };
 
-const LOADING_ADDRESS = "현재 위치를 확인하고 있어요";
+const DEFAULT_LOCATION: RoadAddressLocation = {
+  address: "대전광역시 유성구 가정북로 76",
+  latitude: 36.39151,
+  longitude: 127.36307,
+};
 
 function formatRoadAddress(address: Location.LocationGeocodedAddress) {
   if (address.formattedAddress) {
@@ -64,22 +68,14 @@ function showLocationError(error: unknown) {
 }
 
 export function useRoadAddress() {
-  const [selectedLocation, setSelectedLocation] = useState<RoadAddressLocation | null>(null);
+  const [selectedLocation, setSelectedLocation] =
+    useState<RoadAddressLocation>(DEFAULT_LOCATION);
 
   const {
     isPending: isLocating,
     mutateAsync: getCurrentLocation,
   } = useMutation({
-    mutationFn: async () => {
-      await ensureLocationPermission();
-      const currentLocation = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
-      });
-      return reverseGeocode(
-        currentLocation.coords.latitude,
-        currentLocation.coords.longitude,
-      );
-    },
+    mutationFn: async () => DEFAULT_LOCATION,
     onError: showLocationError,
     onSuccess: setSelectedLocation,
   });
@@ -125,12 +121,8 @@ export function useRoadAddress() {
     }
   }, [findRoadAddress]);
 
-  useEffect(() => {
-    void getCurrentRoadAddress();
-  }, [getCurrentRoadAddress]);
-
   return {
-    address: selectedLocation?.address ?? LOADING_ADDRESS,
+    address: selectedLocation.address,
     getCurrentRoadAddress,
     isLocating,
     isSearching,

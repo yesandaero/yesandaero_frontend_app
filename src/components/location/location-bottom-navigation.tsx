@@ -1,11 +1,14 @@
 import React from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
 import { locationColors } from "./location-theme";
 
 export function LocationBottomNavigation() {
+  const insets = useSafeAreaInsets();
+
   return (
-    <Navigation accessibilityRole="tablist">
+    <Navigation accessibilityRole="tablist" $bottomInset={insets.bottom}>
       <NavigationItem accessibilityRole="tab" accessibilityState={{ selected: false }}>
         <Icon>🏠</Icon>
         <InactiveLabel>홈</InactiveLabel>
@@ -19,38 +22,38 @@ export function LocationBottomNavigation() {
   );
 }
 
-const Navigation = styled.View`
-  min-height: 88px;
+const Navigation = styled.View<{ $bottomInset: number }>`
+  min-height: ${({ $bottomInset }) => 60 + $bottomInset}px;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  padding: 10px 32px 16px;
+  padding: 6px 32px ${({ $bottomInset }) => Math.max($bottomInset, 6)}px;
   border-top-width: 1px;
   border-top-color: ${locationColors.outline};
   background-color: #ffffff;
 `;
 
 const NavigationItem = styled.View`
-  min-width: 92px;
+  min-width: 82px;
   align-items: center;
   justify-content: center;
 `;
 
 const Icon = styled.Text`
-  font-size: 24px;
-  line-height: 30px;
+  font-size: 21px;
+  line-height: 25px;
 `;
 
 const InactiveLabel = styled.Text`
   margin-top: 2px;
   color: ${locationColors.muted};
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
 `;
 
 const ActiveLabel = styled.Text`
   margin-top: 2px;
   color: ${locationColors.goldDark};
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 800;
 `;

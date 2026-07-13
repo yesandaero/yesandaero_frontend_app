@@ -74,51 +74,51 @@ export function LocationConfirmCard({
 }
 
 const Card = styled.View`
-  min-height: 160px;
-  padding: 22px 22px 20px;
-  border-radius: 24px;
+  min-height: 140px;
+  padding: 17px 18px 16px;
+  border-radius: 20px;
   background-color: ${locationColors.card};
   box-shadow: 0 12px 28px rgba(100, 70, 12, 0.13);
 `;
 
 const Label = styled.Text`
   color: ${locationColors.muted};
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
-  line-height: 22px;
-  letter-spacing: 1.5px;
+  line-height: 18px;
+  letter-spacing: 1px;
 `;
 
 const Address = styled.Text`
   margin-top: 4px;
   color: ${locationColors.goldDark};
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 800;
-  line-height: 30px;
+  line-height: 25px;
   letter-spacing: -0.5px;
 `;
 
 const AddressInput = styled.TextInput`
-  height: 44px;
+  height: 40px;
   margin-top: 5px;
   padding: 0 12px;
   border: 1px solid ${locationColors.outline};
   border-radius: 12px;
   color: ${locationColors.text};
   background-color: #fffdf8;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 600;
 `;
 
 const ButtonRow = styled.View`
   flex-direction: row;
-  gap: 10px;
-  margin-top: 18px;
+  gap: 8px;
+  margin-top: 13px;
 `;
 
 const ConfirmButton = styled.Pressable<{ $disabled: boolean }>`
   flex: 1;
-  min-height: 48px;
+  min-height: 42px;
   align-items: center;
   justify-content: center;
   padding: 0 10px;
@@ -129,15 +129,15 @@ const ConfirmButton = styled.Pressable<{ $disabled: boolean }>`
 
 const ConfirmButtonText = styled.Text`
   color: #ffffff;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
-  line-height: 22px;
+  line-height: 19px;
   text-align: center;
 `;
 
 const ManualButton = styled.Pressable`
   flex: 1;
-  min-height: 48px;
+  min-height: 42px;
   align-items: center;
   justify-content: center;
   padding: 0 10px;
@@ -148,8 +148,8 @@ const ManualButton = styled.Pressable`
 
 const ManualButtonText = styled.Text`
   color: ${locationColors.muted};
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 800;
-  line-height: 22px;
+  line-height: 19px;
   text-align: center;
 `;

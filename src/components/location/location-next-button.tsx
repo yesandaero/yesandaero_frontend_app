@@ -24,11 +24,11 @@ export function LocationNextButton({ disabled = false, onPress }: LocationNextBu
 }
 
 const Container = styled.View`
-  padding: 0 24px 24px;
+  padding: 0 20px 12px;
 `;
 
 const Button = styled.Pressable<{ $disabled: boolean }>`
-  min-height: 58px;
+  min-height: 50px;
   align-items: center;
   justify-content: center;
   border-radius: 14px;
@@ -38,7 +38,7 @@ const Button = styled.Pressable<{ $disabled: boolean }>`
 
 const ButtonText = styled.Text`
   color: #ffffff;
-  font-size: 19px;
+  font-size: 17px;
   font-weight: 800;
-  line-height: 26px;
+  line-height: 23px;
 `;

@@ -61,36 +61,46 @@ export default function Location() {
   };
 
   return (
-    <ScreenScroll
-      contentInsetAdjustmentBehavior="automatic"
-      keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
-    >
-      <Screen>
-        <LocationHeader />
-        <LocationMapPreview />
+    <Page>
+      <ScreenScroll
+        contentInsetAdjustmentBehavior="automatic"
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <Content>
+          <LocationHeader />
+          <LocationMapPreview coordinate={selectedLocation} />
 
-        <CardOverlap>
-          <LocationConfirmCard
-            address={address}
-            draftAddress={draftAddress}
-            isEditing={isEditing}
-            isLoading={isLocating || isSearching}
-            onCancelEditing={handleCancelEditing}
-            onConfirm={handleConfirmLocation}
-            onDraftAddressChange={setDraftAddress}
-            onStartEditing={handleStartEditing}
+          <CardOverlap>
+            <LocationConfirmCard
+              address={address}
+              draftAddress={draftAddress}
+              isEditing={isEditing}
+              isLoading={isLocating || isSearching}
+              onCancelEditing={handleCancelEditing}
+              onConfirm={handleConfirmLocation}
+              onDraftAddressChange={setDraftAddress}
+              onStartEditing={handleStartEditing}
+            />
+          </CardOverlap>
+
+          <FlexibleSpace />
+
+          <LocationNextButton
+            disabled={!selectedLocation || isLocating}
+            onPress={handleNext}
           />
-        </CardOverlap>
-
-        <FlexibleSpace />
-
-        <LocationNextButton disabled={!selectedLocation || isLocating} onPress={handleNext} />
-        <LocationBottomNavigation />
-      </Screen>
-    </ScreenScroll>
+        </Content>
+      </ScreenScroll>
+      <LocationBottomNavigation />
+    </Page>
   );
 }
+
+const Page = styled.View`
+  flex: 1;
+  background-color: ${locationColors.background};
+`;
 
 const ScreenScroll = styled(ScrollView).attrs({
   contentContainerStyle: { flexGrow: 1 },
@@ -99,22 +109,21 @@ const ScreenScroll = styled(ScrollView).attrs({
   background-color: ${locationColors.background};
 `;
 
-const Screen = styled.View`
+const Content = styled.View`
   flex: 1;
   width: 100%;
   max-width: 460px;
-  min-height: 720px;
   align-self: center;
   background-color: ${locationColors.background};
 `;
 
 const CardOverlap = styled.View`
   z-index: 2;
-  margin-top: -52px;
-  padding: 0 20px;
+  margin-top: -38px;
+  padding: 0 18px;
 `;
 
 const FlexibleSpace = styled.View`
   flex: 1;
-  min-height: 72px;
+  min-height: 18px;
 `;
