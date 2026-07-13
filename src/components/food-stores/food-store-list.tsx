@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "expo-router";
 import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
@@ -21,22 +22,24 @@ export function FoodStoreList({ stores }: FoodStoreListProps) {
   return (
     <List>
       {stores.map((store) => (
-        <StoreCard key={store.id}>
-          <StoreEmoji>{store.emoji}</StoreEmoji>
-          <StoreInformation>
-            <StoreTopRow>
-              <StoreName numberOfLines={1}>{store.name}</StoreName>
-              <Rating>★ {store.rating.toFixed(1)}</Rating>
-            </StoreTopRow>
-            <StoreMeta>
-              {store.category} · {store.menu}
-            </StoreMeta>
-            <StoreBottomRow>
-              <Discount>{store.discount}% 할인</Discount>
-              <Price>{store.price.toLocaleString()}원</Price>
-            </StoreBottomRow>
-          </StoreInformation>
-        </StoreCard>
+        <Link key={store.id} href="/StoreDetail" asChild>
+          <StoreCard accessibilityLabel={`${store.name} 상세 보기`}>
+            <StoreEmoji>{store.emoji}</StoreEmoji>
+            <StoreInformation>
+              <StoreTopRow>
+                <StoreName numberOfLines={1}>{store.name}</StoreName>
+                <Rating>★ {store.rating.toFixed(1)}</Rating>
+              </StoreTopRow>
+              <StoreMeta>
+                {store.category} · {store.menu}
+              </StoreMeta>
+              <StoreBottomRow>
+                <Discount>{store.discount}% 할인</Discount>
+                <Price>{store.price.toLocaleString()}원</Price>
+              </StoreBottomRow>
+            </StoreInformation>
+          </StoreCard>
+        </Link>
       ))}
     </List>
   );
@@ -47,7 +50,7 @@ const List = styled.View`
   padding-bottom: 12px;
 `;
 
-const StoreCard = styled.View`
+const StoreCard = styled.Pressable`
   min-height: 94px;
   flex-direction: row;
   align-items: center;

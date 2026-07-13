@@ -1,4 +1,5 @@
 import React from "react";
+import { router } from "expo-router";
 import MapView, { Marker } from "react-native-maps";
 import styled from "styled-components/native";
 
@@ -33,6 +34,7 @@ export function FoodStoresMap({ stores }: FoodStoresMapProps) {
             key={store.id}
             coordinate={store.coordinate}
             description={store.menu}
+            onPress={() => router.push("/StoreDetail")}
             title={store.name}
           >
             <MarkerContent>

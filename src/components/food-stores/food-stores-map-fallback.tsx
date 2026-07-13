@@ -1,4 +1,5 @@
 import React from "react";
+import { router } from "expo-router";
 import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
@@ -32,6 +33,8 @@ export function FoodStoresMapFallback({ stores }: FoodStoresMapProps) {
         return (
           <MarkerPreview
             key={store.id}
+            accessibilityLabel={`${store.name} 상세 보기`}
+            onPress={() => router.push("/StoreDetail")}
             style={{ left: position.left, top: position.top }}
           >
             <PriceBubble>
@@ -75,7 +78,7 @@ const SchoolLabel = styled.Text`
   font-weight: 800;
 `;
 
-const MarkerPreview = styled.View`
+const MarkerPreview = styled.Pressable`
   position: absolute;
   align-items: center;
 `;

@@ -1,9 +1,11 @@
 export type FoodCategory =
   | "전체"
   | "한식"
+  | "중식"
+  | "일식"
+  | "양식"
   | "분식"
-  | "치킨·피자"
-  | "카페·디저트";
+  | "카페";
 
 export type FoodSortOption = "discount" | "rating";
 export type FoodViewMode = "map" | "list";
@@ -26,9 +28,11 @@ export type FoodStore = {
 export const FOOD_CATEGORIES: FoodCategory[] = [
   "전체",
   "한식",
+  "중식",
+  "일식",
+  "양식",
   "분식",
-  "치킨·피자",
-  "카페·디저트",
+  "카페",
 ];
 
 export const FOOD_STORES: FoodStore[] = [
@@ -56,35 +60,46 @@ export const FOOD_STORES: FoodStore[] = [
   },
   {
     id: "3",
-    name: "소프트 치킨",
-    category: "치킨·피자",
-    menu: "순살치킨 · 조각피자",
+    name: "소프트 파스타",
+    category: "양식",
+    menu: "토마토 파스타 · 조각피자",
     price: 7500,
     rating: 4.7,
     discount: 20,
-    emoji: "🍗",
+    emoji: "🍝",
     coordinate: { latitude: 36.3908, longitude: 127.3637 },
   },
   {
     id: "4",
-    name: "학교앞 국밥",
-    category: "한식",
-    menu: "돼지국밥 · 공깃밥",
+    name: "궁동 짜장면",
+    category: "중식",
+    menu: "짜장면 · 미니 탕수육",
     price: 7000,
     rating: 4.9,
     discount: 12,
-    emoji: "🍲",
+    emoji: "🥡",
     coordinate: { latitude: 36.3902, longitude: 127.3621 },
   },
   {
     id: "5",
     name: "빨간지붕 카페",
-    category: "카페·디저트",
+    category: "카페",
     menu: "아메리카노 · 크로플",
     price: 3500,
     rating: 4.5,
     discount: 30,
     emoji: "☕",
     coordinate: { latitude: 36.3911, longitude: 127.3631 },
+  },
+  {
+    id: "6",
+    name: "하루 초밥",
+    category: "일식",
+    menu: "모둠 초밥 · 미니 우동",
+    price: 8000,
+    rating: 4.7,
+    discount: 15,
+    emoji: "🍣",
+    coordinate: { latitude: 36.3923, longitude: 127.3638 },
   },
 ];

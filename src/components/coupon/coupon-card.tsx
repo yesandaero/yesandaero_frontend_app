@@ -19,7 +19,6 @@ export function CouponCard({ isUsed, onUsePress }: CouponCardProps) {
         </StatusBadge>
       </CardTopRow>
 
-      <Source selectable>이모네 국밥 QR 스캔 적립</Source>
       <CouponTitle selectable>아메리카노 무료 쿠폰</CouponTitle>
       <Store selectable>사용처 · 스덕컴 카페</Store>
 
