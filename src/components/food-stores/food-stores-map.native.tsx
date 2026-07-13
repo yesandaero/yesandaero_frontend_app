@@ -4,15 +4,14 @@ import MapView, { Marker } from "react-native-maps";
 import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
-import { FoodStore } from "./food-store-data";
+import { FoodStore, SCHOOL_COORDINATE } from "./food-store-data";
 
 type FoodStoresMapProps = {
   stores: FoodStore[];
 };
 
 const SCHOOL_REGION = {
-  latitude: 36.39151,
-  longitude: 127.36307,
+  ...SCHOOL_COORDINATE,
   latitudeDelta: 0.007,
   longitudeDelta: 0.007,
 };

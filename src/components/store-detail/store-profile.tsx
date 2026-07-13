@@ -5,22 +5,36 @@ import { colors } from "@/constants/color";
 
 type StoreProfileProps = {
   address: string;
+  avgPrice: number;
+  closeTime: string;
   description: string;
+  distanceMeters: number;
+  minOrderAmount: number;
+  openTime: string;
   phone: string;
+  walkingMinutes: number;
 };
 
 export function StoreProfile({
   address,
+  avgPrice,
+  closeTime,
   description,
+  distanceMeters,
+  minOrderAmount,
+  openTime,
   phone,
+  walkingMinutes,
 }: StoreProfileProps) {
   return (
     <Section>
       <SectionTitle>가게 정보</SectionTitle>
       <InformationCard>
         <InformationRow>
-          <Label>소개</Label>
-          <Value selectable>{description}</Value>
+          <Label>거리</Label>
+          <Value selectable>
+            도보 {walkingMinutes}분 · {distanceMeters.toLocaleString()}m
+          </Value>
         </InformationRow>
         <InformationRow>
           <Label>주소</Label>
@@ -29,6 +43,24 @@ export function StoreProfile({
         <InformationRow>
           <Label>전화번호</Label>
           <Value selectable>{phone}</Value>
+        </InformationRow>
+        <InformationRow>
+          <Label>영업시간</Label>
+          <Value selectable>
+            {openTime} ~ {closeTime}
+          </Value>
+        </InformationRow>
+        <InformationRow>
+          <Label>최소주문</Label>
+          <Value selectable>{minOrderAmount.toLocaleString()}원</Value>
+        </InformationRow>
+        <InformationRow>
+          <Label>평균가격</Label>
+          <Value selectable>{avgPrice.toLocaleString()}원</Value>
+        </InformationRow>
+        <InformationRow>
+          <Label>소개</Label>
+          <Value selectable>{description}</Value>
         </InformationRow>
       </InformationCard>
     </Section>

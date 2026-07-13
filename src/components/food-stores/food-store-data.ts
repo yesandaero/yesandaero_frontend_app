@@ -7,7 +7,7 @@ export type FoodCategory =
   | "분식"
   | "카페";
 
-export type FoodSortOption = "discount" | "rating";
+export type FoodSortOption = "discount" | "distance" | "price";
 export type FoodViewMode = "map" | "list";
 
 export type FoodStore = {
@@ -24,6 +24,32 @@ export type FoodStore = {
     longitude: number;
   };
 };
+
+export const SCHOOL_COORDINATE = {
+  latitude: 36.39151,
+  longitude: 127.36307,
+} as const;
+
+const EARTH_RADIUS_METERS = 6_371_000;
+
+export function getDistanceFromSchool(store: FoodStore) {
+  const latitudeDelta =
+    ((store.coordinate.latitude - SCHOOL_COORDINATE.latitude) * Math.PI) / 180;
+  const longitudeDelta =
+    ((store.coordinate.longitude - SCHOOL_COORDINATE.longitude) * Math.PI) /
+    180;
+  const schoolLatitude = (SCHOOL_COORDINATE.latitude * Math.PI) / 180;
+  const storeLatitude = (store.coordinate.latitude * Math.PI) / 180;
+  const haversine =
+    Math.sin(latitudeDelta / 2) ** 2 +
+    Math.cos(schoolLatitude) *
+      Math.cos(storeLatitude) *
+      Math.sin(longitudeDelta / 2) ** 2;
+
+  return (
+    2 * EARTH_RADIUS_METERS * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine))
+  );
+}
 
 export const FOOD_CATEGORIES: FoodCategory[] = [
   "전체",

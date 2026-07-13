@@ -23,6 +23,7 @@ export function StoreDetailHeader({
         >
           <BackIcon>‹</BackIcon>
         </BackButton>
+        <FoodEmoji accessibilityLabel="대표 메뉴">🍚</FoodEmoji>
       </TopRow>
 
       <TitleGroup>
@@ -60,6 +61,11 @@ const BackIcon = styled.Text`
   color: ${colors.neutral0};
   font-size: 32px;
   line-height: 34px;
+`;
+
+const FoodEmoji = styled.Text`
+  padding-right: 18px;
+  font-size: 70px;
 `;
 
 const TitleGroup = styled.View`

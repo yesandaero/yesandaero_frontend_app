@@ -9,6 +9,7 @@ import {
   FoodCategory,
   FoodSortOption,
   FoodViewMode,
+  getDistanceFromSchool,
 } from "@/components/food-stores/food-store-data";
 import { FoodStoreList } from "@/components/food-stores/food-store-list";
 import { FoodSearchField } from "@/components/food-stores/food-search-field";
@@ -48,11 +49,20 @@ export default function FoodStores() {
           .includes(normalizedQuery);
 
       return matchesBudget && matchesCategory && matchesQuery;
-    }).sort((firstStore, secondStore) =>
-      selectedSort === "discount"
-        ? secondStore.discount - firstStore.discount
-        : secondStore.rating - firstStore.rating,
-    );
+    }).sort((firstStore, secondStore) => {
+      if (selectedSort === "distance") {
+        return (
+          getDistanceFromSchool(firstStore) -
+          getDistanceFromSchool(secondStore)
+        );
+      }
+
+      if (selectedSort === "price") {
+        return firstStore.price - secondStore.price;
+      }
+
+      return secondStore.discount - firstStore.discount;
+    });
   }, [budget, query, selectedCategory, selectedSort]);
 
   return (
