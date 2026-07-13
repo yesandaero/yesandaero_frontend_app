@@ -5,11 +5,15 @@ import styled from "styled-components/native";
 import { colors } from "@/constants/color";
 
 type CouponSuccessModalProps = {
+  couponName: string;
+  storeName: string;
   visible: boolean;
   onConfirm: () => void;
 };
 
 export function CouponSuccessModal({
+  couponName,
+  storeName,
   visible,
   onConfirm,
 }: CouponSuccessModalProps) {
@@ -24,14 +28,12 @@ export function CouponSuccessModal({
       <ModalRoot>
         <DimLayer />
         <SuccessCard accessibilityRole="alert">
-          <Title>이모네 국밥 QR 인식 완료!</Title>
-          <Description>
-            다른 식당에서 바로 쓸 수 있는 쿠폰이 발급됐어요.
-          </Description>
+          <Title selectable>쿠폰 등록 완료!</Title>
+          <Description selectable>내 쿠폰함에 쿠폰이 등록됐어요.</Description>
 
           <CouponPreview>
-            <PreviewTitle>아메리카노 무료 쿠폰</PreviewTitle>
-            <PreviewStore>사용처 · 스덕컴 카페</PreviewStore>
+            <PreviewTitle selectable>{couponName}</PreviewTitle>
+            <PreviewStore selectable>사용처 · {storeName}</PreviewStore>
           </CouponPreview>
 
           <ConfirmButton accessibilityRole="button" onPress={onConfirm}>

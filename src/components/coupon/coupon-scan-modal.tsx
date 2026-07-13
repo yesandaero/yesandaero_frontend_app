@@ -1,24 +1,66 @@
-import React from "react";
+import {
+  CameraView,
+  type BarcodeScanningResult,
+  useCameraPermissions,
+} from "expo-camera";
+import React, { useEffect, useRef } from "react";
 import { Modal } from "react-native";
+import Toast from "react-native-toast-message";
 import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
 
 type CouponScanModalProps = {
   visible: boolean;
+  isRegistering: boolean;
   onCancel: () => void;
-  onRecognize: () => void;
+  onRecognize: (token: string) => void;
 };
 
 export function CouponScanModal({
   visible,
+  isRegistering,
   onCancel,
   onRecognize,
 }: CouponScanModalProps) {
+  const [permission, requestPermission] = useCameraPermissions();
+  const requestedForOpening = useRef(false);
+
+  useEffect(() => {
+    if (!visible) {
+      requestedForOpening.current = false;
+      return;
+    }
+
+    if (
+      permission &&
+      !permission.granted &&
+      permission.canAskAgain &&
+      !requestedForOpening.current
+    ) {
+      requestedForOpening.current = true;
+      void requestPermission();
+    }
+  }, [permission, requestPermission, visible]);
+
+  const handleBarcodeScanned = ({ data }: BarcodeScanningResult) => {
+    const token = data.trim();
+
+    if (!token || isRegistering) return;
+    onRecognize(token);
+  };
+
+  const handleCameraError = () => {
+    Toast.show({
+      type: "error",
+      text1: "카메라를 실행하지 못했습니다.",
+    });
+  };
+
   return (
     <Modal
       animationType="fade"
-      onRequestClose={onCancel}
+      onRequestClose={isRegistering ? undefined : onCancel}
       statusBarTranslucent
       transparent
       visible={visible}
@@ -26,19 +68,59 @@ export function CouponScanModal({
       <ModalRoot>
         <DimLayer />
         <ScannerSheet>
-          <Title>사장님 화면의 QR을 카메라로 비춰주세요</Title>
+          <Title selectable>사장님 화면의 QR을 카메라로 비춰주세요</Title>
 
-          <ScannerPreview accessibilityLabel="가상 QR 스캐너">
-            <ScannerGlow />
-            <QrSymbol>▦</QrSymbol>
-            <ScanLine />
-            <ScannerCaption>QR 영역을 네모 안에 맞춰주세요</ScannerCaption>
+          <ScannerPreview accessibilityLabel="쿠폰 QR 스캐너">
+            {visible && permission?.granted ? (
+              <CameraPreview
+                active={visible}
+                barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
+                facing="back"
+                onBarcodeScanned={
+                  isRegistering ? undefined : handleBarcodeScanned
+                }
+                onMountError={handleCameraError}
+              />
+            ) : (
+              <PermissionState>
+                <PermissionTitle selectable>
+                  {permission
+                    ? "카메라 권한이 필요합니다"
+                    : "카메라 권한을 확인하고 있어요"}
+                </PermissionTitle>
+                {permission?.canAskAgain ? (
+                  <PermissionButton
+                    accessibilityRole="button"
+                    onPress={requestPermission}
+                  >
+                    <PermissionButtonText>카메라 권한 허용</PermissionButtonText>
+                  </PermissionButton>
+                ) : permission ? (
+                  <PermissionDescription selectable>
+                    기기 설정에서 카메라 권한을 허용해 주세요.
+                  </PermissionDescription>
+                ) : null}
+              </PermissionState>
+            )}
+
+            <ScanFrame pointerEvents="none" />
+            <ScannerCaption selectable>
+              QR 영역을 네모 안에 맞춰주세요
+            </ScannerCaption>
+
+            {isRegistering && (
+              <RegistrationOverlay accessibilityRole="progressbar">
+                <RegistrationText selectable>쿠폰 등록 중...</RegistrationText>
+              </RegistrationOverlay>
+            )}
           </ScannerPreview>
 
-          <RecognizeButton accessibilityRole="button" onPress={onRecognize}>
-            <RecognizeButtonText>QR 인식하기</RecognizeButtonText>
-          </RecognizeButton>
-          <CancelButton accessibilityRole="button" onPress={onCancel}>
+          <CancelButton
+            accessibilityRole="button"
+            disabled={isRegistering}
+            onPress={onCancel}
+            $disabled={isRegistering}
+          >
             <CancelButtonText>취소</CancelButtonText>
           </CancelButton>
         </ScannerSheet>
@@ -83,7 +165,7 @@ const Title = styled.Text`
 
 const ScannerPreview = styled.View`
   position: relative;
-  height: 230px;
+  height: 300px;
   overflow: hidden;
   align-items: center;
   justify-content: center;
@@ -93,61 +175,93 @@ const ScannerPreview = styled.View`
   background-color: ${colors.neutral900};
 `;
 
-const ScannerGlow = styled.View`
+const CameraPreview = styled(CameraView)`
   position: absolute;
-  width: 150px;
-  height: 150px;
-  opacity: 0.22;
-  border-radius: 75px;
-  background-color: ${colors.primary400};
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 `;
 
-const QrSymbol = styled.Text`
-  color: ${colors.neutral0};
-  font-size: 92px;
-  font-weight: 300;
-`;
-
-const ScanLine = styled.View`
+const ScanFrame = styled.View`
   position: absolute;
-  left: 24px;
-  right: 24px;
-  top: 112px;
-  height: 2px;
-  background-color: ${colors.primary400};
+  width: 190px;
+  height: 190px;
+  border-width: 3px;
+  border-color: ${colors.primary400};
+  border-radius: 18px;
 `;
 
 const ScannerCaption = styled.Text`
   position: absolute;
-  bottom: 12px;
-  color: ${colors.neutral300};
-  font-size: 11px;
-  font-weight: 700;
+  bottom: 14px;
+  color: ${colors.neutral0};
+  font-size: 12px;
+  font-weight: 800;
 `;
 
-const RecognizeButton = styled.Pressable`
-  min-height: 48px;
-  margin-top: 18px;
+const PermissionState = styled.View`
+  align-items: center;
+  gap: 14px;
+  padding: 24px;
+`;
+
+const PermissionTitle = styled.Text`
+  color: ${colors.neutral0};
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+`;
+
+const PermissionDescription = styled.Text`
+  color: ${colors.neutral300};
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 19px;
+  text-align: center;
+`;
+
+const PermissionButton = styled.Pressable`
+  min-height: 42px;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
+  padding: 0 16px;
+  border-radius: 12px;
   background-color: ${colors.primary700};
 `;
 
-const RecognizeButtonText = styled.Text`
+const PermissionButtonText = styled.Text`
   color: ${colors.neutral0};
   font-size: 14px;
+  font-weight: 800;
+`;
+
+const RegistrationOverlay = styled.View`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.66);
+`;
+
+const RegistrationText = styled.Text`
+  color: ${colors.neutral0};
+  font-size: 17px;
   font-weight: 900;
 `;
 
-const CancelButton = styled.Pressable`
+const CancelButton = styled.Pressable<{ $disabled: boolean }>`
   min-height: 44px;
-  margin-top: 8px;
+  margin-top: 12px;
   align-items: center;
   justify-content: center;
   border-width: 1px;
   border-color: ${colors.neutral300};
   border-radius: 14px;
+  opacity: ${({ $disabled }) => ($disabled ? 0.45 : 1)};
 `;
 
 const CancelButtonText = styled.Text`

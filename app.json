@@ -34,6 +34,13 @@
         {
           "locationWhenInUsePermission": "현재 위치를 기준으로 가까운 가게를 찾기 위해 위치 권한이 필요합니다."
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "쿠폰 QR을 스캔하기 위해 카메라 권한이 필요합니다.",
+          "recordAudioAndroid": false
+        }
       ]
     ],
     "experiments": {

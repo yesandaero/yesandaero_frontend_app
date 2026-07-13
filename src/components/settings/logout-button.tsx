@@ -37,12 +37,6 @@ const Button = styled.Pressable<{ $disabled: boolean }>`
   background-color: ${colors.neutral0};
 `;
 
-const Icon = styled.Text`
-  color: ${colors.errorRed};
-  font-size: 20px;
-  font-weight: 800;
-`;
-
 const ButtonText = styled.Text`
   color: ${colors.errorRed};
   font-size: 16px;

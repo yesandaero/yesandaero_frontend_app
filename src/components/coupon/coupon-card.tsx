@@ -1,28 +1,42 @@
 import React from "react";
 import styled from "styled-components/native";
 
+import type { Coupon } from "@/apis/Coupon/type";
 import { colors } from "@/constants/color";
 
 type CouponCardProps = {
-  onUsePress: () => void;
+  coupon: Coupon;
+  onUsePress: (couponId: number) => void;
 };
 
-export function CouponCard({ onUsePress }: CouponCardProps) {
+const formatExpirationDate = (expiresAt: string) => {
+  const date = new Date(expiresAt);
+
+  if (Number.isNaN(date.getTime())) return expiresAt;
+  return date.toLocaleDateString("ko-KR");
+};
+
+export function CouponCard({ coupon, onUsePress }: CouponCardProps) {
   return (
-    <Card accessibilityLabel="아메리카노 무료 쿠폰">
+    <Card accessibilityLabel={`${coupon.name}, ${coupon.store.name}`}>
       <CardTopRow>
         <StatusBadge>
           <StatusText>사용가능</StatusText>
         </StatusBadge>
       </CardTopRow>
 
-      <CouponTitle selectable>아메리카노 무료 쿠폰</CouponTitle>
-      <Store selectable>사용처: 스덕컴 카페</Store>
-      <Expired selectable>발급일: 2026-7-13</Expired>
+      <CouponTitle selectable>{coupon.name}</CouponTitle>
+      <Store selectable>사용처: {coupon.store.name}</Store>
+      <Expired selectable>
+        만료일: {formatExpirationDate(coupon.expiresAt)}
+      </Expired>
 
       <Divider />
 
-      <UseButton accessibilityRole="button" onPress={onUsePress}>
+      <UseButton
+        accessibilityRole="button"
+        onPress={() => onUsePress(coupon.couponId)}
+      >
         <UseButtonText>쿠폰 사용하기</UseButtonText>
       </UseButton>
     </Card>
@@ -30,7 +44,6 @@ export function CouponCard({ onUsePress }: CouponCardProps) {
 }
 
 const Card = styled.View`
-  margin-top: 22px;
   padding: 20px;
   border-width: 1px;
   border-color: ${colors.neutral200};
