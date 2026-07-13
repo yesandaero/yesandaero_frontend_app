@@ -7,7 +7,6 @@ import { BudgetActionButton } from "@/components/budget/budget-action-button";
 import { BudgetHeader } from "@/components/budget/budget-header";
 import { BudgetSelector } from "@/components/budget/budget-selector";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
-import { colors } from "@/constants/color";
 import { useSettingsStore } from "@/stores/settings-store";
 
 const DEFAULT_BUDGET = "10000";
@@ -74,14 +73,14 @@ export default function MoneySetting() {
 
 const Page = styled.View`
   flex: 1;
-  background-color: ${colors.primary50};
+  background-color: white;
 `;
 
 const ContentScroll = styled(ScrollView).attrs({
   contentContainerStyle: { flexGrow: 1 },
 })`
   flex: 1;
-  background-color: ${colors.primary50};
+  background-color: white;
 `;
 
 const Content = styled.View`

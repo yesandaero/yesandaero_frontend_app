@@ -9,6 +9,7 @@ import { LocationMapPreview } from "@/components/location/location-map-preview";
 import { LocationNextButton } from "@/components/location/location-next-button";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { useRoadAddress } from "@/hooks/use-road-address";
+import { useSettingsStore } from "@/stores/settings-store";
 
 export default function Location() {
   const { source } = useLocalSearchParams<{ source?: string }>();
@@ -23,6 +24,7 @@ export default function Location() {
   } = useRoadAddress();
   const [draftAddress, setDraftAddress] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const saveLocation = useSettingsStore((state) => state.setLocation);
 
   const handleStartEditing = () => {
     setDraftAddress("");
@@ -51,13 +53,18 @@ export default function Location() {
   const handleNext = () => {
     if (!selectedLocation) return;
 
+    if (isSettingsFlow) {
+      saveLocation(selectedLocation);
+      router.replace("/tab/Setting");
+      return;
+    }
+
     router.push({
       pathname: "/MoneySetting",
       params: {
         latitude: String(selectedLocation.latitude),
         longitude: String(selectedLocation.longitude),
         roadAddress: selectedLocation.address,
-        ...(isSettingsFlow ? { source: "settings" } : {}),
       },
     });
   };
@@ -89,6 +96,7 @@ export default function Location() {
       </ScreenScroll>
       <LocationNextButton
         disabled={!selectedLocation || isLocating}
+        label={isSettingsFlow ? "완료" : "다음 단계"}
         onPress={handleNext}
       />
       <AppBottomNavigation

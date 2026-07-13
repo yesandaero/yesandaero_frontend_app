@@ -69,7 +69,7 @@ const InputContainer = styled.View`
   padding: 0 18px;
   border: 2px solid ${colors.primary200};
   border-radius: 18px;
-  background-color: ${colors.neutral0};
+  background-color: white;
 `;
 
 const AmountInput = styled.TextInput`

@@ -1,4 +1,6 @@
 import { Image } from "expo-image";
+import { router } from "expo-router";
+import { useEffect } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
@@ -7,13 +9,13 @@ import { colors } from "@/constants/color";
 const SPLASH_DURATION_MS = 2000;
 
 export default function Splash() {
-  //   useEffect(() => {
-  //     const timer = setTimeout(() => {
-  //       router.replace("/Login");
-  //     }, SPLASH_DURATION_MS);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.replace("/Login");
+    }, SPLASH_DURATION_MS);
 
-  //     return () => clearTimeout(timer);
-  //   }, []);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <SplashScroll

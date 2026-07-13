@@ -14,7 +14,7 @@ export function LocationHeader() {
 
 const Header = styled.View`
   padding: 50px 20px 13px;
-  background-color: ${colors.primary50};
+  background-color: white;
 `;
 
 const Title = styled.Text`

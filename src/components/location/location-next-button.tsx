@@ -33,7 +33,7 @@ const Container = styled.View`
   max-width: 460px;
   align-self: center;
   padding: 10px 20px 12px;
-  background-color: ${colors.primary50};
+  background-color: white;
 `;
 
 const Button = styled.Pressable<{ $disabled: boolean }>`

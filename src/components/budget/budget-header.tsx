@@ -31,6 +31,7 @@ const Header = styled.View`
   align-items: left;
   gap: 12px;
   padding-bottom: 18px;
+  background-color: white;
 `;
 
 const BackButton = styled.Pressable`
@@ -40,7 +41,7 @@ const BackButton = styled.Pressable`
   justify-content: center;
   border: 1px solid ${colors.primary200};
   border-radius: 12px;
-  background-color: ${colors.neutral0};
+  background-color: white;
 `;
 
 const BackIcon = styled.Text`
