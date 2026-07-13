@@ -2,15 +2,21 @@ import { Link } from "expo-router";
 import React from "react";
 import styled from "styled-components/native";
 
+import type { MapStore, StoreCategory } from "@/apis/Store/type";
 import { colors } from "@/constants/color";
-import { FoodStore } from "./food-store-data";
+import { getCategoryLabel } from "./food-store-data";
 
 type FoodStoreListProps = {
   budget: number;
-  stores: FoodStore[];
+  categories: StoreCategory[];
+  stores: MapStore[];
 };
 
-export function FoodStoreList({ budget, stores }: FoodStoreListProps) {
+export function FoodStoreList({
+  budget,
+  categories,
+  stores,
+}: FoodStoreListProps) {
   if (stores.length === 0) {
     return (
       <EmptyCard>
@@ -24,10 +30,13 @@ export function FoodStoreList({ budget, stores }: FoodStoreListProps) {
     <List>
       {stores.map((store) => (
         <Link
-          key={store.id}
+          key={store.storeId}
           href={{
             pathname: "/StoreDetail",
-            params: { budget: String(budget) },
+            params: {
+              budget: String(budget),
+              storeId: String(store.storeId),
+            },
           }}
           asChild
         >
@@ -37,11 +46,18 @@ export function FoodStoreList({ budget, stores }: FoodStoreListProps) {
                 <StoreName numberOfLines={1}>{store.name}</StoreName>
               </StoreTopRow>
               <StoreMeta>
-                {store.category}: {store.menu}
+                {getCategoryLabel(store.category, categories)} · {store.openTime}
+                ~{store.closeTime}
               </StoreMeta>
               <StoreBottomRow>
-                <Discount>{store.discount}% 할인</Discount>
-                <Price>{store.price.toLocaleString()}원</Price>
+                <Distance>
+                  {store.walkingMinutes !== null &&
+                  store.distanceMeters !== null
+                    ? `도보 ${store.walkingMinutes}분 · ${store.distanceMeters.toLocaleString()}m`
+                    : "거리 정보 없음"}
+                  {store.hasUsableCoupon ? " · 🎟️ 쿠폰 사용 가능" : ""}
+                </Distance>
+                <Price>{store.avgPrice.toLocaleString()}원</Price>
               </StoreBottomRow>
             </StoreInformation>
           </StoreCard>
@@ -99,7 +115,8 @@ const StoreBottomRow = styled.View`
   margin-top: 7px;
 `;
 
-const Discount = styled.Text`
+const Distance = styled.Text`
+  flex: 1;
   color: ${colors.primary700};
   font-size: 12px;
   font-weight: 800;

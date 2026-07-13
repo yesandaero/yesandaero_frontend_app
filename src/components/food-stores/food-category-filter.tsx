@@ -2,18 +2,23 @@ import React from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
+import type { StoreCategory } from "@/apis/Store/type";
 import { colors } from "@/constants/color";
-import { FOOD_CATEGORIES, FoodCategory } from "./food-store-data";
+import { FoodCategory } from "./food-store-data";
 
 type FoodCategoryFilterProps = {
+  categories: StoreCategory[];
   selectedCategory: FoodCategory;
   onSelectCategory: (category: FoodCategory) => void;
 };
 
 export function FoodCategoryFilter({
+  categories,
   selectedCategory,
   onSelectCategory,
 }: FoodCategoryFilterProps) {
+  const options = [{ code: "ALL" as const, label: "전체" }, ...categories];
+
   return (
     <CategoryScroll
       directionalLockEnabled
@@ -21,18 +26,18 @@ export function FoodCategoryFilter({
       nestedScrollEnabled
       showsHorizontalScrollIndicator={false}
     >
-      {FOOD_CATEGORIES.map((category) => {
-        const isSelected = category === selectedCategory;
+      {options.map((category) => {
+        const isSelected = category.code === selectedCategory;
 
         return (
           <CategoryButton
-            key={category}
+            key={category.code}
             accessibilityRole="button"
             accessibilityState={{ selected: isSelected }}
             $selected={isSelected}
-            onPress={() => onSelectCategory(category)}
+            onPress={() => onSelectCategory(category.code)}
           >
-            <CategoryText $selected={isSelected}>{category}</CategoryText>
+            <CategoryText $selected={isSelected}>{category.label}</CategoryText>
           </CategoryButton>
         );
       })}

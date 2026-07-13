@@ -1,12 +1,16 @@
 import { router } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components/native";
 
+import type { MapStore, StoreMapBounds } from "@/apis/Store/type";
 import { colors } from "@/constants/color";
-import { FoodStore } from "./food-store-data";
+import { DEFAULT_MAP_BOUNDS } from "./food-store-data";
 
 type FoodStoresMapProps = {
-  stores: FoodStore[];
+  budget: number;
+  isLoading?: boolean;
+  onBoundsChange: (bounds: StoreMapBounds) => void;
+  stores: MapStore[];
 };
 
 const POSITIONS = [
@@ -17,7 +21,16 @@ const POSITIONS = [
   { left: "43%", top: "35%" },
 ] as const;
 
-export function FoodStoresMapFallback({ stores }: FoodStoresMapProps) {
+export function FoodStoresMapFallback({
+  budget,
+  isLoading = false,
+  onBoundsChange,
+  stores,
+}: FoodStoresMapProps) {
+  useEffect(() => {
+    onBoundsChange(DEFAULT_MAP_BOUNDS);
+  }, [onBoundsChange]);
+
   return (
     <MapContainer accessibilityLabel="대덕소프트웨어마이스터고 주변 맛집 지도 미리보기">
       <Road $horizontal $position="28%" />
@@ -32,20 +45,34 @@ export function FoodStoresMapFallback({ stores }: FoodStoresMapProps) {
 
         return (
           <MarkerPreview
-            key={store.id}
+            key={store.storeId}
             accessibilityLabel={`${store.name} 상세 보기`}
-            onPress={() => router.push("/StoreDetail")}
+            onPress={() =>
+              router.push({
+                pathname: "/StoreDetail",
+                params: {
+                  budget: String(budget),
+                  storeId: String(store.storeId),
+                },
+              })
+            }
             style={{ left: position.left, top: position.top }}
           >
             <PriceBubble>
-              <PriceText>{store.price.toLocaleString()}원</PriceText>
+              <PriceText>{store.avgPrice.toLocaleString()}원</PriceText>
+              {store.hasUsableCoupon && <CouponBadge>쿠폰</CouponBadge>}
             </PriceBubble>
             <Pin>
-              <PinEmoji>{store.emoji}</PinEmoji>
+              <PinEmoji>🍽️</PinEmoji>
             </Pin>
           </MarkerPreview>
         );
       })}
+      {isLoading && (
+        <LoadingBadge>
+          <LoadingText>가게 불러오는 중...</LoadingText>
+        </LoadingBadge>
+      )}
     </MapContainer>
   );
 }
@@ -84,11 +111,20 @@ const MarkerPreview = styled.Pressable`
 `;
 
 const PriceBubble = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
   padding: 5px 8px;
   border-width: 1px;
   border-color: ${colors.primary300};
   border-radius: 13px;
   background-color: ${colors.neutral0};
+`;
+
+const CouponBadge = styled.Text`
+  color: ${colors.errorRed};
+  font-size: 9px;
+  font-weight: 900;
 `;
 
 const PriceText = styled.Text`
@@ -109,4 +145,19 @@ const Pin = styled.View`
 
 const PinEmoji = styled.Text`
   font-size: 16px;
+`;
+
+const LoadingBadge = styled.View`
+  position: absolute;
+  top: 10px;
+  align-self: center;
+  padding: 7px 12px;
+  border-radius: 14px;
+  background-color: ${colors.neutral900};
+`;
+
+const LoadingText = styled.Text`
+  color: ${colors.neutral0};
+  font-size: 11px;
+  font-weight: 800;
 `;

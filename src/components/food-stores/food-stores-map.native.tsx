@@ -1,22 +1,29 @@
-import React from "react";
 import { router } from "expo-router";
-import MapView, { Marker } from "react-native-maps";
+import React from "react";
+import MapView, { Marker, type Region } from "react-native-maps";
 import styled from "styled-components/native";
 
+import type { MapStore, StoreMapBounds } from "@/apis/Store/type";
 import { colors } from "@/constants/color";
-import { FoodStore, SCHOOL_COORDINATE } from "./food-store-data";
+import { regionToMapBounds, SCHOOL_REGION } from "./food-store-data";
 
 type FoodStoresMapProps = {
-  stores: FoodStore[];
+  budget: number;
+  isLoading?: boolean;
+  onBoundsChange: (bounds: StoreMapBounds) => void;
+  stores: MapStore[];
 };
 
-const SCHOOL_REGION = {
-  ...SCHOOL_COORDINATE,
-  latitudeDelta: 0.007,
-  longitudeDelta: 0.007,
-};
+export function FoodStoresMap({
+  budget,
+  isLoading = false,
+  onBoundsChange,
+  stores,
+}: FoodStoresMapProps) {
+  const handleRegionChangeComplete = (region: Region) => {
+    onBoundsChange(regionToMapBounds(region));
+  };
 
-export function FoodStoresMap({ stores }: FoodStoresMapProps) {
   return (
     <MapContainer accessibilityLabel="대덕소프트웨어마이스터고 주변 맛집 지도">
       <MapView
@@ -27,26 +34,44 @@ export function FoodStoresMap({ stores }: FoodStoresMapProps) {
         showsCompass={false}
         showsPointsOfInterest={false}
         style={{ flex: 1 }}
+        onRegionChangeComplete={handleRegionChangeComplete}
       >
         {stores.map((store) => (
           <Marker
-            key={store.id}
-            coordinate={store.coordinate}
-            description={store.menu}
-            onPress={() => router.push("/StoreDetail")}
+            key={store.storeId}
+            coordinate={{
+              latitude: store.latitude,
+              longitude: store.longitude,
+            }}
+            description={`${store.openTime}~${store.closeTime}`}
+            onPress={() =>
+              router.push({
+                pathname: "/StoreDetail",
+                params: {
+                  budget: String(budget),
+                  storeId: String(store.storeId),
+                },
+              })
+            }
             title={store.name}
           >
             <MarkerContent>
               <PriceBubble>
-                <PriceText>{store.price.toLocaleString()}원</PriceText>
+                <PriceText>{store.avgPrice.toLocaleString()}원</PriceText>
+                {store.hasUsableCoupon && <CouponBadge>쿠폰</CouponBadge>}
               </PriceBubble>
               <Pin>
-                <PinEmoji>{store.emoji}</PinEmoji>
+                <PinEmoji>🍽️</PinEmoji>
               </Pin>
             </MarkerContent>
           </Marker>
         ))}
       </MapView>
+      {isLoading && (
+        <LoadingBadge accessibilityLiveRegion="polite">
+          <LoadingText>가게 불러오는 중...</LoadingText>
+        </LoadingBadge>
+      )}
     </MapContainer>
   );
 }
@@ -65,11 +90,20 @@ const MarkerContent = styled.View`
 `;
 
 const PriceBubble = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
   padding: 5px 9px;
   border-width: 1px;
   border-color: ${colors.primary300};
   border-radius: 14px;
   background-color: ${colors.neutral0};
+`;
+
+const CouponBadge = styled.Text`
+  color: ${colors.errorRed};
+  font-size: 9px;
+  font-weight: 900;
 `;
 
 const PriceText = styled.Text`
@@ -90,4 +124,19 @@ const Pin = styled.View`
 
 const PinEmoji = styled.Text`
   font-size: 17px;
+`;
+
+const LoadingBadge = styled.View`
+  position: absolute;
+  top: 10px;
+  align-self: center;
+  padding: 7px 12px;
+  border-radius: 14px;
+  background-color: ${colors.neutral900};
+`;
+
+const LoadingText = styled.Text`
+  color: ${colors.neutral0};
+  font-size: 11px;
+  font-weight: 800;
 `;

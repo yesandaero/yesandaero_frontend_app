@@ -1,133 +1,43 @@
-export type FoodCategory =
-  | "전체"
-  | "한식"
-  | "중식"
-  | "일식"
-  | "양식"
-  | "분식"
-  | "카페";
+import type {
+  StoreCategory,
+  StoreCategoryCode,
+  StoreMapBounds,
+} from "@/apis/Store/type";
 
-export type FoodSortOption = "discount" | "distance" | "price";
+export type FoodCategory = StoreCategoryCode | "ALL";
+export type FoodSortOption = "distance" | "price";
 export type FoodViewMode = "map" | "list";
-
-export type FoodStore = {
-  id: string;
-  name: string;
-  category: Exclude<FoodCategory, "전체">;
-  menu: string;
-  price: number;
-  rating: number;
-  discount: number;
-  emoji: string;
-  coordinate: {
-    latitude: number;
-    longitude: number;
-  };
-};
 
 export const SCHOOL_COORDINATE = {
   latitude: 36.39151,
   longitude: 127.36307,
 } as const;
 
-const EARTH_RADIUS_METERS = 6_371_000;
+export const SCHOOL_REGION = {
+  ...SCHOOL_COORDINATE,
+  latitudeDelta: 0.007,
+  longitudeDelta: 0.007,
+} as const;
 
-export function getDistanceFromSchool(store: FoodStore) {
-  const latitudeDelta =
-    ((store.coordinate.latitude - SCHOOL_COORDINATE.latitude) * Math.PI) / 180;
-  const longitudeDelta =
-    ((store.coordinate.longitude - SCHOOL_COORDINATE.longitude) * Math.PI) /
-    180;
-  const schoolLatitude = (SCHOOL_COORDINATE.latitude * Math.PI) / 180;
-  const storeLatitude = (store.coordinate.latitude * Math.PI) / 180;
-  const haversine =
-    Math.sin(latitudeDelta / 2) ** 2 +
-    Math.cos(schoolLatitude) *
-      Math.cos(storeLatitude) *
-      Math.sin(longitudeDelta / 2) ** 2;
+export const regionToMapBounds = (region: {
+  latitude: number;
+  longitude: number;
+  latitudeDelta: number;
+  longitudeDelta: number;
+}): StoreMapBounds => {
+  const round = (value: number) => Number(value.toFixed(6));
 
-  return (
-    2 *
-    EARTH_RADIUS_METERS *
-    Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine))
-  );
-}
+  return {
+    swLat: round(region.latitude - region.latitudeDelta / 2),
+    swLng: round(region.longitude - region.longitudeDelta / 2),
+    neLat: round(region.latitude + region.latitudeDelta / 2),
+    neLng: round(region.longitude + region.longitudeDelta / 2),
+  };
+};
 
-export const FOOD_CATEGORIES: FoodCategory[] = [
-  "전체",
-  "한식",
-  "중식",
-  "일식",
-  "양식",
-  "분식",
-  "카페",
-];
+export const DEFAULT_MAP_BOUNDS = regionToMapBounds(SCHOOL_REGION);
 
-export const FOOD_STORES: FoodStore[] = [
-  {
-    id: "1",
-    name: "대덕손만두",
-    category: "한식",
-    menu: "고기만두",
-    price: 6500,
-    rating: 4.8,
-    discount: 18,
-    emoji: "🥟",
-    coordinate: { latitude: 36.3932, longitude: 127.3614 },
-  },
-  {
-    id: "2",
-    name: "한그릇 분식",
-    category: "분식",
-    menu: "떡볶이",
-    price: 4250,
-    rating: 4.6,
-    discount: 25,
-    emoji: "🍢",
-    coordinate: { latitude: 36.3917, longitude: 127.3644 },
-  },
-  {
-    id: "3",
-    name: "소프트 파스타",
-    category: "양식",
-    menu: "토마토 파스타",
-    price: 7500,
-    rating: 4.7,
-    discount: 20,
-    emoji: "🍝",
-    coordinate: { latitude: 36.3908, longitude: 127.3637 },
-  },
-  {
-    id: "4",
-    name: "궁동 짜장면",
-    category: "중식",
-    menu: "짜장면",
-    price: 7000,
-    rating: 4.9,
-    discount: 12,
-    emoji: "🥡",
-    coordinate: { latitude: 36.3902, longitude: 127.3621 },
-  },
-  {
-    id: "5",
-    name: "빨간지붕 카페",
-    category: "카페",
-    menu: "아메리카노",
-    price: 3500,
-    rating: 4.5,
-    discount: 30,
-    emoji: "☕",
-    coordinate: { latitude: 36.3911, longitude: 127.3631 },
-  },
-  {
-    id: "6",
-    name: "하루 초밥",
-    category: "일식",
-    menu: "모둠 초밥",
-    price: 8000,
-    rating: 4.7,
-    discount: 15,
-    emoji: "🍣",
-    coordinate: { latitude: 36.3923, longitude: 127.3638 },
-  },
-];
+export const getCategoryLabel = (
+  code: StoreCategoryCode,
+  categories: StoreCategory[],
+) => categories.find((category) => category.code === code)?.label ?? code;

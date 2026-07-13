@@ -10,7 +10,6 @@ type FoodSortFilterProps = {
 };
 
 const OPTIONS: { label: string; value: FoodSortOption }[] = [
-  { label: "할인많은순", value: "discount" },
   { label: "거리 가까운 순", value: "distance" },
   { label: "가격 낮은 순", value: "price" },
 ];
