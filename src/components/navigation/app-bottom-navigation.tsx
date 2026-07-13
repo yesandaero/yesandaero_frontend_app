@@ -73,8 +73,7 @@ const Icon = styled.Text`
 
 const Label = styled.Text<{ $active: boolean }>`
   margin-top: 2px;
-  color: ${({ $active }) =>
-    $active ? colors.primary800 : colors.neutral600};
+  color: ${({ $active }) => ($active ? colors.primary800 : colors.neutral600)};
   font-size: 13px;
   font-weight: ${({ $active }) => ($active ? 900 : 700)};
 `;

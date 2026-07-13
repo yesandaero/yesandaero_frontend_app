@@ -6,7 +6,7 @@ import { colors } from "@/constants/color";
 export function SettingsHeader() {
   return (
     <Header>
-      <Title>맛집 설정</Title>
+      <Title>설정</Title>
       <Description>
         현재 위치와 한 끼 예산을 언제든 다시 설정할 수 있어요.
       </Description>

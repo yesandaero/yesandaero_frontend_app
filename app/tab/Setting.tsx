@@ -5,7 +5,6 @@ import styled from "styled-components/native";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { SettingsHeader } from "@/components/settings/settings-header";
 import { SettingsOptionCard } from "@/components/settings/settings-option-card";
-import { colors } from "@/constants/color";
 
 export default function Setting() {
   return (
@@ -43,14 +42,13 @@ export default function Setting() {
 
 const Page = styled.View`
   flex: 1;
-  background-color: ${colors.primary50};
 `;
 
 const ContentScroll = styled(ScrollView).attrs({
   contentContainerStyle: { flexGrow: 1 },
 })`
   flex: 1;
-  background-color: ${colors.primary50};
+  background-color: white;
 `;
 
 const Content = styled.View`

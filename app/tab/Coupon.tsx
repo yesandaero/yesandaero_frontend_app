@@ -10,7 +10,6 @@ import { CouponHeader } from "@/components/coupon/coupon-header";
 import { CouponScanModal } from "@/components/coupon/coupon-scan-modal";
 import { CouponSuccessModal } from "@/components/coupon/coupon-success-modal";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
-import { colors } from "@/constants/color";
 
 export default function Coupon() {
   const [isScannerVisible, setIsScannerVisible] = useState(false);
@@ -74,14 +73,13 @@ export default function Coupon() {
 
 const Page = styled.View`
   flex: 1;
-  background-color: ${colors.primary50};
 `;
 
 const ContentScroll = styled(ScrollView).attrs({
   contentContainerStyle: { flexGrow: 1 },
 })`
   flex: 1;
-  background-color: ${colors.primary50};
+  background-color: white;
 `;
 
 const Content = styled.View`
