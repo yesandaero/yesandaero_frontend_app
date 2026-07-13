@@ -4,6 +4,8 @@ import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
 import { FoodCategoryFilter } from "@/components/food-stores/food-category-filter";
+import { FoodSearchField } from "@/components/food-stores/food-search-field";
+import { FoodSortFilter } from "@/components/food-stores/food-sort-filter";
 import {
   FOOD_STORES,
   FoodCategory,
@@ -12,8 +14,6 @@ import {
   getDistanceFromSchool,
 } from "@/components/food-stores/food-store-data";
 import { FoodStoreList } from "@/components/food-stores/food-store-list";
-import { FoodSearchField } from "@/components/food-stores/food-search-field";
-import { FoodSortFilter } from "@/components/food-stores/food-sort-filter";
 import { FoodStoresHeader } from "@/components/food-stores/food-stores-header";
 import { FoodStoresMap } from "@/components/food-stores/food-stores-map";
 import { FoodViewToggle } from "@/components/food-stores/food-view-toggle";
@@ -26,8 +26,7 @@ export default function FoodStores() {
   const savedBudget = useSettingsStore((state) => state.budget);
   const [selectedCategory, setSelectedCategory] =
     useState<FoodCategory>("전체");
-  const [selectedSort, setSelectedSort] =
-    useState<FoodSortOption>("discount");
+  const [selectedSort, setSelectedSort] = useState<FoodSortOption>("discount");
   const [viewMode, setViewMode] = useState<FoodViewMode>("map");
   const [query, setQuery] = useState("");
 
@@ -56,8 +55,7 @@ export default function FoodStores() {
     }).sort((firstStore, secondStore) => {
       if (selectedSort === "distance") {
         return (
-          getDistanceFromSchool(firstStore) -
-          getDistanceFromSchool(secondStore)
+          getDistanceFromSchool(firstStore) - getDistanceFromSchool(secondStore)
         );
       }
 
@@ -84,6 +82,8 @@ export default function FoodStores() {
             onSelectCategory={setSelectedCategory}
           />
           <FoodSearchField value={query} onChangeText={setQuery} />
+
+          <FoodViewToggle viewMode={viewMode} onChangeViewMode={setViewMode} />
           {viewMode === "list" ? (
             <FoodSortFilter
               selectedSort={selectedSort}
@@ -92,7 +92,6 @@ export default function FoodStores() {
           ) : (
             <FilterSpacer />
           )}
-          <FoodViewToggle viewMode={viewMode} onChangeViewMode={setViewMode} />
 
           {viewMode === "map" ? (
             <FoodStoresMap stores={visibleStores} />

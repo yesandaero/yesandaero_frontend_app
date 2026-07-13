@@ -50,11 +50,11 @@ const ScanButton = styled.Pressable`
   align-items: center;
   justify-content: center;
   border-radius: 15px;
-  background-color: ${colors.primary700};
+  background-color: ${colors.primary300};
 `;
 
 const ScanButtonText = styled.Text`
-  color: ${colors.neutral0};
+  color: #000000;
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 700;
 `;

@@ -1,5 +1,5 @@
-import React from "react";
 import { router } from "expo-router";
+import React from "react";
 import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";

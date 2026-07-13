@@ -43,7 +43,7 @@ const Container = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 10px 0;
+  margin: 0px 0px 8px;
 `;
 
 const SortButton = styled.Pressable<{ $selected: boolean }>`

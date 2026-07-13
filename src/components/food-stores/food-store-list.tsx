@@ -32,13 +32,12 @@ export function FoodStoreList({ budget, stores }: FoodStoreListProps) {
           asChild
         >
           <StoreCard accessibilityLabel={`${store.name} 상세 보기`}>
-            <StoreEmoji>{store.emoji}</StoreEmoji>
             <StoreInformation>
               <StoreTopRow>
                 <StoreName numberOfLines={1}>{store.name}</StoreName>
               </StoreTopRow>
               <StoreMeta>
-                {store.category} · {store.menu}
+                {store.category}: {store.menu}
               </StoreMeta>
               <StoreBottomRow>
                 <Discount>{store.discount}% 할인</Discount>
@@ -61,16 +60,11 @@ const StoreCard = styled.Pressable`
   min-height: 94px;
   flex-direction: row;
   align-items: center;
-  padding: 13px;
+  padding: 16px 18px;
   border-width: 1px;
   border-color: ${colors.primary200};
   border-radius: 16px;
   background-color: ${colors.neutral0};
-`;
-
-const StoreEmoji = styled.Text`
-  width: 46px;
-  font-size: 30px;
 `;
 
 const StoreInformation = styled.View`

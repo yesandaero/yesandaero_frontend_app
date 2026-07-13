@@ -47,7 +47,9 @@ export function getDistanceFromSchool(store: FoodStore) {
       Math.sin(longitudeDelta / 2) ** 2;
 
   return (
-    2 * EARTH_RADIUS_METERS * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine))
+    2 *
+    EARTH_RADIUS_METERS *
+    Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine))
   );
 }
 
@@ -66,7 +68,7 @@ export const FOOD_STORES: FoodStore[] = [
     id: "1",
     name: "대덕손만두",
     category: "한식",
-    menu: "고기만두 · 김치만두",
+    menu: "고기만두",
     price: 6500,
     rating: 4.8,
     discount: 18,
@@ -77,7 +79,7 @@ export const FOOD_STORES: FoodStore[] = [
     id: "2",
     name: "한그릇 분식",
     category: "분식",
-    menu: "떡볶이 · 김밥",
+    menu: "떡볶이",
     price: 4250,
     rating: 4.6,
     discount: 25,
@@ -88,7 +90,7 @@ export const FOOD_STORES: FoodStore[] = [
     id: "3",
     name: "소프트 파스타",
     category: "양식",
-    menu: "토마토 파스타 · 조각피자",
+    menu: "토마토 파스타",
     price: 7500,
     rating: 4.7,
     discount: 20,
@@ -99,7 +101,7 @@ export const FOOD_STORES: FoodStore[] = [
     id: "4",
     name: "궁동 짜장면",
     category: "중식",
-    menu: "짜장면 · 미니 탕수육",
+    menu: "짜장면",
     price: 7000,
     rating: 4.9,
     discount: 12,
@@ -110,7 +112,7 @@ export const FOOD_STORES: FoodStore[] = [
     id: "5",
     name: "빨간지붕 카페",
     category: "카페",
-    menu: "아메리카노 · 크로플",
+    menu: "아메리카노",
     price: 3500,
     rating: 4.5,
     discount: 30,
@@ -121,7 +123,7 @@ export const FOOD_STORES: FoodStore[] = [
     id: "6",
     name: "하루 초밥",
     category: "일식",
-    menu: "모둠 초밥 · 미니 우동",
+    menu: "모둠 초밥",
     price: 8000,
     rating: 4.7,
     discount: 15,

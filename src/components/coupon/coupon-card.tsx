@@ -22,10 +22,7 @@ export function CouponCard({ onUsePress }: CouponCardProps) {
 
       <Divider />
 
-      <UseButton
-        accessibilityRole="button"
-        onPress={onUsePress}
-      >
+      <UseButton accessibilityRole="button" onPress={onUsePress}>
         <UseButtonText>쿠폰 사용하기</UseButtonText>
       </UseButton>
     </Card>

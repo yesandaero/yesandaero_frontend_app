@@ -15,7 +15,7 @@ export function FoodSearchField({ value, onChangeText }: FoodSearchFieldProps) {
       <SearchInput
         accessibilityLabel="메뉴 검색"
         onChangeText={onChangeText}
-        placeholder="메뉴로 검색 (예: 국밥, 돈까스)"
+        placeholder="메뉴 검색"
         placeholderTextColor={colors.neutral600}
         returnKeyType="search"
         value={value}
@@ -28,6 +28,7 @@ const SearchBox = styled.View`
   min-height: 50px;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 10px;
   padding: 0 15px;
   border-width: 1px;
   border-color: ${colors.primary300};
