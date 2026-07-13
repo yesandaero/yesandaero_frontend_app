@@ -12,9 +12,10 @@ export function CouponCard({ isUsed, onUsePress }: CouponCardProps) {
   return (
     <Card accessibilityLabel="아메리카노 무료 쿠폰">
       <CardTopRow>
-        <CouponIcon>🎟️</CouponIcon>
         <StatusBadge $used={isUsed}>
-          <StatusText $used={isUsed}>{isUsed ? "사용완료" : "사용가능"}</StatusText>
+          <StatusText $used={isUsed}>
+            {isUsed ? "사용완료" : "사용가능"}
+          </StatusText>
         </StatusBadge>
       </CardTopRow>
 
@@ -55,10 +56,6 @@ const CardTopRow = styled.View`
   justify-content: space-between;
 `;
 
-const CouponIcon = styled.Text`
-  font-size: 32px;
-`;
-
 const StatusBadge = styled.View<{ $used: boolean }>`
   padding: 6px 10px;
   border-radius: 12px;
@@ -67,8 +64,7 @@ const StatusBadge = styled.View<{ $used: boolean }>`
 `;
 
 const StatusText = styled.Text<{ $used: boolean }>`
-  color: ${({ $used }) =>
-    $used ? colors.neutral600 : colors.primary800};
+  color: ${({ $used }) => ($used ? colors.neutral600 : colors.primary800)};
   font-size: 12px;
   font-weight: 800;
 `;
@@ -83,7 +79,7 @@ const Source = styled.Text`
 const CouponTitle = styled.Text`
   margin-top: 5px;
   color: ${colors.primary900};
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 900;
 `;
 
@@ -110,8 +106,7 @@ const UseButton = styled.Pressable<{ $used: boolean }>`
 `;
 
 const UseButtonText = styled.Text<{ $used: boolean }>`
-  color: ${({ $used }) =>
-    $used ? colors.neutral600 : colors.neutral0};
+  color: ${({ $used }) => ($used ? colors.neutral600 : colors.neutral0)};
   font-size: 15px;
   font-weight: 900;
 `;

@@ -26,9 +26,6 @@ export function CouponScanModal({
       <ModalRoot>
         <DimLayer />
         <ScannerSheet>
-          <SimulationBadge>
-            <SimulationText>SIMULATION MODE</SimulationText>
-          </SimulationBadge>
           <Title>사장님 화면의 QR을 카메라로 비춰주세요</Title>
 
           <ScannerPreview accessibilityLabel="가상 QR 스캐너">
@@ -39,7 +36,7 @@ export function CouponScanModal({
           </ScannerPreview>
 
           <RecognizeButton accessibilityRole="button" onPress={onRecognize}>
-            <RecognizeButtonText>QR 인식하기 (시뮬레이션)</RecognizeButtonText>
+            <RecognizeButtonText>QR 인식하기</RecognizeButtonText>
           </RecognizeButton>
           <CancelButton accessibilityRole="button" onPress={onCancel}>
             <CancelButtonText>취소</CancelButtonText>

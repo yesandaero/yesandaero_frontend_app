@@ -13,11 +13,9 @@ export function CouponEmptyState({ onScanPress }: CouponEmptyStateProps) {
       <EmptyIcon>🎟️</EmptyIcon>
       <EmptyTitle>아직 쿠폰이 없어요</EmptyTitle>
       <EmptyDescription>
-        가게 사장님 화면의 QR을 스캔하면 다른 식당에서도 쓸 수 있는 쿠폰이 생겨요.
+        가게 사장님 화면의 QR을 스캔하면 다른 식당에서도 쓸 수 있는 쿠폰이
+        생겨요!
       </EmptyDescription>
-      <EmptyAction accessibilityRole="button" onPress={onScanPress}>
-        <EmptyActionText>QR 스캔 시작하기</EmptyActionText>
-      </EmptyAction>
     </EmptyState>
   );
 }

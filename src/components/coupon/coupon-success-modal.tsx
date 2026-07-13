@@ -24,12 +24,12 @@ export function CouponSuccessModal({
       <ModalRoot>
         <DimLayer />
         <SuccessCard accessibilityRole="alert">
-          <Celebration>🎉</Celebration>
           <Title>이모네 국밥 QR 인식 완료!</Title>
-          <Description>다른 식당에서 바로 쓸 수 있는 쿠폰이 발급됐어요.</Description>
+          <Description>
+            다른 식당에서 바로 쓸 수 있는 쿠폰이 발급됐어요.
+          </Description>
 
           <CouponPreview>
-            <PreviewSource>이모네 국밥 QR 스캔 적립</PreviewSource>
             <PreviewTitle>아메리카노 무료 쿠폰</PreviewTitle>
             <PreviewStore>사용처 · 스덕컴 카페</PreviewStore>
           </CouponPreview>

@@ -11,15 +11,12 @@ export function CouponHeader({ onScanPress }: CouponHeaderProps) {
   return (
     <Header>
       <TitleGroup>
-        <Eyebrow>MY COUPON</Eyebrow>
         <Title>쿠폰함</Title>
-        <Description>
-          사장님 화면의 QR을 스캔하면 쿠폰을 받을 수 있어요.
-        </Description>
+        <Description>사장님 화면의 QR을 스캔하세요!</Description>
       </TitleGroup>
 
       <ScanButton accessibilityRole="button" onPress={onScanPress}>
-        <ScanButtonText>▣ 쿠폰 받기 (QR 스캔)</ScanButtonText>
+        <ScanButtonText>쿠폰 받기 (QR 스캔)</ScanButtonText>
       </ScanButton>
     </Header>
   );
@@ -33,17 +30,12 @@ const TitleGroup = styled.View`
   gap: 4px;
 `;
 
-const Eyebrow = styled.Text`
-  color: ${colors.primary600};
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 1.4px;
-`;
-
 const Title = styled.Text`
   color: ${colors.primary900};
-  font-size: 28px;
-  font-weight: 900;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 32px;
+  letter-spacing: -0.7px;
 `;
 
 const Description = styled.Text`
@@ -54,7 +46,7 @@ const Description = styled.Text`
 `;
 
 const ScanButton = styled.Pressable`
-  min-height: 52px;
+  min-height: 50px;
   align-items: center;
   justify-content: center;
   border-radius: 15px;
