@@ -39,7 +39,13 @@
           }
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "현재 위치를 기준으로 가까운 가게를 찾기 위해 위치 권한이 필요합니다."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
