@@ -2,6 +2,7 @@ import { AuthButton, Question } from "@/components/auth/index";
 import CodeInput from "@/components/Signup/CodeInput";
 import Input from "@/components/Signup/Input";
 import { colors } from "@/constants/color";
+import { useSignup } from "@/hooks/use-auth";
 import { useSignupStore } from "@/stores/SignupStore";
 import { isValidEmail } from "@/utils/isValidEmail";
 import { router } from "expo-router";
@@ -14,8 +15,9 @@ interface InputWrapperProps {
 }
 
 export default function Signup() {
-  const { email, setEmail, id, setId, password, setPassword } =
+  const { email, setEmail, id, setId, password, setPassword, reset } =
     useSignupStore();
+  const { signup, isLoading, clearError } = useSignup();
 
   const [isSubmitActive, setIsSubmitActive] = useState(false);
 
@@ -34,30 +36,32 @@ export default function Signup() {
   const handleIdChange = (text: string) => {
     setId(text.replace(/\s/g, ""));
     setIsIdDuplication(false);
+    clearError();
   };
 
   const handleEmailChange = (text: string) => {
     setEmail(text.replace(/\s/g, ""));
     setIsEmailError(false);
+    clearError();
   };
 
   const handlePasswordChange = (text: string) => {
     setPassword(text.replace(/\s/g, ""));
     setIsLengthFull(true);
     setIsPasswordError(false);
+    clearError();
   };
 
   const handleRePasswordChange = (text: string) => {
     setRePassword(text.replace(/\s/g, ""));
     setIsLengthFull(true);
     setIsPasswordError(false);
+    clearError();
   };
 
-  const handleSubmit = () => {
-    if (id === "에러아이디") {
-      setIsIdDuplication(true);
-      return;
-    }
+  const handleSubmit = async () => {
+    if (!isSubmitActive || isLoading) return;
+
     if (!isValidEmail(email)) {
       setIsEmailError(true);
       return;
@@ -71,7 +75,18 @@ export default function Signup() {
       return;
     }
 
-    router.push("/Login");
+    try {
+      await signup({
+        username: id,
+        email,
+        password,
+        role: "CUSTOMER",
+      });
+      reset();
+      router.replace("/Login");
+    } catch {
+      // API 오류는 useSignup의 Toast에서 표시한다.
+    }
   };
 
   return (
@@ -144,8 +159,8 @@ export default function Signup() {
 
             <Footer>
               <AuthButton
-                text="가입하기"
-                isActive={isSubmitActive}
+                text={isLoading ? "가입 중..." : "가입하기"}
+                isActive={isSubmitActive && !isLoading}
                 onPress={handleSubmit}
               />
               <Question

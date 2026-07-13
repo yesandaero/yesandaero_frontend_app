@@ -30,6 +30,8 @@ export default function Input({
         value={value}
         secureTextEntry={isPassword}
         keyboardType={getKeyboardType()}
+        autoCapitalize={type === "email" ? "none" : "sentences"}
+        autoComplete={type === "email" ? "email" : "off"}
         placeholderTextColor={colors.neutral400}
       />
     </Container>

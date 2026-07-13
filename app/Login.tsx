@@ -2,30 +2,51 @@ import AuthButton from "@/components/auth/AuthButton";
 import Input from "@/components/auth/LoginInput";
 import Question from "@/components/auth/Question";
 import { colors } from "@/constants/color";
+import { useLogin } from "@/hooks/use-auth";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, View } from "react-native";
+import Toast from "react-native-toast-message";
 import styled from "styled-components/native";
 
 export default function Login() {
   const [isActive, setIsActive] = useState(false);
-  const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login, isLoading, clearError } = useLogin();
 
-  const InputId = (text: string) => {
-    setId(text.replace(/\s/g, ""));
+  const inputEmail = (text: string) => {
+    setEmail(text.replace(/\s/g, ""));
+    clearError();
   };
-  const InputPassword = (text: string) => {
+
+  const inputPassword = (text: string) => {
     setPassword(text.replace(/\s/g, ""));
+    clearError();
   };
 
   useEffect(() => {
-    if (id && password) {
+    if (email && password) {
       setIsActive(true);
       return;
     }
     setIsActive(false);
-  }, [id, password]);
+  }, [email, password]);
+
+  const handleLogin = async () => {
+    if (!isActive || isLoading) return;
+
+    try {
+      await login({ email, password });
+      Toast.show({
+        type: "success",
+        text1: "로그인 완료",
+        text2: "정상적으로 로그인되었습니다.",
+      });
+    } catch {
+      // API 오류는 useLogin의 Toast에서 표시한다.
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -43,21 +64,25 @@ export default function Login() {
         <Wrapper>
           <InputWrapper>
             <Input
-              placeholder="아이디를 입력해주세요."
-              type="text"
-              onChangeText={InputId}
-              value={id}
+              placeholder="이메일을 입력해주세요."
+              type="email"
+              onChangeText={inputEmail}
+              value={email}
             />
             <Input
               placeholder="비밀번호를 입력해주세요."
               type="password"
-              onChangeText={InputPassword}
+              onChangeText={inputPassword}
               value={password}
             />
           </InputWrapper>
 
           <View>
-            <AuthButton text="로그인" isActive={isActive} />
+            <AuthButton
+              text={isLoading ? "로그인 중..." : "로그인"}
+              isActive={isActive && !isLoading}
+              onPress={handleLogin}
+            />
             <Question
               question="계정이 없으신가요?"
               button="회원가입"

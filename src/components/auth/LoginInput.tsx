@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 
 interface LoginInputProps {
   placeholder: string;
-  type: "text" | "password";
+  type: "text" | "password" | "email";
   onChangeText: (text: string) => void;
   value: string;
 }
@@ -24,6 +24,15 @@ export default function LoginInput({
       <Wrapper
         placeholder={placeholder}
         secureTextEntry={type === "password" && !isVisible}
+        keyboardType={type === "email" ? "email-address" : "default"}
+        autoCapitalize={type === "email" ? "none" : "sentences"}
+        autoComplete={
+          type === "email"
+            ? "email"
+            : type === "password"
+              ? "current-password"
+              : "off"
+        }
         onChangeText={onChangeText}
         value={value}
       />
