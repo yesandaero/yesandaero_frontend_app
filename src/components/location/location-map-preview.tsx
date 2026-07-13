@@ -30,10 +30,6 @@ const MapFallback = styled.View`
   background-color: ${colors.primary50};
 `;
 
-const Pin = styled.Text`
-  font-size: 34px;
-`;
-
 const FallbackText = styled.Text`
   color: ${colors.primary700};
   font-size: 14px;

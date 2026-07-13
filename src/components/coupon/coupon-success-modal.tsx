@@ -69,10 +69,6 @@ const SuccessCard = styled.View`
   background-color: ${colors.neutral0};
 `;
 
-const Celebration = styled.Text`
-  font-size: 42px;
-`;
-
 const Title = styled.Text`
   margin-top: 10px;
   color: ${colors.primary900};
@@ -98,12 +94,6 @@ const CouponPreview = styled.View`
   border-color: ${colors.primary200};
   border-radius: 16px;
   background-color: ${colors.primary100};
-`;
-
-const PreviewSource = styled.Text`
-  color: ${colors.neutral600};
-  font-size: 11px;
-  font-weight: 700;
 `;
 
 const PreviewTitle = styled.Text`

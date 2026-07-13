@@ -5,13 +5,9 @@ import { colors } from "@/constants/color";
 
 type FoodStoresHeaderProps = {
   budget: number;
-  onBackPress: () => void;
 };
 
-export function FoodStoresHeader({
-  budget,
-  onBackPress,
-}: FoodStoresHeaderProps) {
+export function FoodStoresHeader({ budget }: FoodStoresHeaderProps) {
   return (
     <Header>
       <TitleGroup>
@@ -31,24 +27,6 @@ const Header = styled.View`
   align-items: center;
   gap: 10px;
   margin-bottom: 14px;
-`;
-
-const BackButton = styled.Pressable`
-  width: 42px;
-  height: 42px;
-  align-items: center;
-  justify-content: center;
-  border-width: 1px;
-  border-color: ${colors.primary300};
-  border-radius: 13px;
-  background-color: ${colors.neutral0};
-`;
-
-const BackIcon = styled.Text`
-  margin-top: -3px;
-  color: ${colors.neutral900};
-  font-size: 29px;
-  line-height: 31px;
 `;
 
 const TitleGroup = styled.View`

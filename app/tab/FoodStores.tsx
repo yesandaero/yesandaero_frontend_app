@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import React, { useMemo, useState } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
@@ -64,7 +64,7 @@ export default function FoodStores() {
         showsVerticalScrollIndicator={false}
       >
         <Content>
-          <FoodStoresHeader budget={budget} onBackPress={() => router.back()} />
+          <FoodStoresHeader budget={budget} />
           <FoodCategoryFilter
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
@@ -83,7 +83,7 @@ export default function FoodStores() {
           {viewMode === "map" ? (
             <FoodStoresMap stores={visibleStores} />
           ) : (
-            <FoodStoreList stores={visibleStores} />
+            <FoodStoreList budget={budget} stores={visibleStores} />
           )}
         </Content>
       </ContentScroll>

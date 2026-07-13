@@ -56,7 +56,7 @@ export default function Coupon() {
           {isCouponRegistered ? (
             <CouponCard isUsed={isCouponUsed} onUsePress={handleUseCoupon} />
           ) : (
-            <CouponEmptyState onScanPress={() => setIsScannerVisible(true)} />
+            <CouponEmptyState />
           )}
         </Content>
       </ContentScroll>

@@ -72,20 +72,6 @@ const ScannerSheet = styled.View`
   background-color: ${colors.neutral0};
 `;
 
-const SimulationBadge = styled.View`
-  align-self: center;
-  padding: 5px 9px;
-  border-radius: 10px;
-  background-color: ${colors.primary100};
-`;
-
-const SimulationText = styled.Text`
-  color: ${colors.primary800};
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 1px;
-`;
-
 const Title = styled.Text`
   margin: 12px 0 18px;
   color: ${colors.neutral900};

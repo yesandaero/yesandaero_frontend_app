@@ -5,22 +5,15 @@ import { colors } from "@/constants/color";
 
 type StoreBudgetCardProps = {
   budget: number;
-  orderPrice: number;
 };
 
-export function StoreBudgetCard({ budget, orderPrice }: StoreBudgetCardProps) {
-  const remainingBudget = Math.max(budget - orderPrice, 0);
-
+export function StoreBudgetCard({ budget }: StoreBudgetCardProps) {
   return (
     <Section>
       <SectionTitle>예산 대비</SectionTitle>
       <BudgetCard>
-        <BudgetDescription selectable>
-          내 예산 <BudgetAmount>{budget.toLocaleString()}원</BudgetAmount>으로 주문 시
-        </BudgetDescription>
-        <RemainingAmount selectable>
-          {remainingBudget.toLocaleString()}원 남아요
-        </RemainingAmount>
+        <BudgetDescription>설정한 예산</BudgetDescription>
+        <BudgetAmount selectable>{budget.toLocaleString()}원 이하</BudgetAmount>
       </BudgetCard>
     </Section>
   );
@@ -57,11 +50,6 @@ const BudgetDescription = styled.Text`
 
 const BudgetAmount = styled.Text`
   color: ${colors.primary900};
+  font-size: 16px;
   font-weight: 900;
-`;
-
-const RemainingAmount = styled.Text`
-  color: ${colors.neutral900};
-  font-size: 14px;
-  font-weight: 700;
 `;

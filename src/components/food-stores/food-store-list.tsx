@@ -1,15 +1,16 @@
-import React from "react";
 import { Link } from "expo-router";
+import React from "react";
 import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
 import { FoodStore } from "./food-store-data";
 
 type FoodStoreListProps = {
+  budget: number;
   stores: FoodStore[];
 };
 
-export function FoodStoreList({ stores }: FoodStoreListProps) {
+export function FoodStoreList({ budget, stores }: FoodStoreListProps) {
   if (stores.length === 0) {
     return (
       <EmptyCard>
@@ -22,13 +23,19 @@ export function FoodStoreList({ stores }: FoodStoreListProps) {
   return (
     <List>
       {stores.map((store) => (
-        <Link key={store.id} href="/StoreDetail" asChild>
+        <Link
+          key={store.id}
+          href={{
+            pathname: "/StoreDetail",
+            params: { budget: String(budget) },
+          }}
+          asChild
+        >
           <StoreCard accessibilityLabel={`${store.name} 상세 보기`}>
             <StoreEmoji>{store.emoji}</StoreEmoji>
             <StoreInformation>
               <StoreTopRow>
                 <StoreName numberOfLines={1}>{store.name}</StoreName>
-                <Rating>★ {store.rating.toFixed(1)}</Rating>
               </StoreTopRow>
               <StoreMeta>
                 {store.category} · {store.menu}
@@ -84,12 +91,6 @@ const StoreName = styled.Text`
   font-weight: 900;
 `;
 
-const Rating = styled.Text`
-  color: ${colors.primary700};
-  font-size: 12px;
-  font-weight: 800;
-`;
-
 const StoreMeta = styled.Text`
   margin-top: 4px;
   color: ${colors.neutral600};
@@ -124,10 +125,6 @@ const EmptyCard = styled.View`
   border-color: ${colors.primary200};
   border-radius: 18px;
   background-color: ${colors.neutral0};
-`;
-
-const EmptyEmoji = styled.Text`
-  font-size: 32px;
 `;
 
 const EmptyTitle = styled.Text`

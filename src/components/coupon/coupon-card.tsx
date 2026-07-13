@@ -68,13 +68,6 @@ const StatusText = styled.Text<{ $used: boolean }>`
   font-weight: 800;
 `;
 
-const Source = styled.Text`
-  margin-top: 18px;
-  color: ${colors.neutral600};
-  font-size: 12px;
-  font-weight: 700;
-`;
-
 const CouponTitle = styled.Text`
   margin-top: 5px;
   color: ${colors.primary900};

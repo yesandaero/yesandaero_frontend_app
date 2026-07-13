@@ -3,11 +3,7 @@ import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
 
-type CouponEmptyStateProps = {
-  onScanPress: () => void;
-};
-
-export function CouponEmptyState({ onScanPress }: CouponEmptyStateProps) {
+export function CouponEmptyState() {
   return (
     <EmptyState>
       <EmptyIcon>🎟️</EmptyIcon>
@@ -46,22 +42,4 @@ const EmptyDescription = styled.Text`
   font-weight: 600;
   line-height: 21px;
   text-align: center;
-`;
-
-const EmptyAction = styled.Pressable`
-  min-height: 44px;
-  margin-top: 22px;
-  padding: 0 20px;
-  align-items: center;
-  justify-content: center;
-  border-width: 1px;
-  border-color: ${colors.primary300};
-  border-radius: 14px;
-  background-color: ${colors.neutral0};
-`;
-
-const EmptyActionText = styled.Text`
-  color: ${colors.primary800};
-  font-size: 14px;
-  font-weight: 800;
 `;

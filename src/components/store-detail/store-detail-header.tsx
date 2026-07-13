@@ -62,11 +62,6 @@ const BackIcon = styled.Text`
   line-height: 34px;
 `;
 
-const FoodEmoji = styled.Text`
-  margin-right: 30px;
-  font-size: 76px;
-`;
-
 const TitleGroup = styled.View`
   gap: 4px;
 `;

@@ -11,7 +11,6 @@ type FoodSortFilterProps = {
 
 const OPTIONS: { label: string; value: FoodSortOption }[] = [
   { label: "할인많은순", value: "discount" },
-  { label: "평점순", value: "rating" },
 ];
 
 export function FoodSortFilter({
