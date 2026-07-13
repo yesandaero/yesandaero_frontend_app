@@ -39,17 +39,16 @@ export default function Input({
 }
 
 const Container = styled.View`
+  background-color: ${colors.neutral100};
   width: 100%;
   height: 48px;
-  background-color: ${colors.neutral100};
   border-radius: 12px;
-  padding: 0 20px;
+  border: 1px solid ${colors.neutral100};
+  padding: 0px 20px;
   flex-direction: row;
   align-items: center;
 `;
 
 const Wrapper = styled.TextInput`
   flex: 1;
-  color: ${colors.neutral900};
-  font-size: 16px;
 `;

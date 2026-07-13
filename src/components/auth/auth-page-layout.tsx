@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, ScrollView } from "react-native";
 import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
+import { screenLayout } from "@/constants/layout";
 
 interface AuthPageLayoutProps extends PropsWithChildren {
   title: ReactNode;
@@ -37,11 +38,12 @@ export default function AuthPageLayout({
 
 const Container = styled.View`
   width: 100%;
-  max-width: 400px;
+  max-width: ${screenLayout.authContentMaxWidth}px;
   min-height: 100%;
   flex: 1;
   align-self: center;
-  padding: 60px 20px;
+  padding: ${screenLayout.topPadding}px ${screenLayout.horizontalPadding}px
+    ${screenLayout.bottomPadding}px;
 `;
 
 const Title = styled.View`

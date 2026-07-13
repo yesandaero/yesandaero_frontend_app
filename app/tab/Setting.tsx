@@ -5,6 +5,7 @@ import styled from "styled-components/native";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { SettingsHeader } from "@/components/settings/settings-header";
 import { SettingsOptionCard } from "@/components/settings/settings-option-card";
+import { screenLayout } from "@/constants/layout";
 
 export default function Setting() {
   return (
@@ -53,9 +54,10 @@ const ContentScroll = styled(ScrollView).attrs({
 
 const Content = styled.View`
   width: 100%;
-  max-width: 460px;
+  max-width: ${screenLayout.contentMaxWidth}px;
   align-self: center;
-  padding: 14px 18px 28px;
+  padding: ${screenLayout.topPadding}px ${screenLayout.horizontalPadding}px
+    ${screenLayout.bottomPadding}px;
 `;
 
 const OptionList = styled.View`

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
+import { screenLayout } from "@/constants/layout";
 
 export function LocationHeader() {
   return (
@@ -13,7 +14,11 @@ export function LocationHeader() {
 }
 
 const Header = styled.View`
-  padding: 50px 20px 13px;
+  width: 100%;
+  max-width: ${screenLayout.contentMaxWidth}px;
+  align-self: center;
+  padding: ${screenLayout.topPadding}px ${screenLayout.horizontalPadding}px
+    14px;
   background-color: white;
 `;
 

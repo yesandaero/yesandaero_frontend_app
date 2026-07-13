@@ -11,6 +11,7 @@ import { CouponScanModal } from "@/components/coupon/coupon-scan-modal";
 import { CouponSuccessModal } from "@/components/coupon/coupon-success-modal";
 import { CouponUseConfirmModal } from "@/components/coupon/coupon-use-confirm-modal";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
+import { screenLayout } from "@/constants/layout";
 
 export default function Coupon() {
   const [isScannerVisible, setIsScannerVisible] = useState(false);
@@ -93,7 +94,8 @@ const ContentScroll = styled(ScrollView).attrs({
 const Content = styled.View`
   flex: 1;
   width: 100%;
-  max-width: 460px;
+  max-width: ${screenLayout.contentMaxWidth}px;
   align-self: center;
-  padding: 14px 18px 28px;
+  padding: ${screenLayout.topPadding}px ${screenLayout.horizontalPadding}px
+    ${screenLayout.bottomPadding}px;
 `;

@@ -34,8 +34,10 @@ const TitleGroup = styled.View`
 
 const Title = styled.Text`
   color: ${colors.primary900};
-  font-size: 24px;
-  font-weight: 900;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 32px;
+  letter-spacing: -0.7px;
 `;
 
 const BudgetBadge = styled.View`

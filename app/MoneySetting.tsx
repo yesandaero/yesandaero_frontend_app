@@ -7,6 +7,7 @@ import { BudgetActionButton } from "@/components/budget/budget-action-button";
 import { BudgetHeader } from "@/components/budget/budget-header";
 import { BudgetSelector } from "@/components/budget/budget-selector";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
+import { screenLayout } from "@/constants/layout";
 import { useSettingsStore } from "@/stores/settings-store";
 
 const DEFAULT_BUDGET = "10000";
@@ -85,7 +86,8 @@ const ContentScroll = styled(ScrollView).attrs({
 
 const Content = styled.View`
   width: 100%;
-  max-width: 460px;
+  max-width: ${screenLayout.contentMaxWidth}px;
   align-self: center;
-  padding: 14px 18px 20px;
+  padding: ${screenLayout.topPadding}px ${screenLayout.horizontalPadding}px
+    ${screenLayout.bottomPadding}px;
 `;

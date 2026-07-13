@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
+import { screenLayout } from "@/constants/layout";
 
 type StoreDetailHeaderProps = {
   name: string;
@@ -37,7 +38,7 @@ export function StoreDetailHeader({
 const Header = styled.View`
   min-height: 284px;
   justify-content: space-between;
-  padding: 12px 22px 30px;
+  padding: ${screenLayout.topPadding}px ${screenLayout.horizontalPadding}px 30px;
   background-color: ${colors.primary900};
 `;
 

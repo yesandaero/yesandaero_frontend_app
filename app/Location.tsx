@@ -10,6 +10,7 @@ import { LocationNextButton } from "@/components/location/location-next-button";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { useRoadAddress } from "@/hooks/use-road-address";
 import { useSettingsStore } from "@/stores/settings-store";
+import { screenLayout } from "@/constants/layout";
 
 export default function Location() {
   const { source } = useLocalSearchParams<{ source?: string }>();
@@ -122,9 +123,8 @@ const ScreenScroll = styled(ScrollView).attrs({
 const Content = styled.View`
   flex: 1;
   width: 100%;
-  display: flex;
-  max-width: 460px;
-  display: flex;
+  max-width: ${screenLayout.contentMaxWidth}px;
+  align-self: center;
   background-color: white;
   justify-content: center;
   margin-bottom: 65px;
@@ -133,5 +133,5 @@ const Content = styled.View`
 const CardOverlap = styled.View`
   z-index: 2;
   margin-top: -60px;
-  padding: 0 18px;
+  padding: 0 ${screenLayout.horizontalPadding}px;
 `;

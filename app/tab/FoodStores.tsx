@@ -18,6 +18,7 @@ import { FoodStoresHeader } from "@/components/food-stores/food-stores-header";
 import { FoodStoresMap } from "@/components/food-stores/food-stores-map";
 import { FoodViewToggle } from "@/components/food-stores/food-view-toggle";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
+import { screenLayout } from "@/constants/layout";
 import { useSettingsStore } from "@/stores/settings-store";
 
 export default function FoodStores() {
@@ -118,9 +119,10 @@ const ContentScroll = styled(ScrollView).attrs({
 
 const Content = styled.View`
   width: 100%;
-  max-width: 460px;
+  max-width: ${screenLayout.contentMaxWidth}px;
   align-self: center;
-  padding: 14px 16px 24px;
+  padding: ${screenLayout.topPadding}px ${screenLayout.horizontalPadding}px
+    ${screenLayout.bottomPadding}px;
 `;
 
 const FilterSpacer = styled.View`

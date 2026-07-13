@@ -28,7 +28,8 @@ export function BudgetHeader({ onBackPress }: BudgetHeaderProps) {
 }
 
 const Header = styled.View`
-  align-items: left;
+  flex-direction: row;
+  align-items: center;
   gap: 12px;
   padding-bottom: 18px;
   background-color: white;
@@ -64,6 +65,7 @@ const Title = styled.Text`
 `;
 
 const Description = styled.Text`
+  margin-top: 2px;
   color: ${colors.primary700};
   font-size: 14px;
   font-weight: 500;

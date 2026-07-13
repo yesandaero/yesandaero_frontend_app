@@ -15,19 +15,21 @@ export function SettingsHeader() {
 }
 
 const Header = styled.View`
-  gap: 6px;
-  padding: 12px 2px 18px;
+  gap: 4px;
+  padding-bottom: 18px;
   background-color: white;
 `;
 
 const Title = styled.Text`
   color: ${colors.primary900};
-  font-size: 26px;
-  font-weight: 900;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 32px;
+  letter-spacing: -0.7px;
 `;
 
 const Description = styled.Text`
-  color: ${colors.neutral600};
+  color: ${colors.neutral700};
   font-size: 14px;
   font-weight: 600;
   line-height: 21px;
