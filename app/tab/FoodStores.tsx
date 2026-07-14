@@ -25,6 +25,7 @@ import { screenLayout } from "@/constants/layout";
 import {
   useStoreCategories,
   useStoreList,
+  useStoreMenuSearch,
   useStoresInMap,
 } from "@/hooks/use-stores";
 import { useSettingsStore } from "@/stores/settings-store";
@@ -151,24 +152,19 @@ export default function FoodStores() {
     [locationKey],
   );
 
-  const normalizedQuery = query.trim().toLocaleLowerCase("ko-KR");
-  const visibleMapStores = useMemo(() => {
-    return mapStores.filter((store) => {
-      const matchesQuery =
-        normalizedQuery.length === 0 ||
-        store.name.toLocaleLowerCase("ko-KR").includes(normalizedQuery);
-
-      return matchesQuery;
-    });
-  }, [mapStores, normalizedQuery]);
-  const visibleListStores = useMemo(
-    () =>
-      listStores.filter(
-        (store) =>
-          normalizedQuery.length === 0 ||
-          store.name.toLocaleLowerCase("ko-KR").includes(normalizedQuery),
-      ),
-    [listStores, normalizedQuery],
+  const searchLocation = useMemo(
+    () => ({ lat: currentLatitude, lng: currentLongitude }),
+    [currentLatitude, currentLongitude],
+  );
+  const visibleMapStores = useStoreMenuSearch(
+    mapStores,
+    query,
+    searchLocation,
+  );
+  const visibleListStores = useStoreMenuSearch(
+    listStores,
+    query,
+    searchLocation,
   );
 
   return (

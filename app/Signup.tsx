@@ -23,8 +23,6 @@ export default function Signup() {
 
   const [isEmailError, setIsEmailError] = useState(false);
 
-  const [isIdDuplication, setIsIdDuplication] = useState(false);
-
   const [rePassword, setRePassword] = useState("");
   const [isLengthFull, setIsLengthFull] = useState(true);
   const [isPasswordError, setIsPasswordError] = useState(false);
@@ -35,7 +33,6 @@ export default function Signup() {
 
   const handleIdChange = (text: string) => {
     setId(text.replace(/\s/g, ""));
-    setIsIdDuplication(false);
     clearError();
   };
 
@@ -116,16 +113,13 @@ export default function Signup() {
     >
       <InputListContainer>
         <FormGroup>
-          <InputWrapper isError={isIdDuplication}>
+          <InputWrapper>
             <Input
               placeholder="아이디를 입력해주세요."
               value={id}
               onChangeText={handleIdChange}
             />
           </InputWrapper>
-          {isIdDuplication && (
-            <ErrorText>이미 사용중인 아이디입니다.</ErrorText>
-          )}
         </FormGroup>
         <FormGroup>
           <InputWrapper isError={isEmailError}>

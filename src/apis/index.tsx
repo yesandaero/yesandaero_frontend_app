@@ -7,6 +7,8 @@ import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import Toast from "react-native-toast-message";
 
+import { useAuthSessionStore } from "@/stores/auth-session-store";
+
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL?.trim();
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
@@ -62,16 +64,20 @@ const deleteStoredToken = async (key: string) => {
 export const tokenStorage = {
   getAccessToken: () => getStoredToken(ACCESS_TOKEN_KEY),
   getRefreshToken: () => getStoredToken(REFRESH_TOKEN_KEY),
-  setTokens: ({ accessToken, refreshToken }: TokenPair) =>
-    Promise.all([
+  setTokens: async ({ accessToken, refreshToken }: TokenPair) => {
+    await Promise.all([
       setStoredToken(ACCESS_TOKEN_KEY, accessToken),
       setStoredToken(REFRESH_TOKEN_KEY, refreshToken),
-    ]).then(() => undefined),
-  clearTokens: () =>
-    Promise.all([
+    ]);
+    useAuthSessionStore.getState().setAuthenticated(true);
+  },
+  clearTokens: async () => {
+    await Promise.all([
       deleteStoredToken(ACCESS_TOKEN_KEY),
       deleteStoredToken(REFRESH_TOKEN_KEY),
-    ]).then(() => undefined),
+    ]);
+    useAuthSessionStore.getState().setAuthenticated(false);
+  },
 };
 
 const isSkipUrl = (url?: string) =>

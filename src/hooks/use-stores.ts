@@ -5,6 +5,7 @@ import {
   getStoresInMap,
 } from "@/apis/Store";
 import type {
+  MapStore,
   StoreDetailLocation,
   StoreListFilters,
   StoreMapQuery,
@@ -12,10 +13,11 @@ import type {
 import {
   keepPreviousData,
   useInfiniteQuery,
+  useQueries,
   useQuery,
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import Toast from "react-native-toast-message";
 
 const storeKeys = {
@@ -164,4 +166,42 @@ export function useStoreDetail(
     isRefetching: query.isRefetching,
     refetch: query.refetch,
   };
+}
+
+export function useStoreMenuSearch(
+  stores: MapStore[],
+  searchText: string,
+  location?: StoreDetailLocation,
+) {
+  const normalizedSearchText = searchText
+    .trim()
+    .toLocaleLowerCase("ko-KR");
+  const isSearching = normalizedSearchText.length > 0;
+  const detailQueries = useQueries({
+    queries: stores.map((store) => ({
+      queryKey: storeKeys.detail(store.storeId, location),
+      queryFn: ({ signal }: { signal: AbortSignal }) =>
+        getStoreDetail(store.storeId, location, signal),
+      enabled: isSearching,
+      staleTime: 5 * 60 * 1000,
+      retry: false,
+    })),
+  });
+
+  return useMemo(() => {
+    if (!isSearching) return stores;
+
+    return stores.filter((store, index) => {
+      const matchesStoreName = store.name
+        .toLocaleLowerCase("ko-KR")
+        .includes(normalizedSearchText);
+      const matchesMenuName = detailQueries[index]?.data?.menus.some((menu) =>
+        menu.name
+          .toLocaleLowerCase("ko-KR")
+          .includes(normalizedSearchText),
+      );
+
+      return matchesStoreName || matchesMenuName;
+    });
+  }, [detailQueries, isSearching, normalizedSearchText, stores]);
 }

@@ -25,10 +25,12 @@ export function CouponScanModal({
 }: CouponScanModalProps) {
   const [permission, requestPermission] = useCameraPermissions();
   const requestedForOpening = useRef(false);
+  const scanLockRef = useRef(false);
 
   useEffect(() => {
     if (!visible) {
       requestedForOpening.current = false;
+      scanLockRef.current = false;
       return;
     }
 
@@ -46,7 +48,8 @@ export function CouponScanModal({
   const handleBarcodeScanned = ({ data }: BarcodeScanningResult) => {
     const token = data.trim();
 
-    if (!token || isRegistering) return;
+    if (!token || isRegistering || scanLockRef.current) return;
+    scanLockRef.current = true;
     onRecognize(token);
   };
 
