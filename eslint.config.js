@@ -8,6 +8,8 @@ module.exports = defineConfig([
     ignores: ['dist/*'],
     rules: {
       'import/no-named-as-default': 'off',
+      // Expo/TypeScript resolves this alias through tsconfig.json.
+      'import/no-unresolved': ['error', { ignore: ['^@/'] }],
     },
   },
 ]);

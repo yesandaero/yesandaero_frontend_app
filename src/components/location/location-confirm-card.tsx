@@ -1,8 +1,7 @@
+import { colors } from "@/constants/color";
 import React from "react";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
-
-import { colors } from "@/constants/color";
 
 type LocationConfirmCardProps = {
   address: string;
