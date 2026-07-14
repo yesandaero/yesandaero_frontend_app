@@ -30,12 +30,12 @@ export type MapStore = {
   storeId: number;
   name: string;
   category: StoreCategoryCode;
-  avgPrice: number;
+  avgPrice: number | null;
   latitude: number;
   longitude: number;
   openTime: string;
   closeTime: string;
-  minOrderAmount: number;
+  minOrderAmount: number | null;
   distanceMeters: number | null;
   walkingMinutes: number | null;
   hasUsableCoupon: boolean;

@@ -61,7 +61,11 @@ export function FoodStoreList({
                     : "거리 정보 없음"}
                   {store.hasUsableCoupon ? " · 🎟️ 쿠폰 사용 가능" : ""}
                 </Distance>
-                <Price>{store.avgPrice.toLocaleString()}원</Price>
+                <Price>
+                  {typeof store.avgPrice === "number"
+                    ? `${store.avgPrice.toLocaleString()}원`
+                    : "가격 정보 없음"}
+                </Price>
               </StoreBottomRow>
             </StoreInformation>
           </StoreCard>

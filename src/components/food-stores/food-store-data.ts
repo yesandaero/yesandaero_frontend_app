@@ -19,8 +19,8 @@ export type FoodMapRegion = MapCoordinate & {
   longitudeDelta: number;
 };
 
-const MAP_LATITUDE_DELTA = 0.007;
-const MAP_LONGITUDE_DELTA = 0.007;
+const MAP_LATITUDE_DELTA = 0.03;
+const MAP_LONGITUDE_DELTA = 0.03;
 
 export const SCHOOL_COORDINATE = {
   latitude: 36.39151,

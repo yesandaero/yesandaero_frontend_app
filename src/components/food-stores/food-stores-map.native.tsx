@@ -44,7 +44,11 @@ export function FoodStoresMap({
       >
         {stores
           .filter(
-            (store) => Number.isInteger(store.storeId) && store.storeId > 0,
+            (store) =>
+              Number.isInteger(store.storeId) &&
+              store.storeId > 0 &&
+              Number.isFinite(store.latitude) &&
+              Number.isFinite(store.longitude),
           )
           .map((store) => (
           <Marker
@@ -67,7 +71,11 @@ export function FoodStoresMap({
           >
             <MarkerContent>
               <PriceBubble>
-                <PriceText>{store.avgPrice.toLocaleString()}원</PriceText>
+                <PriceText>
+                  {typeof store.avgPrice === "number"
+                    ? `${store.avgPrice.toLocaleString()}원`
+                    : "가격 정보 없음"}
+                </PriceText>
                 {store.hasUsableCoupon && <CouponBadge>쿠폰</CouponBadge>}
               </PriceBubble>
               <Pin>

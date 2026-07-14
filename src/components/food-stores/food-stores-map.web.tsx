@@ -106,7 +106,11 @@ export function FoodStoresMap({
           style={position}
         >
           <PriceBubble>
-            <PriceText>{store.avgPrice.toLocaleString()}원</PriceText>
+            <PriceText>
+              {typeof store.avgPrice === "number"
+                ? `${store.avgPrice.toLocaleString()}원`
+                : "가격 정보 없음"}
+            </PriceText>
             {store.hasUsableCoupon && <CouponBadge>쿠폰</CouponBadge>}
           </PriceBubble>
           <Pin>
