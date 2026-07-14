@@ -13,9 +13,7 @@ const GUEST_ONLY_PATHS = new Set(["/Login", "/Signup"]);
 
 function RootNavigator() {
   const pathname = usePathname();
-  const isAuthenticated = useAuthSessionStore(
-    (state) => state.isAuthenticated,
-  );
+  const isAuthenticated = useAuthSessionStore((state) => state.isAuthenticated);
   const setAuthenticated = useAuthSessionStore(
     (state) => state.setAuthenticated,
   );
