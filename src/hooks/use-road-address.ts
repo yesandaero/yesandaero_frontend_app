@@ -67,9 +67,9 @@ function showLocationError(error: unknown) {
   Toast.show({ type: "error", text1: message });
 }
 
-export function useRoadAddress() {
+export function useRoadAddress(initialLocation = DEFAULT_LOCATION) {
   const [selectedLocation, setSelectedLocation] =
-    useState<RoadAddressLocation>(DEFAULT_LOCATION);
+    useState<RoadAddressLocation>(initialLocation);
 
   const {
     isPending: isLocating,

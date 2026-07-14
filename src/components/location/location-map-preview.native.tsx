@@ -9,12 +9,16 @@ type LocationMapPreviewProps = {
     latitude: number;
     longitude: number;
   } | null;
+  title?: string;
 };
 
 const LATITUDE_DELTA = 0.008;
 const LONGITUDE_DELTA = 0.008;
 
-export function LocationMapPreview({ coordinate }: LocationMapPreviewProps) {
+export function LocationMapPreview({
+  coordinate,
+  title = "설정한 위치",
+}: LocationMapPreviewProps) {
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
@@ -65,7 +69,7 @@ export function LocationMapPreview({ coordinate }: LocationMapPreviewProps) {
         <Marker
           coordinate={coordinate}
           pinColor={colors.primary700}
-          title="대덕소프트웨어마이스터고등학교"
+          title={title}
         />
       </MapView>
     </MapContainer>

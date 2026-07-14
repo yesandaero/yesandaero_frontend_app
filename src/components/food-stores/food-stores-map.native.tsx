@@ -5,10 +5,14 @@ import styled from "styled-components/native";
 
 import type { MapStore, StoreMapBounds } from "@/apis/Store/type";
 import { colors } from "@/constants/color";
-import { regionToMapBounds, SCHOOL_REGION } from "./food-store-data";
+import {
+  type FoodMapRegion,
+  regionToMapBounds,
+} from "./food-store-data";
 
 type FoodStoresMapProps = {
   budget: number;
+  initialRegion: FoodMapRegion;
   isLoading?: boolean;
   onBoundsChange: (bounds: StoreMapBounds) => void;
   stores: MapStore[];
@@ -16,6 +20,7 @@ type FoodStoresMapProps = {
 
 export function FoodStoresMap({
   budget,
+  initialRegion,
   isLoading = false,
   onBoundsChange,
   stores,
@@ -25,9 +30,10 @@ export function FoodStoresMap({
   };
 
   return (
-    <MapContainer accessibilityLabel="대덕소프트웨어마이스터고 주변 맛집 지도">
+    <MapContainer accessibilityLabel="설정한 위치 주변 맛집 지도">
       <MapView
-        initialRegion={SCHOOL_REGION}
+        key={`${initialRegion.latitude}:${initialRegion.longitude}`}
+        initialRegion={initialRegion}
         moveOnMarkerPress={false}
         pitchEnabled={false}
         rotateEnabled={false}
@@ -36,7 +42,11 @@ export function FoodStoresMap({
         style={{ flex: 1 }}
         onRegionChangeComplete={handleRegionChangeComplete}
       >
-        {stores.map((store) => (
+        {stores
+          .filter(
+            (store) => Number.isInteger(store.storeId) && store.storeId > 0,
+          )
+          .map((store) => (
           <Marker
             key={store.storeId}
             coordinate={{
@@ -65,7 +75,7 @@ export function FoodStoresMap({
               </Pin>
             </MarkerContent>
           </Marker>
-        ))}
+          ))}
       </MapView>
       {isLoading && (
         <LoadingBadge accessibilityLiveRegion="polite">

@@ -47,6 +47,29 @@ export type StoreMapResponse = {
   truncated: boolean;
 };
 
+export type StoreListSort =
+  | "PRICE_ASC"
+  | "DISCOUNT_DESC"
+  | "DISTANCE_ASC";
+
+export type StoreListQuery = {
+  category?: StoreCategoryCode[];
+  maxPrice?: number;
+  lat?: number;
+  lng?: number;
+  sort?: StoreListSort;
+  page?: number;
+  size?: number;
+};
+
+export type StoreListFilters = Omit<StoreListQuery, "page">;
+
+export type StoreListResponse = {
+  content: MapStore[];
+  page: number;
+  totalPages: number;
+};
+
 export type StoreCategoriesResponse = {
   categories: StoreCategory[];
 };

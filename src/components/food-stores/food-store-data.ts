@@ -1,23 +1,41 @@
 import type {
   StoreCategory,
   StoreCategoryCode,
+  StoreListSort,
   StoreMapBounds,
 } from "@/apis/Store/type";
 
 export type FoodCategory = StoreCategoryCode | "ALL";
-export type FoodSortOption = "distance" | "price";
+export type FoodSortOption = StoreListSort;
 export type FoodViewMode = "map" | "list";
+
+export type MapCoordinate = {
+  latitude: number;
+  longitude: number;
+};
+
+export type FoodMapRegion = MapCoordinate & {
+  latitudeDelta: number;
+  longitudeDelta: number;
+};
+
+const MAP_LATITUDE_DELTA = 0.007;
+const MAP_LONGITUDE_DELTA = 0.007;
 
 export const SCHOOL_COORDINATE = {
   latitude: 36.39151,
   longitude: 127.36307,
 } as const;
 
-export const SCHOOL_REGION = {
-  ...SCHOOL_COORDINATE,
-  latitudeDelta: 0.007,
-  longitudeDelta: 0.007,
-} as const;
+export const createMapRegion = (
+  coordinate: MapCoordinate,
+): FoodMapRegion => ({
+  ...coordinate,
+  latitudeDelta: MAP_LATITUDE_DELTA,
+  longitudeDelta: MAP_LONGITUDE_DELTA,
+});
+
+export const SCHOOL_REGION = createMapRegion(SCHOOL_COORDINATE);
 
 export const regionToMapBounds = (region: {
   latitude: number;

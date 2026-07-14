@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { Redirect, router, useLocalSearchParams } from "expo-router";
 import React, { useMemo } from "react";
 import { ActivityIndicator, ScrollView } from "react-native";
 import styled from "styled-components/native";
@@ -74,6 +74,10 @@ export default function StoreDetail() {
     });
   };
 
+  if (storeId === null) {
+    return <Redirect href="/tab/FoodStores" />;
+  }
+
   return (
     <Page>
       <ScreenScroll
@@ -124,11 +128,7 @@ export default function StoreDetail() {
                 </>
               ) : (
                 <>
-                  <StatusText>
-                    {storeId === null
-                      ? "가게 정보가 올바르지 않습니다."
-                      : "가게 정보를 불러오지 못했습니다."}
-                  </StatusText>
+                  <StatusText>가게 정보를 불러오지 못했습니다.</StatusText>
                   {isError && (
                     <RetryButton
                       accessibilityRole="button"

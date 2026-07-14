@@ -4,6 +4,8 @@ import type {
   StoreCategoriesResponse,
   StoreDetailLocation,
   StoreDetailResponse,
+  StoreListQuery,
+  StoreListResponse,
   StoreMapQuery,
   StoreMapResponse,
 } from "./type";
@@ -33,6 +35,28 @@ export const getStoresInMap = async (
   query.category?.forEach((category) => params.append("category", category));
 
   const response = await api.get<StoreMapResponse>("/stores/map", {
+    params,
+    signal,
+  });
+
+  return response.data;
+};
+
+export const getStores = async (
+  query: StoreListQuery,
+  signal?: AbortSignal,
+) => {
+  const params = new URLSearchParams();
+
+  query.category?.forEach((category) => params.append("category", category));
+  appendNumber(params, "maxPrice", query.maxPrice);
+  appendNumber(params, "lat", query.lat);
+  appendNumber(params, "lng", query.lng);
+  if (query.sort) params.append("sort", query.sort);
+  appendNumber(params, "page", query.page);
+  appendNumber(params, "size", query.size);
+
+  const response = await api.get<StoreListResponse>("/stores", {
     params,
     signal,
   });

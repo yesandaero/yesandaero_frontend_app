@@ -17,7 +17,11 @@ export function FoodStoreList({
   categories,
   stores,
 }: FoodStoreListProps) {
-  if (stores.length === 0) {
+  const storesWithId = stores.filter(
+    (store) => Number.isInteger(store.storeId) && store.storeId > 0,
+  );
+
+  if (storesWithId.length === 0) {
     return (
       <EmptyCard>
         <EmptyTitle>조건에 맞는 맛집이 없어요</EmptyTitle>
@@ -28,7 +32,7 @@ export function FoodStoreList({
 
   return (
     <List>
-      {stores.map((store) => (
+      {storesWithId.map((store) => (
         <Link
           key={store.storeId}
           href={{

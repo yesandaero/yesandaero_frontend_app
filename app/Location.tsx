@@ -1,4 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
@@ -15,6 +16,8 @@ import { screenLayout } from "@/constants/layout";
 export default function Location() {
   const { source } = useLocalSearchParams<{ source?: string }>();
   const isSettingsFlow = source === "settings";
+  const queryClient = useQueryClient();
+  const savedLocation = useSettingsStore((state) => state.location);
   const {
     address,
     getCurrentRoadAddress,
@@ -22,7 +25,7 @@ export default function Location() {
     isSearching,
     searchRoadAddress,
     selectedLocation,
-  } = useRoadAddress();
+  } = useRoadAddress(savedLocation ?? undefined);
   const [draftAddress, setDraftAddress] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const saveLocation = useSettingsStore((state) => state.setLocation);
@@ -54,8 +57,11 @@ export default function Location() {
   const handleNext = () => {
     if (!selectedLocation) return;
 
+    saveLocation(selectedLocation);
+    queryClient.removeQueries({ queryKey: ["stores", "map"] });
+    queryClient.removeQueries({ queryKey: ["stores", "list"] });
+
     if (isSettingsFlow) {
-      saveLocation(selectedLocation);
       router.replace("/tab/Setting");
       return;
     }
@@ -79,7 +85,10 @@ export default function Location() {
       >
         <LocationHeader />
         <Content>
-          <LocationMapPreview coordinate={selectedLocation} />
+          <LocationMapPreview
+            coordinate={selectedLocation}
+            title={selectedLocation.address}
+          />
 
           <CardOverlap>
             <LocationConfirmCard

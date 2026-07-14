@@ -1,13 +1,19 @@
 import {
   getStoreCategories,
   getStoreDetail,
+  getStores,
   getStoresInMap,
 } from "@/apis/Store";
 import type {
   StoreDetailLocation,
+  StoreListFilters,
   StoreMapQuery,
 } from "@/apis/Store/type";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useInfiniteQuery,
+  useQuery,
+} from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useEffect } from "react";
 import Toast from "react-native-toast-message";
@@ -17,6 +23,8 @@ const storeKeys = {
   categories: () => [...storeKeys.all, "categories"] as const,
   detail: (storeId: number | null, location?: StoreDetailLocation) =>
     [...storeKeys.all, "detail", storeId, location] as const,
+  list: (filters: StoreListFilters | null) =>
+    [...storeKeys.all, "list", filters] as const,
   map: (query: StoreMapQuery | null) =>
     [...storeKeys.all, "map", query] as const,
 };
@@ -26,12 +34,13 @@ const isUnauthorizedError = (error: unknown) =>
 
 const showStoreError = (
   error: unknown,
-  action: "map" | "categories" | "detail",
+  action: "map" | "list" | "categories" | "detail",
 ) => {
   if (isUnauthorizedError(error)) return;
 
   let message = {
     map: "주변 가게를 불러오지 못했습니다.",
+    list: "가게 목록을 불러오지 못했습니다.",
     categories: "음식 카테고리를 불러오지 못했습니다.",
     detail: "가게 정보를 불러오지 못했습니다.",
   }[action];
@@ -44,6 +53,12 @@ const showStoreError = (
     error.response?.status === 400
   ) {
     message = "지도 범위를 다시 확인해 주세요.";
+  } else if (
+    action === "list" &&
+    error instanceof AxiosError &&
+    error.response?.status === 400
+  ) {
+    message = "목록 필터나 정렬 조건을 다시 확인해 주세요.";
   } else if (
     action === "detail" &&
     error instanceof AxiosError &&
@@ -93,6 +108,36 @@ export function useStoresInMap(queryParams: StoreMapQuery | null) {
     isLoading: query.isLoading,
     isFetching: query.isFetching,
     isError: query.isError,
+    refetch: query.refetch,
+  };
+}
+
+export function useStoreList(filters: StoreListFilters | null) {
+  const query = useInfiniteQuery({
+    queryKey: storeKeys.list(filters),
+    queryFn: ({ pageParam, signal }) =>
+      getStores({ ...filters!, page: pageParam }, signal),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) =>
+      lastPage.page + 1 < lastPage.totalPages
+        ? lastPage.page + 1
+        : undefined,
+    enabled: filters !== null,
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (query.error) showStoreError(query.error, "list");
+  }, [query.error]);
+
+  return {
+    stores: query.data?.pages.flatMap((page) => page.content) ?? [],
+    isLoading: query.isLoading,
+    isError: query.isError,
+    isRefetching: query.isRefetching,
+    isFetchingNextPage: query.isFetchingNextPage,
+    hasNextPage: query.hasNextPage,
+    fetchNextPage: query.fetchNextPage,
     refetch: query.refetch,
   };
 }

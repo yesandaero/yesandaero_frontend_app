@@ -8,10 +8,11 @@ import { FoodCategoryFilter } from "@/components/food-stores/food-category-filte
 import { FoodSearchField } from "@/components/food-stores/food-search-field";
 import { FoodSortFilter } from "@/components/food-stores/food-sort-filter";
 import {
-  DEFAULT_MAP_BOUNDS,
+  createMapRegion,
   FoodCategory,
   FoodSortOption,
   FoodViewMode,
+  regionToMapBounds,
   SCHOOL_COORDINATE,
 } from "@/components/food-stores/food-store-data";
 import { FoodStoreList } from "@/components/food-stores/food-store-list";
@@ -21,20 +22,47 @@ import { FoodViewToggle } from "@/components/food-stores/food-view-toggle";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { colors } from "@/constants/color";
 import { screenLayout } from "@/constants/layout";
-import { useStoreCategories, useStoresInMap } from "@/hooks/use-stores";
+import {
+  useStoreCategories,
+  useStoreList,
+  useStoresInMap,
+} from "@/hooks/use-stores";
 import { useSettingsStore } from "@/stores/settings-store";
 
 export default function FoodStores() {
   const { budget: budgetParam } = useLocalSearchParams<{ budget?: string }>();
   const savedBudget = useSettingsStore((state) => state.budget);
   const savedLocation = useSettingsStore((state) => state.location);
+  const currentLocation = savedLocation ?? SCHOOL_COORDINATE;
+  const currentLatitude = currentLocation.latitude;
+  const currentLongitude = currentLocation.longitude;
+  const locationKey = `${currentLatitude}:${currentLongitude}`;
+  const initialMapRegion = useMemo(
+    () =>
+      createMapRegion({
+        latitude: currentLatitude,
+        longitude: currentLongitude,
+      }),
+    [currentLatitude, currentLongitude],
+  );
+  const locationBounds = useMemo(
+    () => regionToMapBounds(initialMapRegion),
+    [initialMapRegion],
+  );
   const [selectedCategory, setSelectedCategory] =
     useState<FoodCategory>("ALL");
-  const [selectedSort, setSelectedSort] = useState<FoodSortOption>("distance");
+  const [selectedSort, setSelectedSort] =
+    useState<FoodSortOption>("DISTANCE_ASC");
   const [viewMode, setViewMode] = useState<FoodViewMode>("map");
   const [query, setQuery] = useState("");
-  const [mapBounds, setMapBounds] =
-    useState<StoreMapBounds>(DEFAULT_MAP_BOUNDS);
+  const [mapViewport, setMapViewport] = useState<{
+    bounds: StoreMapBounds;
+    locationKey: string;
+  }>(() => ({ bounds: locationBounds, locationKey }));
+  const mapBounds =
+    mapViewport.locationKey === locationKey
+      ? mapViewport.bounds
+      : locationBounds;
 
   const parsedBudget = Number(
     Array.isArray(budgetParam) ? budgetParam[0] : budgetParam,
@@ -45,61 +73,103 @@ export default function FoodStores() {
       : savedBudget;
 
   const { categories } = useStoreCategories();
-  const currentLocation = savedLocation ?? SCHOOL_COORDINATE;
   const mapQuery = useMemo(
-    () => ({
-      ...mapBounds,
-      maxPrice: budget,
-      category:
-        selectedCategory === "ALL" ? undefined : [selectedCategory],
-      limit: 100,
-      lat: currentLocation.latitude,
-      lng: currentLocation.longitude,
-    }),
+    () =>
+      viewMode === "map"
+        ? {
+            ...mapBounds,
+            maxPrice: budget,
+            category:
+              selectedCategory === "ALL" ? undefined : [selectedCategory],
+            limit: 100,
+            lat: currentLatitude,
+            lng: currentLongitude,
+          }
+        : null,
     [
       budget,
-      currentLocation.latitude,
-      currentLocation.longitude,
+      currentLatitude,
+      currentLongitude,
       mapBounds,
       selectedCategory,
+      viewMode,
+    ],
+  );
+  const listFilters = useMemo(
+    () =>
+      viewMode === "list"
+        ? {
+            category:
+              selectedCategory === "ALL" ? undefined : [selectedCategory],
+            maxPrice: budget,
+            lat: currentLatitude,
+            lng: currentLongitude,
+            sort: selectedSort,
+            size: 20,
+          }
+        : null,
+    [
+      budget,
+      currentLatitude,
+      currentLongitude,
+      selectedCategory,
+      selectedSort,
+      viewMode,
     ],
   );
   const {
-    stores,
+    stores: mapStores,
     truncated,
-    isLoading,
-    isFetching,
-    isError,
-    refetch,
+    isLoading: isMapLoading,
+    isFetching: isMapFetching,
+    isError: isMapError,
+    refetch: refetchMap,
   } = useStoresInMap(mapQuery);
+  const {
+    stores: listStores,
+    isLoading: isListLoading,
+    isError: isListError,
+    isRefetching: isListRefetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch: refetchList,
+  } = useStoreList(listFilters);
 
-  const handleBoundsChange = useCallback((nextBounds: StoreMapBounds) => {
-    setMapBounds((currentBounds) => {
-      const isSameBounds = (Object.keys(currentBounds) as (keyof StoreMapBounds)[])
-        .every((key) => currentBounds[key] === nextBounds[key]);
+  const handleBoundsChange = useCallback(
+    (nextBounds: StoreMapBounds) => {
+      setMapViewport((currentViewport) => {
+        const isSameBounds = (
+          Object.keys(nextBounds) as (keyof StoreMapBounds)[]
+        ).every((key) => currentViewport.bounds[key] === nextBounds[key]);
 
-      return isSameBounds ? currentBounds : nextBounds;
-    });
-  }, []);
+        return currentViewport.locationKey === locationKey && isSameBounds
+          ? currentViewport
+          : { bounds: nextBounds, locationKey };
+      });
+    },
+    [locationKey],
+  );
 
-  const visibleStores = useMemo(() => {
-    const normalizedQuery = query.trim().toLocaleLowerCase("ko-KR");
-
-    return stores.filter((store) => {
+  const normalizedQuery = query.trim().toLocaleLowerCase("ko-KR");
+  const visibleMapStores = useMemo(() => {
+    return mapStores.filter((store) => {
       const matchesQuery =
         normalizedQuery.length === 0 ||
         store.name.toLocaleLowerCase("ko-KR").includes(normalizedQuery);
 
       return matchesQuery;
-    }).sort((firstStore, secondStore) => {
-      if (selectedSort === "distance") {
-        return (firstStore.distanceMeters ?? Number.POSITIVE_INFINITY) -
-          (secondStore.distanceMeters ?? Number.POSITIVE_INFINITY);
-      }
-
-      return firstStore.avgPrice - secondStore.avgPrice;
     });
-  }, [query, selectedSort, stores]);
+  }, [mapStores, normalizedQuery]);
+  const visibleListStores = useMemo(
+    () =>
+      listStores.filter(
+        (store) =>
+          normalizedQuery.length === 0 ||
+          store.name.toLocaleLowerCase("ko-KR").includes(normalizedQuery),
+      ),
+    [listStores, normalizedQuery],
+  );
 
   return (
     <Page>
@@ -135,32 +205,48 @@ export default function FoodStores() {
                   가게가 많아요. 지도를 확대하면 더 정확히 볼 수 있어요.
                 </NoticeBanner>
               )}
-              {isError && (
-                <ErrorBanner onPress={() => void refetch()}>
+              {isMapError && (
+                <ErrorBanner onPress={() => void refetchMap()}>
                   가게를 불러오지 못했어요. 눌러서 다시 시도해 주세요.
                 </ErrorBanner>
               )}
               <FoodStoresMap
                 budget={budget}
-                isLoading={isLoading || isFetching}
+                initialRegion={initialMapRegion}
+                isLoading={isMapLoading || isMapFetching}
                 onBoundsChange={handleBoundsChange}
-                stores={visibleStores}
+                stores={visibleMapStores}
               />
             </>
           ) : (
             <>
-              {isLoading ? (
+              {isListLoading ? (
                 <NoticeBanner>가게를 불러오는 중이에요.</NoticeBanner>
-              ) : isError ? (
-                <ErrorBanner onPress={() => void refetch()}>
+              ) : isListError ? (
+                <ErrorBanner onPress={() => void refetchList()}>
                   가게를 불러오지 못했어요. 눌러서 다시 시도해 주세요.
                 </ErrorBanner>
               ) : (
-                <FoodStoreList
-                  budget={budget}
-                  categories={categories}
-                  stores={visibleStores}
-                />
+                <>
+                  <FoodStoreList
+                    budget={budget}
+                    categories={categories}
+                    stores={visibleListStores}
+                  />
+                  {hasNextPage && (
+                    <LoadMoreButton
+                      accessibilityRole="button"
+                      disabled={isFetchingNextPage || isListRefetching}
+                      onPress={() => void fetchNextPage()}
+                    >
+                      <LoadMoreText>
+                        {isFetchingNextPage
+                          ? "가게를 더 불러오는 중..."
+                          : "가게 더 보기"}
+                      </LoadMoreText>
+                    </LoadMoreButton>
+                  )}
+                </>
               )}
             </>
           )}
@@ -213,5 +299,22 @@ const ErrorBanner = styled.Text`
   background-color: ${colors.neutral100};
   color: ${colors.errorRed};
   font-size: 12px;
+  font-weight: 800;
+`;
+
+const LoadMoreButton = styled.Pressable`
+  min-height: 44px;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+  border-width: 1px;
+  border-color: ${colors.primary300};
+  border-radius: 12px;
+  background-color: ${colors.neutral0};
+`;
+
+const LoadMoreText = styled.Text`
+  color: ${colors.primary800};
+  font-size: 14px;
   font-weight: 800;
 `;

@@ -4,10 +4,14 @@ import styled from "styled-components/native";
 
 import type { MapStore, StoreMapBounds } from "@/apis/Store/type";
 import { colors } from "@/constants/color";
-import { DEFAULT_MAP_BOUNDS } from "./food-store-data";
+import {
+  type FoodMapRegion,
+  regionToMapBounds,
+} from "./food-store-data";
 
 type FoodStoresMapProps = {
   budget: number;
+  initialRegion: FoodMapRegion;
   isLoading?: boolean;
   onBoundsChange: (bounds: StoreMapBounds) => void;
   stores: MapStore[];
@@ -23,24 +27,29 @@ const POSITIONS = [
 
 export function FoodStoresMapFallback({
   budget,
+  initialRegion,
   isLoading = false,
   onBoundsChange,
   stores,
 }: FoodStoresMapProps) {
   useEffect(() => {
-    onBoundsChange(DEFAULT_MAP_BOUNDS);
-  }, [onBoundsChange]);
+    onBoundsChange(regionToMapBounds(initialRegion));
+  }, [initialRegion, onBoundsChange]);
 
   return (
-    <MapContainer accessibilityLabel="대덕소프트웨어마이스터고 주변 맛집 지도 미리보기">
+    <MapContainer accessibilityLabel="설정한 위치 주변 맛집 지도 미리보기">
       <Road $horizontal $position="28%" />
       <Road $horizontal $position="68%" />
       <Road $position="30%" />
       <Road $position="72%" />
 
-      <SchoolLabel>대덕소프트웨어마이스터고</SchoolLabel>
+      <LocationLabel>설정한 위치</LocationLabel>
 
-      {stores.map((store, index) => {
+      {stores
+        .filter(
+          (store) => Number.isInteger(store.storeId) && store.storeId > 0,
+        )
+        .map((store, index) => {
         const position = POSITIONS[index % POSITIONS.length];
 
         return (
@@ -67,7 +76,7 @@ export function FoodStoresMapFallback({
             </Pin>
           </MarkerPreview>
         );
-      })}
+        })}
       {isLoading && (
         <LoadingBadge>
           <LoadingText>가게 불러오는 중...</LoadingText>
@@ -96,7 +105,7 @@ const Road = styled.View<{ $horizontal?: boolean; $position: string }>`
   background-color: ${colors.primary200};
 `;
 
-const SchoolLabel = styled.Text`
+const LocationLabel = styled.Text`
   position: absolute;
   right: 12px;
   bottom: 10px;

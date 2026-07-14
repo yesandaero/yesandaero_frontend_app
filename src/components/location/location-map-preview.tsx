@@ -8,14 +8,15 @@ type LocationMapPreviewProps = {
     latitude: number;
     longitude: number;
   } | null;
+  title?: string;
 };
 
-export function LocationMapPreview({ coordinate }: LocationMapPreviewProps) {
+export function LocationMapPreview({ coordinate, title }: LocationMapPreviewProps) {
   return (
     <MapFallback accessibilityLabel="현재 위치 지도">
       <FallbackText>
         {coordinate
-          ? "현재 위치를 확인했습니다"
+          ? title ?? "현재 위치를 확인했습니다"
           : "현재 위치 지도를 불러오고 있어요"}
       </FallbackText>
     </MapFallback>
