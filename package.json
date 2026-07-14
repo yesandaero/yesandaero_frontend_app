@@ -3,11 +3,11 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --host localhost --port 8086",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
+    "android": "expo start --android --host localhost --port 8086",
+    "ios": "expo start --ios --host localhost --port 8086",
+    "web": "expo start --web --host localhost --port 8086",
     "lint": "expo lint"
   },
   "dependencies": {
@@ -53,5 +53,6 @@
     "eslint-config-expo": "~10.0.0",
     "typescript": "~5.9.2"
   },
-  "private": true
+  "private": true,
+  "proxy": "http://localhost:8086"
 }

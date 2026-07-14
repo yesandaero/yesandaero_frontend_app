@@ -3,7 +3,7 @@ import {
   type BarcodeScanningResult,
   useCameraPermissions,
 } from "expo-camera";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Modal } from "react-native";
 import Toast from "react-native-toast-message";
 import styled from "styled-components/native";
@@ -17,6 +17,24 @@ type CouponScanModalProps = {
   onRecognize: (token: string) => void;
 };
 
+const extractCouponToken = (qrData: string) => {
+  const value = qrData.trim();
+  if (!value) return null;
+
+  if (!value.startsWith("couponapp://register")) {
+    return value.includes("://") ? null : value;
+  }
+
+  const tokenMatch = value.match(/[?&]token=([^&#]+)/);
+  if (!tokenMatch?.[1]) return null;
+
+  try {
+    return decodeURIComponent(tokenMatch[1]).trim() || null;
+  } catch {
+    return null;
+  }
+};
+
 export function CouponScanModal({
   visible,
   isRegistering,
@@ -24,31 +42,21 @@ export function CouponScanModal({
   onRecognize,
 }: CouponScanModalProps) {
   const [permission, requestPermission] = useCameraPermissions();
-  const requestedForOpening = useRef(false);
   const scanLockRef = useRef(false);
 
-  useEffect(() => {
-    if (!visible) {
-      requestedForOpening.current = false;
-      scanLockRef.current = false;
+  const handleBarcodeScanned = ({ data }: BarcodeScanningResult) => {
+    const token = extractCouponToken(data);
+
+    if (isRegistering || scanLockRef.current) return;
+
+    if (!token) {
+      Toast.show({
+        type: "error",
+        text1: "쿠폰 등록용 QR이 아닙니다.",
+      });
       return;
     }
 
-    if (
-      permission &&
-      !permission.granted &&
-      permission.canAskAgain &&
-      !requestedForOpening.current
-    ) {
-      requestedForOpening.current = true;
-      void requestPermission();
-    }
-  }, [permission, requestPermission, visible]);
-
-  const handleBarcodeScanned = ({ data }: BarcodeScanningResult) => {
-    const token = data.trim();
-
-    if (!token || isRegistering || scanLockRef.current) return;
     scanLockRef.current = true;
     onRecognize(token);
   };

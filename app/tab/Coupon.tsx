@@ -113,12 +113,14 @@ export default function Coupon() {
 
       <AppBottomNavigation activeTab="coupon" />
 
-      <CouponScanModal
-        visible={isScannerVisible}
-        isRegistering={isRegistering}
-        onCancel={() => setIsScannerVisible(false)}
-        onRecognize={handleRecognizeQr}
-      />
+      {isScannerVisible && (
+        <CouponScanModal
+          visible
+          isRegistering={isRegistering}
+          onCancel={() => setIsScannerVisible(false)}
+          onRecognize={handleRecognizeQr}
+        />
+      )}
       <CouponSuccessModal
         couponName={registeredCoupon?.name ?? ""}
         storeName={registeredCoupon?.store.name ?? ""}

@@ -12,7 +12,7 @@ import { useAuthSessionStore } from "@/stores/auth-session-store";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
-const REFRESH_PATH = "/auth/token/refresh";
+const REFRESH_PATH = "/auth/refresh";
 
 const skipUrls = [
   "/auth/login",
@@ -90,6 +90,7 @@ export const api = create({
 });
 
 let currentRefreshPromise: Promise<string> | null = null;
+let hasConfirmedSession = false;
 
 const showSessionExpiredToast = () => {
   Toast.show({
@@ -109,7 +110,10 @@ const handleRefreshFailure = async (refreshError: unknown) => {
 
   if (shouldEndSession) {
     await tokenStorage.clearTokens();
-    showSessionExpiredToast();
+    if (hasConfirmedSession) {
+      showSessionExpiredToast();
+    }
+    hasConfirmedSession = false;
     router.replace("/Login");
   }
 
@@ -155,7 +159,13 @@ api.interceptors.request.use(async (config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (!isSkipUrl(response.config.url)) {
+      hasConfirmedSession = true;
+    }
+
+    return response;
+  },
   async (error: AxiosError) => {
     const config = error.config as RetryableRequestConfig | undefined;
 
@@ -176,7 +186,10 @@ api.interceptors.response.use(
     if (!refreshToken) {
       if (accessToken) {
         await tokenStorage.clearTokens();
-        showSessionExpiredToast();
+        if (hasConfirmedSession) {
+          showSessionExpiredToast();
+        }
+        hasConfirmedSession = false;
         router.replace("/Login");
       }
 

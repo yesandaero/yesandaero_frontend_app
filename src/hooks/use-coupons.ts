@@ -1,5 +1,6 @@
 import { consumeCoupon, getMyCoupons, registerCoupon } from "@/apis/Coupon";
 import type {
+  Coupon,
   CouponListResponse,
   CouponStatus,
   RegisterCouponRequest,
@@ -84,8 +85,26 @@ export function useRegisterCoupon() {
   const mutation = useMutation({
     mutationKey: [...couponKeys.all, "register"],
     mutationFn: (request: RegisterCouponRequest) => registerCoupon(request),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: couponKeys.all });
+    onSuccess: (registeredCoupon) => {
+      queryClient.setQueryData<CouponListResponse>(
+        couponKeys.mine("REGISTERED"),
+        (currentCoupons) => {
+          if (!currentCoupons) {
+            return { coupons: [registeredCoupon] };
+          }
+
+          const coupons = currentCoupons.coupons.filter(
+            (coupon: Coupon) => coupon.couponId !== registeredCoupon.couponId,
+          );
+
+          return {
+            ...currentCoupons,
+            coupons: [registeredCoupon, ...coupons],
+          };
+        },
+      );
+
+      void queryClient.invalidateQueries({ queryKey: couponKeys.all });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) return;
