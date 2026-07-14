@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components/native";
 
+import type { StoreMenu } from "@/apis/Store/type";
 import { colors } from "@/constants/color";
-import { StoreMenu } from "./store-detail-data";
 
 type StoreHighlightsProps = {
   closeTime: string;
-  distanceMeters: number;
+  distanceMeters: number | null;
   menus: StoreMenu[];
   openTime: string;
   usableCouponCount: number;
-  walkingMinutes: number;
+  walkingMinutes: number | null;
 };
 
 export function StoreHighlights({
@@ -38,11 +38,13 @@ export function StoreHighlights({
             {openTime} ~ {closeTime}
           </BadgeText>
         </Badge>
-        <Badge>
-          <BadgeText selectable>
-            도보 {walkingMinutes}분 · {distanceMeters.toLocaleString()}m
-          </BadgeText>
-        </Badge>
+        {walkingMinutes !== null && distanceMeters !== null ? (
+          <Badge>
+            <BadgeText selectable>
+              도보 {walkingMinutes}분 · {distanceMeters.toLocaleString()}m
+            </BadgeText>
+          </Badge>
+        ) : null}
       </BadgeRow>
 
       {maxDiscountRate > 0 ? (

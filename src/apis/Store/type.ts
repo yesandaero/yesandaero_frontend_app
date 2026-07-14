@@ -50,3 +50,35 @@ export type StoreMapResponse = {
 export type StoreCategoriesResponse = {
   categories: StoreCategory[];
 };
+
+export type StoreMenu = {
+  menuId: number;
+  name: string;
+  description: string;
+  price: number;
+  discountedPrice: number;
+};
+
+export type StoreDetailResponse = {
+  storeId: number;
+  name: string;
+  category: StoreCategoryCode;
+  address: string;
+  latitude: number;
+  longitude: number;
+  phone: string;
+  avgPrice: number;
+  description: string;
+  openTime: string;
+  closeTime: string;
+  minOrderAmount: number;
+  distanceMeters: number | null;
+  walkingMinutes: number | null;
+  menus: StoreMenu[];
+  usableCouponCount: number;
+};
+
+export type StoreDetailLocation = {
+  lat: number;
+  lng: number;
+};

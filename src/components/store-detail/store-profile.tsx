@@ -8,11 +8,11 @@ type StoreProfileProps = {
   avgPrice: number;
   closeTime: string;
   description: string;
-  distanceMeters: number;
+  distanceMeters: number | null;
   minOrderAmount: number;
   openTime: string;
   phone: string;
-  walkingMinutes: number;
+  walkingMinutes: number | null;
 };
 
 export function StoreProfile({
@@ -33,7 +33,9 @@ export function StoreProfile({
         <InformationRow>
           <Label>거리</Label>
           <Value selectable>
-            도보 {walkingMinutes}분 · {distanceMeters.toLocaleString()}m
+            {walkingMinutes !== null && distanceMeters !== null
+              ? `도보 ${walkingMinutes}분 · ${distanceMeters.toLocaleString()}m`
+              : "거리 정보 없음"}
           </Value>
         </InformationRow>
         <InformationRow>

@@ -2,6 +2,8 @@ import { api } from "@/apis";
 
 import type {
   StoreCategoriesResponse,
+  StoreDetailLocation,
+  StoreDetailResponse,
   StoreMapQuery,
   StoreMapResponse,
 } from "./type";
@@ -43,6 +45,19 @@ export const getStoreCategories = async (signal?: AbortSignal) => {
     "/stores/categories",
     { signal },
   );
+
+  return response.data;
+};
+
+export const getStoreDetail = async (
+  storeId: number,
+  location?: StoreDetailLocation,
+  signal?: AbortSignal,
+) => {
+  const response = await api.get<StoreDetailResponse>(`/stores/${storeId}`, {
+    params: location,
+    signal,
+  });
 
   return response.data;
 };

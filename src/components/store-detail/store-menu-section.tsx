@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components/native";
 
+import type { StoreMenu } from "@/apis/Store/type";
 import { colors } from "@/constants/color";
-import { StoreMenu } from "./store-detail-data";
 
 type StoreMenuSectionProps = {
   menus: StoreMenu[];
