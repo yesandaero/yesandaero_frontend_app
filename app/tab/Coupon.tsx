@@ -14,6 +14,7 @@ import { CouponUseConfirmModal } from "@/components/coupon/coupon-use-confirm-mo
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { colors } from "@/constants/color";
 import { screenLayout } from "@/constants/layout";
+
 import {
   useCouponUsage,
   useMyCoupons,
