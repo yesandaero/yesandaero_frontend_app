@@ -4,6 +4,7 @@ import Input from "@/components/auth/LoginInput";
 import Question from "@/components/auth/Question";
 import { colors } from "@/constants/color";
 import { useLogin } from "@/hooks/use-auth";
+import { isValidEmail } from "@/utils/isValidEmail";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
@@ -35,6 +36,14 @@ export default function Login() {
 
   const handleLogin = async () => {
     if (!isActive || isLoading) return;
+
+    if (!isValidEmail(email)) {
+      Toast.show({
+        type: "error",
+        text1: "이메일 형식이 올바르지 않습니다.",
+      });
+      return;
+    }
 
     try {
       await login({ email, password });

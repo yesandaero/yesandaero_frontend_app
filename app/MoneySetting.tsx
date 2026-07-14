@@ -13,7 +13,12 @@ import { useSettingsStore } from "@/stores/settings-store";
 const DEFAULT_BUDGET = "10000";
 
 export default function MoneySetting() {
-  const { source } = useLocalSearchParams<{ source?: string }>();
+  const { latitude, longitude, roadAddress, source } = useLocalSearchParams<{
+    latitude?: string;
+    longitude?: string;
+    roadAddress?: string;
+    source?: string;
+  }>();
   const isSettingsFlow = source === "settings";
   const savedBudget = useSettingsStore((state) => state.budget);
   const saveBudget = useSettingsStore((state) => state.setBudget);
@@ -38,7 +43,12 @@ export default function MoneySetting() {
 
     router.replace({
       pathname: "/tab/FoodStores",
-      params: { budget },
+      params: {
+        budget,
+        ...(latitude ? { latitude } : {}),
+        ...(longitude ? { longitude } : {}),
+        ...(roadAddress ? { roadAddress } : {}),
+      },
     });
   };
 

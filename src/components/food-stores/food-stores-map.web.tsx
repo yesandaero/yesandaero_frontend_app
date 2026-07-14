@@ -44,10 +44,48 @@ export function FoodStoresMap({
   onBoundsChange,
   stores,
 }: FoodStoresMapProps) {
-  const bounds = useMemo(
+  const queryBounds = useMemo(
     () => regionToMapBounds(initialRegion),
     [initialRegion],
   );
+  const validStores = useMemo(
+    () =>
+      stores.filter(
+        (store) =>
+          Number.isInteger(store.storeId) &&
+          store.storeId > 0 &&
+          Number.isFinite(store.latitude) &&
+          Number.isFinite(store.longitude),
+      ),
+    [stores],
+  );
+  const bounds = useMemo(() => {
+    if (validStores.length === 0) return queryBounds;
+
+    const latitudes = [
+      initialRegion.latitude,
+      ...validStores.map((store) => store.latitude),
+    ];
+    const longitudes = [
+      initialRegion.longitude,
+      ...validStores.map((store) => store.longitude),
+    ];
+    const latitudePadding = Math.max(
+      (Math.max(...latitudes) - Math.min(...latitudes)) * 0.12,
+      0.001,
+    );
+    const longitudePadding = Math.max(
+      (Math.max(...longitudes) - Math.min(...longitudes)) * 0.12,
+      0.001,
+    );
+
+    return {
+      swLat: Math.min(...latitudes) - latitudePadding,
+      swLng: Math.min(...longitudes) - longitudePadding,
+      neLat: Math.max(...latitudes) + latitudePadding,
+      neLng: Math.max(...longitudes) + longitudePadding,
+    };
+  }, [initialRegion.latitude, initialRegion.longitude, queryBounds, validStores]);
   const mapUrl = useMemo(() => {
     const bbox = [bounds.swLng, bounds.swLat, bounds.neLng, bounds.neLat].join(
       ",",
@@ -57,21 +95,16 @@ export function FoodStoresMap({
   }, [bounds]);
   const storesWithPosition = useMemo(
     () =>
-      stores.flatMap((store) => {
-        if (!Number.isInteger(store.storeId) || store.storeId <= 0) return [];
-        if (!Number.isFinite(store.latitude) || !Number.isFinite(store.longitude)) {
-          return [];
-        }
-
+      validStores.flatMap((store) => {
         const position = toPercentPosition(store, bounds);
         return position ? [{ store, position }] : [];
       }),
-    [bounds, stores],
+    [bounds, validStores],
   );
 
   useEffect(() => {
-    onBoundsChange(bounds);
-  }, [bounds, onBoundsChange]);
+    onBoundsChange(queryBounds);
+  }, [onBoundsChange, queryBounds]);
 
   return (
     <MapContainer accessibilityLabel="백엔드 가게 위치를 표시한 실제 지도">

@@ -31,10 +31,36 @@ import {
 import { useSettingsStore } from "@/stores/settings-store";
 
 export default function FoodStores() {
-  const { budget: budgetParam } = useLocalSearchParams<{ budget?: string }>();
+  const {
+    budget: budgetParam,
+    latitude: latitudeParam,
+    longitude: longitudeParam,
+    roadAddress,
+  } = useLocalSearchParams<{
+    budget?: string;
+    latitude?: string;
+    longitude?: string;
+    roadAddress?: string;
+  }>();
   const savedBudget = useSettingsStore((state) => state.budget);
   const savedLocation = useSettingsStore((state) => state.location);
-  const currentLocation = savedLocation ?? SCHOOL_COORDINATE;
+  const routeLatitude = Number(
+    Array.isArray(latitudeParam) ? latitudeParam[0] : latitudeParam,
+  );
+  const routeLongitude = Number(
+    Array.isArray(longitudeParam) ? longitudeParam[0] : longitudeParam,
+  );
+  const routeLocation =
+    Number.isFinite(routeLatitude) && Number.isFinite(routeLongitude)
+      ? {
+          address: Array.isArray(roadAddress)
+            ? roadAddress[0]
+            : (roadAddress ?? "입력한 위치"),
+          latitude: routeLatitude,
+          longitude: routeLongitude,
+        }
+      : null;
+  const currentLocation = routeLocation ?? savedLocation ?? SCHOOL_COORDINATE;
   const currentLatitude = currentLocation.latitude;
   const currentLongitude = currentLocation.longitude;
   const locationKey = `${currentLatitude}:${currentLongitude}`;
@@ -81,7 +107,7 @@ export default function FoodStores() {
             maxPrice: budget,
             category:
               selectedCategory === "ALL" ? undefined : [selectedCategory],
-            limit: 15,
+            limit: 100,
             lat: currentLatitude,
             lng: currentLongitude,
           }

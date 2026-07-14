@@ -1,5 +1,5 @@
-import { router, useLocalSearchParams } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
@@ -9,9 +9,9 @@ import { LocationHeader } from "@/components/location/location-header";
 import { LocationMapPreview } from "@/components/location/location-map-preview";
 import { LocationNextButton } from "@/components/location/location-next-button";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
+import { screenLayout } from "@/constants/layout";
 import { useRoadAddress } from "@/hooks/use-road-address";
 import { useSettingsStore } from "@/stores/settings-store";
-import { screenLayout } from "@/constants/layout";
 
 export default function Location() {
   const { source } = useLocalSearchParams<{ source?: string }>();
@@ -84,24 +84,23 @@ export default function Location() {
         showsVerticalScrollIndicator={false}
       >
         <LocationHeader />
+        <CardOverlap>
+          <LocationConfirmCard
+            address={address}
+            draftAddress={draftAddress}
+            isEditing={isEditing}
+            isLoading={isLocating || isSearching}
+            onCancelEditing={handleCancelEditing}
+            onConfirm={handleConfirmLocation}
+            onDraftAddressChange={setDraftAddress}
+            onStartEditing={handleStartEditing}
+          />
+        </CardOverlap>
         <Content>
           <LocationMapPreview
             coordinate={selectedLocation}
             title={selectedLocation.address}
           />
-
-          <CardOverlap>
-            <LocationConfirmCard
-              address={address}
-              draftAddress={draftAddress}
-              isEditing={isEditing}
-              isLoading={isLocating || isSearching}
-              onCancelEditing={handleCancelEditing}
-              onConfirm={handleConfirmLocation}
-              onDraftAddressChange={setDraftAddress}
-              onStartEditing={handleStartEditing}
-            />
-          </CardOverlap>
         </Content>
       </ScreenScroll>
       <LocationNextButton
@@ -135,12 +134,15 @@ const Content = styled.View`
   max-width: ${screenLayout.contentMaxWidth}px;
   align-self: center;
   background-color: white;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 65px;
 `;
 
 const CardOverlap = styled.View`
+  width: 100%;
+  max-width: ${screenLayout.contentMaxWidth}px;
+  align-self: center;
   z-index: 2;
-  margin-top: -60px;
+  margin-bottom: -70px;
   padding: 0 ${screenLayout.horizontalPadding}px;
 `;

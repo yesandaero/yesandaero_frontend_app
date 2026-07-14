@@ -19,7 +19,7 @@ const getAuthErrorMessage = (error: unknown, action: AuthAction) => {
   }
 
   if (action === "login" && status === 401) {
-    return "비밀번호가 틀렸습니다.";
+    return "이메일 또는 비밀번호가 올바르지 않습니다.";
   }
 
   if (action === "signup" && status === 400) {

@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import styled from "styled-components/native";
 
 import type { MapStore, StoreMapBounds } from "@/apis/Store/type";
@@ -17,13 +17,25 @@ type FoodStoresMapProps = {
   stores: MapStore[];
 };
 
-const POSITIONS = [
-  { left: "12%", top: "12%" },
-  { left: "55%", top: "18%" },
-  { left: "65%", top: "44%" },
-  { left: "24%", top: "55%" },
-  { left: "43%", top: "35%" },
-] as const;
+const toPercentPosition = (
+  store: MapStore,
+  bounds: StoreMapBounds,
+) => {
+  const longitudeRange = bounds.neLng - bounds.swLng;
+  const latitudeRange = bounds.neLat - bounds.swLat;
+
+  if (longitudeRange <= 0 || latitudeRange <= 0) return null;
+
+  const left = ((store.longitude - bounds.swLng) / longitudeRange) * 100;
+  const top = ((bounds.neLat - store.latitude) / latitudeRange) * 100;
+
+  if (left < 0 || left > 100 || top < 0 || top > 100) return null;
+
+  return {
+    left: `${left}%` as `${number}%`,
+    top: `${top}%` as `${number}%`,
+  };
+};
 
 export function FoodStoresMapFallback({
   budget,
@@ -32,9 +44,60 @@ export function FoodStoresMapFallback({
   onBoundsChange,
   stores,
 }: FoodStoresMapProps) {
+  const queryBounds = useMemo(
+    () => regionToMapBounds(initialRegion),
+    [initialRegion],
+  );
+  const validStores = useMemo(
+    () =>
+      stores.filter(
+        (store) =>
+          Number.isInteger(store.storeId) &&
+          store.storeId > 0 &&
+          Number.isFinite(store.latitude) &&
+          Number.isFinite(store.longitude),
+      ),
+    [stores],
+  );
+  const bounds = useMemo(() => {
+    if (validStores.length === 0) return queryBounds;
+
+    const latitudes = [
+      initialRegion.latitude,
+      ...validStores.map((store) => store.latitude),
+    ];
+    const longitudes = [
+      initialRegion.longitude,
+      ...validStores.map((store) => store.longitude),
+    ];
+    const latitudePadding = Math.max(
+      (Math.max(...latitudes) - Math.min(...latitudes)) * 0.12,
+      0.001,
+    );
+    const longitudePadding = Math.max(
+      (Math.max(...longitudes) - Math.min(...longitudes)) * 0.12,
+      0.001,
+    );
+
+    return {
+      swLat: Math.min(...latitudes) - latitudePadding,
+      swLng: Math.min(...longitudes) - longitudePadding,
+      neLat: Math.max(...latitudes) + latitudePadding,
+      neLng: Math.max(...longitudes) + longitudePadding,
+    };
+  }, [initialRegion.latitude, initialRegion.longitude, queryBounds, validStores]);
+  const storesWithPosition = useMemo(
+    () =>
+      validStores.flatMap((store) => {
+        const position = toPercentPosition(store, bounds);
+        return position ? [{ store, position }] : [];
+      }),
+    [bounds, validStores],
+  );
+
   useEffect(() => {
-    onBoundsChange(regionToMapBounds(initialRegion));
-  }, [initialRegion, onBoundsChange]);
+    onBoundsChange(queryBounds);
+  }, [onBoundsChange, queryBounds]);
 
   return (
     <MapContainer accessibilityLabel="설정한 위치 주변 맛집 지도 미리보기">
@@ -43,16 +106,10 @@ export function FoodStoresMapFallback({
       <Road $position="30%" />
       <Road $position="72%" />
 
+      <CurrentLocationMarker accessibilityLabel="사용자가 입력한 위치" />
       <LocationLabel>설정한 위치</LocationLabel>
 
-      {stores
-        .filter(
-          (store) => Number.isInteger(store.storeId) && store.storeId > 0,
-        )
-        .map((store, index) => {
-        const position = POSITIONS[index % POSITIONS.length];
-
-        return (
+      {storesWithPosition.map(({ store, position }) => (
           <MarkerPreview
             key={store.storeId}
             accessibilityLabel={`${store.name} 상세 보기`}
@@ -79,8 +136,7 @@ export function FoodStoresMapFallback({
               <PinEmoji>🍽️</PinEmoji>
             </Pin>
           </MarkerPreview>
-        );
-        })}
+        ))}
       {isLoading && (
         <LoadingBadge>
           <LoadingText>가게 불러오는 중...</LoadingText>
@@ -116,6 +172,20 @@ const LocationLabel = styled.Text`
   color: ${colors.primary800};
   font-size: 11px;
   font-weight: 800;
+`;
+
+const CurrentLocationMarker = styled.View`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  margin-top: -7px;
+  border-width: 3px;
+  border-color: ${colors.neutral0};
+  border-radius: 7px;
+  background-color: ${colors.errorRed};
 `;
 
 const MarkerPreview = styled.Pressable`

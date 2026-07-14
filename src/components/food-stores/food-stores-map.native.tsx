@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import React from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import MapView, { Marker, type Region } from "react-native-maps";
 import styled from "styled-components/native";
 
@@ -25,6 +25,44 @@ export function FoodStoresMap({
   onBoundsChange,
   stores,
 }: FoodStoresMapProps) {
+  const mapRef = useRef<MapView>(null);
+  const fittedLocationRef = useRef<string | null>(null);
+  const validStores = useMemo(
+    () =>
+      stores.filter(
+        (store) =>
+          Number.isInteger(store.storeId) &&
+          store.storeId > 0 &&
+          Number.isFinite(store.latitude) &&
+          Number.isFinite(store.longitude),
+      ),
+    [stores],
+  );
+
+  useEffect(() => {
+    if (validStores.length === 0) return;
+    const locationKey = `${initialRegion.latitude}:${initialRegion.longitude}`;
+    if (fittedLocationRef.current === locationKey) return;
+    fittedLocationRef.current = locationKey;
+
+    mapRef.current?.fitToCoordinates(
+      [
+        {
+          latitude: initialRegion.latitude,
+          longitude: initialRegion.longitude,
+        },
+        ...validStores.map((store) => ({
+          latitude: store.latitude,
+          longitude: store.longitude,
+        })),
+      ],
+      {
+        animated: true,
+        edgePadding: { top: 64, right: 48, bottom: 64, left: 48 },
+      },
+    );
+  }, [initialRegion.latitude, initialRegion.longitude, validStores]);
+
   const handleRegionChangeComplete = (region: Region) => {
     onBoundsChange(regionToMapBounds(region));
   };
@@ -32,6 +70,7 @@ export function FoodStoresMap({
   return (
     <MapContainer accessibilityLabel="설정한 위치 주변 맛집 지도">
       <MapView
+        ref={mapRef}
         key={`${initialRegion.latitude}:${initialRegion.longitude}`}
         initialRegion={initialRegion}
         moveOnMarkerPress={false}
@@ -42,15 +81,7 @@ export function FoodStoresMap({
         style={{ flex: 1 }}
         onRegionChangeComplete={handleRegionChangeComplete}
       >
-        {stores
-          .filter(
-            (store) =>
-              Number.isInteger(store.storeId) &&
-              store.storeId > 0 &&
-              Number.isFinite(store.latitude) &&
-              Number.isFinite(store.longitude),
-          )
-          .map((store) => (
+        {validStores.map((store) => (
           <Marker
             key={store.storeId}
             coordinate={{
@@ -58,6 +89,9 @@ export function FoodStoresMap({
               longitude: store.longitude,
             }}
             description={`${store.openTime}~${store.closeTime}`}
+            pinColor={
+              store.hasUsableCoupon ? colors.errorRed : colors.primary700
+            }
             onPress={() =>
               router.push({
                 pathname: "/StoreDetail",
@@ -67,23 +101,13 @@ export function FoodStoresMap({
                 },
               })
             }
-            title={store.name}
-          >
-            <MarkerContent>
-              <PriceBubble>
-                <PriceText>
-                  {typeof store.avgPrice === "number"
-                    ? `${store.avgPrice.toLocaleString()}원`
-                    : "가격 정보 없음"}
-                </PriceText>
-                {store.hasUsableCoupon && <CouponBadge>쿠폰</CouponBadge>}
-              </PriceBubble>
-              <Pin>
-                <PinEmoji>🍽️</PinEmoji>
-              </Pin>
-            </MarkerContent>
-          </Marker>
-          ))}
+            title={`${store.name}${
+              typeof store.avgPrice === "number"
+                ? ` · ${store.avgPrice.toLocaleString()}원`
+                : ""
+            }${store.hasUsableCoupon ? " · 쿠폰 사용 가능" : ""}`}
+          />
+        ))}
       </MapView>
       {isLoading && (
         <LoadingBadge accessibilityLiveRegion="polite">
@@ -101,47 +125,6 @@ const MapContainer = styled.View`
   border-color: ${colors.primary300};
   border-radius: 18px;
   background-color: ${colors.primary100};
-`;
-
-const MarkerContent = styled.View`
-  align-items: center;
-`;
-
-const PriceBubble = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-  padding: 5px 9px;
-  border-width: 1px;
-  border-color: ${colors.primary300};
-  border-radius: 14px;
-  background-color: ${colors.neutral0};
-`;
-
-const CouponBadge = styled.Text`
-  color: ${colors.errorRed};
-  font-size: 9px;
-  font-weight: 900;
-`;
-
-const PriceText = styled.Text`
-  color: ${colors.primary900};
-  font-size: 12px;
-  font-weight: 900;
-`;
-
-const Pin = styled.View`
-  width: 36px;
-  height: 36px;
-  margin-top: 3px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 18px;
-  background-color: ${colors.primary700};
-`;
-
-const PinEmoji = styled.Text`
-  font-size: 17px;
 `;
 
 const LoadingBadge = styled.View`

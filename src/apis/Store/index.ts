@@ -6,9 +6,29 @@ import type {
   StoreDetailResponse,
   StoreListQuery,
   StoreListResponse,
+  MapStore,
   StoreMapQuery,
   StoreMapResponse,
 } from "./type";
+
+type RawMapStore = Omit<MapStore, "storeId" | "latitude" | "longitude"> & {
+  storeId: number | string;
+  latitude?: number | string;
+  longitude?: number | string;
+  lat?: number | string;
+  lng?: number | string;
+};
+
+type RawStoreMapResponse = Omit<StoreMapResponse, "stores"> & {
+  stores: RawMapStore[];
+};
+
+const normalizeMapStore = (store: RawMapStore): MapStore => ({
+  ...store,
+  storeId: Number(store.storeId),
+  latitude: Number(store.latitude ?? store.lat),
+  longitude: Number(store.longitude ?? store.lng),
+});
 
 const appendNumber = (
   params: URLSearchParams,
@@ -34,12 +54,17 @@ export const getStoresInMap = async (
   appendNumber(params, "lng", query.lng);
   query.category?.forEach((category) => params.append("category", category));
 
-  const response = await api.get<StoreMapResponse>("/stores/map", {
+  const response = await api.get<RawStoreMapResponse>("/stores/map", {
     params,
     signal,
   });
 
-  return response.data;
+  return {
+    ...response.data,
+    stores: Array.isArray(response.data.stores)
+      ? response.data.stores.map(normalizeMapStore)
+      : [],
+  } satisfies StoreMapResponse;
 };
 
 export const getStores = async (
