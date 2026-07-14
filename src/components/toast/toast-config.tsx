@@ -49,7 +49,7 @@ const SuccessIcon = styled.View`
 
 const SuccessIconText = styled.Text`
   color: ${colors.neutral0};
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 900;
 `;
 
@@ -71,7 +71,7 @@ const ErrorCard = styled.View`
   margin-right: 16px;
   padding: 14px 18px;
   border-radius: 14px;
-  background-color: ${colors.primary800};
+  background-color: ${colors.errorRed};
   box-shadow: 0 8px 24px ${colors.primary300};
 `;
 
@@ -81,19 +81,19 @@ const ErrorIcon = styled.View`
   align-items: center;
   justify-content: center;
   border-radius: 13px;
-  background-color: ${colors.primary600};
+  background-color: #a80303;
 `;
 
 const ErrorIconText = styled.Text`
   color: ${colors.neutral0};
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 800;
 `;
 
 const ErrorMessage = styled.Text`
   flex-shrink: 1;
   color: ${colors.neutral0};
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 24px;
+  line-height: 20px;
 `;
