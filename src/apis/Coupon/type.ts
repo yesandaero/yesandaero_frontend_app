@@ -21,3 +21,14 @@ export type CouponListResponse = {
 export type RegisterCouponRequest = {
   token: string;
 };
+
+export type CouponDiscountType = "AMOUNT" | "PERCENT";
+
+export type UseCouponResponse = {
+  couponId: number;
+  name: string;
+  discountType: CouponDiscountType;
+  discountValue: number;
+  status: "USED";
+  usedAt: string;
+};

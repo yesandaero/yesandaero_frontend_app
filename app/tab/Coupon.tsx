@@ -1,5 +1,5 @@
 import * as Haptics from "expo-haptics";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { ActivityIndicator, ScrollView } from "react-native";
 import Toast from "react-native-toast-message";
 import styled from "styled-components/native";
@@ -14,7 +14,11 @@ import { CouponUseConfirmModal } from "@/components/coupon/coupon-use-confirm-mo
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { colors } from "@/constants/color";
 import { screenLayout } from "@/constants/layout";
-import { useMyCoupons, useRegisterCoupon } from "@/hooks/use-coupons";
+import {
+  useCouponUsage,
+  useMyCoupons,
+  useRegisterCoupon,
+} from "@/hooks/use-coupons";
 
 export default function Coupon() {
   const [isScannerVisible, setIsScannerVisible] = useState(false);
@@ -22,15 +26,10 @@ export default function Coupon() {
     null,
   );
   const [selectedCouponId, setSelectedCouponId] = useState<number | null>(null);
-  const [usedCouponIds, setUsedCouponIds] = useState<number[]>([]);
   const { coupons, isError, isLoading, isRefetching, refetch } =
     useMyCoupons("REGISTERED");
   const { registerCoupon, isRegistering } = useRegisterCoupon();
-
-  const visibleCoupons = useMemo(
-    () => coupons.filter((coupon) => !usedCouponIds.includes(coupon.couponId)),
-    [coupons, usedCouponIds],
-  );
+  const { consumeCoupon, isUsing } = useCouponUsage();
 
   const handleRecognizeQr = async (token: string) => {
     try {
@@ -49,15 +48,22 @@ export default function Coupon() {
     }
   };
 
-  const handleUseCoupon = () => {
+  const handleUseCoupon = async () => {
     if (selectedCouponId === null) return;
 
-    setUsedCouponIds((couponIds) => [...couponIds, selectedCouponId]);
-    setSelectedCouponId(null);
-    Toast.show({ type: "success", text1: "사용됐습니다!" });
+    try {
+      await consumeCoupon(selectedCouponId);
+      Toast.show({ type: "success", text1: "사용됐습니다!" });
 
-    if (process.env.EXPO_OS === "ios") {
-      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      if (process.env.EXPO_OS === "ios") {
+        void Haptics.notificationAsync(
+          Haptics.NotificationFeedbackType.Success,
+        );
+      }
+    } catch {
+      // API 오류는 useCouponUsage의 Toast에서 표시한다.
+    } finally {
+      setSelectedCouponId(null);
     }
   };
 
@@ -88,9 +94,9 @@ export default function Coupon() {
                 </RetryButtonText>
               </RetryButton>
             </StatusState>
-          ) : visibleCoupons.length > 0 ? (
+          ) : coupons.length > 0 ? (
             <CouponList>
-              {visibleCoupons.map((coupon) => (
+              {coupons.map((coupon) => (
                 <CouponCard
                   key={coupon.couponId}
                   coupon={coupon}
@@ -119,9 +125,10 @@ export default function Coupon() {
         onConfirm={() => setRegisteredCoupon(null)}
       />
       <CouponUseConfirmModal
+        isConfirming={isUsing}
         visible={selectedCouponId !== null}
         onCancel={() => setSelectedCouponId(null)}
-        onConfirm={handleUseCoupon}
+        onConfirm={() => void handleUseCoupon()}
       />
     </Page>
   );

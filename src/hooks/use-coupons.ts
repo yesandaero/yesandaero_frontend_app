@@ -1,5 +1,6 @@
-import { getMyCoupons, registerCoupon } from "@/apis/Coupon";
+import { consumeCoupon, getMyCoupons, registerCoupon } from "@/apis/Coupon";
 import type {
+  CouponListResponse,
   CouponStatus,
   RegisterCouponRequest,
 } from "@/apis/Coupon/type";
@@ -16,7 +17,9 @@ const couponKeys = {
 const isUnauthorizedError = (error: unknown) =>
   error instanceof AxiosError && error.response?.status === 401;
 
-const getCouponErrorMessage = (error: unknown, action: "list" | "register") => {
+type CouponAction = "list" | "register" | "use";
+
+const getCouponErrorMessage = (error: unknown, action: CouponAction) => {
   if (!(error instanceof AxiosError)) {
     return "요청을 처리하지 못했습니다.";
   }
@@ -27,6 +30,22 @@ const getCouponErrorMessage = (error: unknown, action: "list" | "register") => {
 
   if (action === "register" && error.response.status === 409) {
     return "이미 등록된 쿠폰입니다.";
+  }
+
+  if (action === "use") {
+    if (error.response.status === 403) {
+      return "본인 쿠폰만 사용할 수 있습니다.";
+    }
+
+    if (error.response.status === 404) {
+      return "존재하지 않는 쿠폰입니다.";
+    }
+
+    if (error.response.status === 409) {
+      return "이미 사용됐거나 만료된 쿠폰입니다.";
+    }
+
+    return "쿠폰을 사용하지 못했습니다.";
   }
 
   return action === "list"
@@ -82,5 +101,43 @@ export function useRegisterCoupon() {
   return {
     registerCoupon: mutation.mutateAsync,
     isRegistering: mutation.isPending,
+  };
+}
+
+export function useCouponUsage() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: [...couponKeys.all, "use"],
+    mutationFn: (couponId: number) => consumeCoupon(couponId),
+    onSuccess: (usedCoupon) => {
+      queryClient.setQueryData<CouponListResponse>(
+        couponKeys.mine("REGISTERED"),
+        (currentCoupons) =>
+          currentCoupons
+            ? {
+                ...currentCoupons,
+                coupons: currentCoupons.coupons.filter(
+                  (coupon) => coupon.couponId !== usedCoupon.couponId,
+                ),
+              }
+            : currentCoupons,
+      );
+
+      void queryClient.invalidateQueries({ queryKey: couponKeys.all });
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) return;
+
+      Toast.show({
+        type: "error",
+        text1: getCouponErrorMessage(error, "use"),
+      });
+    },
+    retry: false,
+  });
+
+  return {
+    consumeCoupon: mutation.mutateAsync,
+    isUsing: mutation.isPending,
   };
 }

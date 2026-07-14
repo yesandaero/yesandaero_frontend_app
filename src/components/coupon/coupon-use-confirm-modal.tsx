@@ -5,12 +5,14 @@ import styled from "styled-components/native";
 import { colors } from "@/constants/color";
 
 type CouponUseConfirmModalProps = {
+  isConfirming?: boolean;
   visible: boolean;
   onCancel: () => void;
   onConfirm: () => void;
 };
 
 export function CouponUseConfirmModal({
+  isConfirming = false,
   visible,
   onCancel,
   onConfirm,
@@ -30,11 +32,21 @@ export function CouponUseConfirmModal({
           <Description>사용된 쿠폰은 쿠폰함에서 삭제됩니다</Description>
 
           <ButtonRow>
-            <CancelButton accessibilityRole="button" onPress={onCancel}>
+            <CancelButton
+              accessibilityRole="button"
+              disabled={isConfirming}
+              onPress={onCancel}
+            >
               <CancelButtonText>아니요</CancelButtonText>
             </CancelButton>
-            <ConfirmButton accessibilityRole="button" onPress={onConfirm}>
-              <ConfirmButtonText>예</ConfirmButtonText>
+            <ConfirmButton
+              accessibilityRole="button"
+              disabled={isConfirming}
+              onPress={onConfirm}
+            >
+              <ConfirmButtonText>
+                {isConfirming ? "처리 중..." : "예"}
+              </ConfirmButtonText>
             </ConfirmButton>
           </ButtonRow>
         </ConfirmCard>
