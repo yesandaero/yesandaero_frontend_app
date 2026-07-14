@@ -72,7 +72,7 @@ const ErrorCard = styled.View`
   padding: 14px 18px;
   border-radius: 14px;
   background-color: ${colors.errorRed};
-  box-shadow: 0 8px 24px ${colors.primary300};
+  box-shadow: 1px 1px 1px red;
 `;
 
 const ErrorIcon = styled.View`
