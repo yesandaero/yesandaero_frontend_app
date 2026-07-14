@@ -50,6 +50,7 @@ export function CouponScanModal({
     if (isRegistering || scanLockRef.current) return;
 
     if (!token) {
+      scanLockRef.current = true;
       Toast.show({
         type: "error",
         text1: "쿠폰 등록용 QR이 아닙니다.",
