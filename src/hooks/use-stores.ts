@@ -9,12 +9,14 @@ import type {
   StoreDetailLocation,
   StoreListFilters,
   StoreMapQuery,
+  StoreMenu,
 } from "@/apis/Store/type";
 import {
   keepPreviousData,
   useInfiniteQuery,
   useQueries,
   useQuery,
+  useQueryClient,
 } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useEffect, useMemo } from "react";
@@ -25,6 +27,7 @@ const storeKeys = {
   categories: () => [...storeKeys.all, "categories"] as const,
   detail: (storeId: number | null, location?: StoreDetailLocation) =>
     [...storeKeys.all, "detail", storeId, location] as const,
+  menus: (storeId: number) => [...storeKeys.all, "menus", storeId] as const,
   list: (filters: StoreListFilters | null) =>
     [...storeKeys.all, "list", filters] as const,
   map: (query: StoreMapQuery | null) =>
@@ -148,6 +151,7 @@ export function useStoreDetail(
   storeId: number | null,
   location?: StoreDetailLocation,
 ) {
+  const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: storeKeys.detail(storeId, location),
     queryFn: ({ signal }) => getStoreDetail(storeId!, location, signal),
@@ -158,6 +162,15 @@ export function useStoreDetail(
   useEffect(() => {
     if (query.error) showStoreError(query.error, "detail");
   }, [query.error]);
+
+  useEffect(() => {
+    if (!query.data) return;
+
+    queryClient.setQueryData<StoreMenu[]>(
+      storeKeys.menus(query.data.storeId),
+      query.data.menus,
+    );
+  }, [query.data, queryClient]);
 
   return {
     store: query.data,
@@ -171,20 +184,17 @@ export function useStoreDetail(
 export function useStoreMenuSearch(
   stores: MapStore[],
   searchText: string,
-  location?: StoreDetailLocation,
 ) {
   const normalizedSearchText = searchText
     .trim()
     .toLocaleLowerCase("ko-KR");
   const isSearching = normalizedSearchText.length > 0;
-  const detailQueries = useQueries({
+  const cachedMenuQueries = useQueries({
     queries: stores.map((store) => ({
-      queryKey: storeKeys.detail(store.storeId, location),
-      queryFn: ({ signal }: { signal: AbortSignal }) =>
-        getStoreDetail(store.storeId, location, signal),
-      enabled: isSearching,
-      staleTime: 5 * 60 * 1000,
-      retry: false,
+      queryKey: storeKeys.menus(store.storeId),
+      queryFn: async (): Promise<StoreMenu[]> => [],
+      enabled: false,
+      staleTime: Infinity,
     })),
   });
 
@@ -195,7 +205,7 @@ export function useStoreMenuSearch(
       const matchesStoreName = store.name
         .toLocaleLowerCase("ko-KR")
         .includes(normalizedSearchText);
-      const matchesMenuName = detailQueries[index]?.data?.menus.some((menu) =>
+      const matchesMenuName = cachedMenuQueries[index]?.data?.some((menu) =>
         menu.name
           .toLocaleLowerCase("ko-KR")
           .includes(normalizedSearchText),
@@ -203,11 +213,9 @@ export function useStoreMenuSearch(
 
       return matchesStoreName || matchesMenuName;
     });
-  }, [detailQueries, isSearching, normalizedSearchText, stores]);
+  }, [cachedMenuQueries, isSearching, normalizedSearchText, stores]);
 
   return {
     stores: filteredStores,
-    isSearchingMenus:
-      isSearching && detailQueries.some((query) => query.isPending),
   };
 }

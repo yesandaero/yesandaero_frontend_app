@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
@@ -151,47 +151,9 @@ export default function FoodStores() {
     [locationKey],
   );
 
-  const searchLocation = useMemo(
-    () => ({ lat: currentLatitude, lng: currentLongitude }),
-    [currentLatitude, currentLongitude],
-  );
   const normalizedQuery = query.trim();
-  const {
-    stores: visibleMapStores,
-    isSearchingMenus: isSearchingMapMenus,
-  } = useStoreMenuSearch(mapStores, query, searchLocation);
-  const {
-    stores: visibleListStores,
-    isSearchingMenus: isSearchingListMenus,
-  } = useStoreMenuSearch(
-    listStores,
-    query,
-    searchLocation,
-  );
-  const isListSearchLoading =
-    normalizedQuery.length > 0 &&
-    (isSearchingListMenus || isFetchingNextPage || hasNextPage);
-
-  useEffect(() => {
-    if (
-      viewMode !== "list" ||
-      normalizedQuery.length === 0 ||
-      !hasNextPage ||
-      isFetchingNextPage ||
-      isListError
-    ) {
-      return;
-    }
-
-    void fetchNextPage();
-  }, [
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isListError,
-    normalizedQuery,
-    viewMode,
-  ]);
+  const { stores: visibleMapStores } = useStoreMenuSearch(mapStores, query);
+  const { stores: visibleListStores } = useStoreMenuSearch(listStores, query);
 
   return (
     <Page>
@@ -232,9 +194,6 @@ export default function FoodStores() {
                   가게를 불러오지 못했어요. 눌러서 다시 시도해 주세요.
                 </ErrorBanner>
               )}
-              {normalizedQuery.length > 0 && isSearchingMapMenus && (
-                <NoticeBanner>메뉴를 검색하고 있어요.</NoticeBanner>
-              )}
               <FoodStoresMap
                 budget={budget}
                 initialRegion={initialMapRegion}
@@ -253,18 +212,11 @@ export default function FoodStores() {
                 </ErrorBanner>
               ) : (
                 <>
-                  {isListSearchLoading && (
-                    <NoticeBanner>
-                      전체 가게의 메뉴를 검색하고 있어요.
-                    </NoticeBanner>
-                  )}
-                  {visibleListStores.length > 0 || !isListSearchLoading ? (
-                    <FoodStoreList
-                      budget={budget}
-                      categories={categories}
-                      stores={visibleListStores}
-                    />
-                  ) : null}
+                  <FoodStoreList
+                    budget={budget}
+                    categories={categories}
+                    stores={visibleListStores}
+                  />
                   {hasNextPage && normalizedQuery.length === 0 && (
                     <LoadMoreButton
                       accessibilityRole="button"
