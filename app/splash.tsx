@@ -5,17 +5,22 @@ import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
 import { colors } from "@/constants/color";
+import { useAuthSessionStore } from "@/stores/auth-session-store";
 
 const SPLASH_DURATION_MS = 2000;
 
 export default function Splash() {
+  const isAuthenticated = useAuthSessionStore(
+    (state) => state.isAuthenticated,
+  );
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/Login");
+      router.replace(isAuthenticated ? "/tab/FoodStores" : "/Login");
     }, SPLASH_DURATION_MS);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <SplashScroll

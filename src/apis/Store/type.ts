@@ -47,10 +47,7 @@ export type StoreMapResponse = {
   truncated: boolean;
 };
 
-export type StoreListSort =
-  | "PRICE_ASC"
-  | "DISCOUNT_DESC"
-  | "DISTANCE_ASC";
+export type StoreListSort = "PRICE_ASC" | "DISCOUNT_DESC" | "DISTANCE_ASC";
 
 export type StoreListQuery = {
   category?: StoreCategoryCode[];

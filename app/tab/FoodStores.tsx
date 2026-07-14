@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ScrollView } from "react-native";
 import styled from "styled-components/native";
 
@@ -50,8 +50,7 @@ export default function FoodStores() {
     () => regionToMapBounds(initialMapRegion),
     [initialMapRegion],
   );
-  const [selectedCategory, setSelectedCategory] =
-    useState<FoodCategory>("ALL");
+  const [selectedCategory, setSelectedCategory] = useState<FoodCategory>("ALL");
   const [selectedSort, setSelectedSort] =
     useState<FoodSortOption>("DISTANCE_ASC");
   const [viewMode, setViewMode] = useState<FoodViewMode>("map");
@@ -82,7 +81,7 @@ export default function FoodStores() {
             maxPrice: budget,
             category:
               selectedCategory === "ALL" ? undefined : [selectedCategory],
-            limit: 100,
+            limit: 15,
             lat: currentLatitude,
             lng: currentLongitude,
           }
@@ -156,16 +155,43 @@ export default function FoodStores() {
     () => ({ lat: currentLatitude, lng: currentLongitude }),
     [currentLatitude, currentLongitude],
   );
-  const visibleMapStores = useStoreMenuSearch(
-    mapStores,
-    query,
-    searchLocation,
-  );
-  const visibleListStores = useStoreMenuSearch(
+  const normalizedQuery = query.trim();
+  const {
+    stores: visibleMapStores,
+    isSearchingMenus: isSearchingMapMenus,
+  } = useStoreMenuSearch(mapStores, query, searchLocation);
+  const {
+    stores: visibleListStores,
+    isSearchingMenus: isSearchingListMenus,
+  } = useStoreMenuSearch(
     listStores,
     query,
     searchLocation,
   );
+  const isListSearchLoading =
+    normalizedQuery.length > 0 &&
+    (isSearchingListMenus || isFetchingNextPage || hasNextPage);
+
+  useEffect(() => {
+    if (
+      viewMode !== "list" ||
+      normalizedQuery.length === 0 ||
+      !hasNextPage ||
+      isFetchingNextPage ||
+      isListError
+    ) {
+      return;
+    }
+
+    void fetchNextPage();
+  }, [
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isListError,
+    normalizedQuery,
+    viewMode,
+  ]);
 
   return (
     <Page>
@@ -206,6 +232,9 @@ export default function FoodStores() {
                   가게를 불러오지 못했어요. 눌러서 다시 시도해 주세요.
                 </ErrorBanner>
               )}
+              {normalizedQuery.length > 0 && isSearchingMapMenus && (
+                <NoticeBanner>메뉴를 검색하고 있어요.</NoticeBanner>
+              )}
               <FoodStoresMap
                 budget={budget}
                 initialRegion={initialMapRegion}
@@ -224,12 +253,19 @@ export default function FoodStores() {
                 </ErrorBanner>
               ) : (
                 <>
-                  <FoodStoreList
-                    budget={budget}
-                    categories={categories}
-                    stores={visibleListStores}
-                  />
-                  {hasNextPage && (
+                  {isListSearchLoading && (
+                    <NoticeBanner>
+                      전체 가게의 메뉴를 검색하고 있어요.
+                    </NoticeBanner>
+                  )}
+                  {visibleListStores.length > 0 || !isListSearchLoading ? (
+                    <FoodStoreList
+                      budget={budget}
+                      categories={categories}
+                      stores={visibleListStores}
+                    />
+                  ) : null}
+                  {hasNextPage && normalizedQuery.length === 0 && (
                     <LoadMoreButton
                       accessibilityRole="button"
                       disabled={isFetchingNextPage || isListRefetching}

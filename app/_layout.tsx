@@ -9,6 +9,7 @@ import { View } from "react-native";
 import Toast from "react-native-toast-message";
 
 const PUBLIC_PATHS = new Set(["/", "/splash", "/Login", "/Signup"]);
+const GUEST_ONLY_PATHS = new Set(["/Login", "/Signup"]);
 
 function RootNavigator() {
   const pathname = usePathname();
@@ -20,6 +21,7 @@ function RootNavigator() {
   );
   const previousAuthentication = useRef<boolean | null>(null);
   const isProtectedPath = !PUBLIC_PATHS.has(pathname);
+  const isGuestOnlyPath = GUEST_ONLY_PATHS.has(pathname);
 
   useEffect(() => {
     let isMounted = true;
@@ -27,10 +29,15 @@ function RootNavigator() {
     void Promise.all([
       tokenStorage.getAccessToken(),
       tokenStorage.getRefreshToken(),
-    ]).then(([accessToken, refreshToken]) => {
-      if (!isMounted) return;
-      setAuthenticated(Boolean(accessToken && refreshToken));
-    });
+    ])
+      .then(([accessToken, refreshToken]) => {
+        if (!isMounted) return;
+        setAuthenticated(Boolean(accessToken && refreshToken));
+      })
+      .catch(() => {
+        if (!isMounted) return;
+        setAuthenticated(false);
+      });
 
     return () => {
       isMounted = false;
@@ -51,12 +58,18 @@ function RootNavigator() {
         });
       }
       router.replace("/Login");
+      return;
     }
-  }, [isAuthenticated, isProtectedPath, pathname]);
+
+    if (isAuthenticated && isGuestOnlyPath) {
+      router.replace("/tab/FoodStores");
+    }
+  }, [isAuthenticated, isGuestOnlyPath, isProtectedPath, pathname]);
 
   if (
     isAuthenticated === null ||
-    (!isAuthenticated && isProtectedPath)
+    (!isAuthenticated && isProtectedPath) ||
+    (isAuthenticated && isGuestOnlyPath)
   ) {
     return <View style={{ flex: 1 }} />;
   }

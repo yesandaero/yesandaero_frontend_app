@@ -188,7 +188,7 @@ export function useStoreMenuSearch(
     })),
   });
 
-  return useMemo(() => {
+  const filteredStores = useMemo(() => {
     if (!isSearching) return stores;
 
     return stores.filter((store, index) => {
@@ -204,4 +204,10 @@ export function useStoreMenuSearch(
       return matchesStoreName || matchesMenuName;
     });
   }, [detailQueries, isSearching, normalizedSearchText, stores]);
+
+  return {
+    stores: filteredStores,
+    isSearchingMenus:
+      isSearching && detailQueries.some((query) => query.isPending),
+  };
 }

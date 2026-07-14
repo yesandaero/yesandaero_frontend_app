@@ -104,7 +104,10 @@ const handleRefreshFailure = async (refreshError: unknown) => {
       ? refreshError.response?.status
       : undefined;
 
-  if (refreshStatus === 401 || !(refreshError instanceof AxiosError)) {
+  const shouldEndSession =
+    !(refreshError instanceof AxiosError) || refreshStatus !== undefined;
+
+  if (shouldEndSession) {
     await tokenStorage.clearTokens();
     showSessionExpiredToast();
     router.replace("/Login");
