@@ -81,6 +81,17 @@ export function FoodStoresMap({
         style={{ flex: 1 }}
         onRegionChangeComplete={handleRegionChangeComplete}
       >
+        <Marker
+          key={`current-location:${initialRegion.latitude}:${initialRegion.longitude}`}
+          coordinate={{
+            latitude: initialRegion.latitude,
+            longitude: initialRegion.longitude,
+          }}
+          description="사용자가 설정에서 선택한 위치입니다."
+          pinColor={colors.primary500}
+          title="설정한 현재 위치"
+          zIndex={1000}
+        />
         {validStores.map((store) => (
           <Marker
             key={store.storeId}

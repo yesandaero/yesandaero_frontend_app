@@ -18,7 +18,7 @@ type FoodStoresMapProps = {
 };
 
 const toPercentPosition = (
-  store: MapStore,
+  coordinate: { latitude: number; longitude: number },
   bounds: StoreMapBounds,
 ) => {
   const longitudeRange = bounds.neLng - bounds.swLng;
@@ -26,8 +26,8 @@ const toPercentPosition = (
 
   if (longitudeRange <= 0 || latitudeRange <= 0) return null;
 
-  const left = ((store.longitude - bounds.swLng) / longitudeRange) * 100;
-  const top = ((bounds.neLat - store.latitude) / latitudeRange) * 100;
+  const left = ((coordinate.longitude - bounds.swLng) / longitudeRange) * 100;
+  const top = ((bounds.neLat - coordinate.latitude) / latitudeRange) * 100;
 
   if (left < 0 || left > 100 || top < 0 || top > 100) return null;
 
@@ -101,6 +101,17 @@ export function FoodStoresMap({
       }),
     [bounds, validStores],
   );
+  const currentLocationPosition = useMemo(
+    () =>
+      toPercentPosition(
+        {
+          latitude: initialRegion.latitude,
+          longitude: initialRegion.longitude,
+        },
+        bounds,
+      ),
+    [bounds, initialRegion.latitude, initialRegion.longitude],
+  );
 
   useEffect(() => {
     onBoundsChange(queryBounds);
@@ -122,6 +133,16 @@ export function FoodStoresMap({
         }}
         title="가게 위치 지도"
       />
+
+      {currentLocationPosition && (
+        <CurrentLocationMarker
+          accessibilityLabel="사용자가 설정한 현재 위치"
+          style={currentLocationPosition}
+        >
+          <CurrentLocationDot />
+          <CurrentLocationLabel>현재 위치</CurrentLocationLabel>
+        </CurrentLocationMarker>
+      )}
 
       {storesWithPosition.map(({ store, position }) => (
         <StoreMarker
@@ -176,6 +197,34 @@ const StoreMarker = styled.Pressable`
   align-items: center;
   margin-left: -38px;
   margin-top: -16px;
+`;
+
+const CurrentLocationMarker = styled.View`
+  position: absolute;
+  z-index: 2;
+  align-items: center;
+  margin-left: -28px;
+  margin-top: -8px;
+`;
+
+const CurrentLocationDot = styled.View`
+  width: 18px;
+  height: 18px;
+  border-width: 3px;
+  border-color: ${colors.neutral0};
+  border-radius: 9px;
+  background-color: ${colors.primary500};
+`;
+
+const CurrentLocationLabel = styled.Text`
+  margin-top: 3px;
+  padding: 2px 6px;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: ${colors.neutral0};
+  color: ${colors.primary900};
+  font-size: 10px;
+  font-weight: 900;
 `;
 
 const PriceBubble = styled.View`
