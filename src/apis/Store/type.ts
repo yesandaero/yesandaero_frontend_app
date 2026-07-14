@@ -75,8 +75,8 @@ export type StoreMenu = {
   menuId: number;
   name: string;
   description: string;
-  price: number;
-  discountedPrice: number;
+  price: number | null;
+  discountedPrice: number | null;
 };
 
 export type StoreDetailResponse = {
@@ -87,11 +87,11 @@ export type StoreDetailResponse = {
   latitude: number;
   longitude: number;
   phone: string;
-  avgPrice: number;
+  avgPrice: number | null;
   description: string;
   openTime: string;
   closeTime: string;
-  minOrderAmount: number;
+  minOrderAmount: number | null;
   distanceMeters: number | null;
   walkingMinutes: number | null;
   menus: StoreMenu[];

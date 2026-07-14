@@ -22,7 +22,14 @@ export function StoreHighlights({
   walkingMinutes,
 }: StoreHighlightsProps) {
   const maxDiscountRate = menus.reduce((maxRate, menu) => {
-    if (menu.price <= 0 || menu.discountedPrice >= menu.price) return maxRate;
+    if (
+      typeof menu.price !== "number" ||
+      typeof menu.discountedPrice !== "number" ||
+      menu.price <= 0 ||
+      menu.discountedPrice >= menu.price
+    ) {
+      return maxRate;
+    }
 
     return Math.max(
       maxRate,

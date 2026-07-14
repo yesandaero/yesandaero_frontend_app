@@ -1,17 +1,16 @@
-import { Redirect, router, useLocalSearchParams } from "expo-router";
-import React, { useMemo } from "react";
-import { ActivityIndicator, ScrollView } from "react-native";
-import styled from "styled-components/native";
 import { AppBottomNavigation } from "@/components/navigation/app-bottom-navigation";
 import { StoreBudgetCard } from "@/components/store-detail/store-budget-card";
 import { StoreDetailHeader } from "@/components/store-detail/store-detail-header";
-import { StoreDirections } from "@/components/store-detail/store-directions";
 import { StoreHighlights } from "@/components/store-detail/store-highlights";
 import { StoreMenuSection } from "@/components/store-detail/store-menu-section";
 import { StoreProfile } from "@/components/store-detail/store-profile";
 import { colors } from "@/constants/color";
 import { useStoreDetail } from "@/hooks/use-stores";
 import { useSettingsStore } from "@/stores/settings-store";
+import { Redirect, router, useLocalSearchParams } from "expo-router";
+import React, { useMemo } from "react";
+import { ActivityIndicator, ScrollView } from "react-native";
+import styled from "styled-components/native";
 
 export default function StoreDetail() {
   const { budget: budgetParam, storeId: storeIdParam } = useLocalSearchParams<{
@@ -43,10 +42,16 @@ export default function StoreDetail() {
     storeId,
     detailLocation,
   );
-  const lowestMenuPrice = store?.menus.reduce(
-    (lowestPrice, menu) => Math.min(lowestPrice, menu.discountedPrice),
-    Number.POSITIVE_INFINITY,
-  );
+  const lowestMenuPrice = store?.menus.reduce((lowestPrice, menu) => {
+    const effectivePrice =
+      typeof menu.discountedPrice === "number"
+        ? menu.discountedPrice
+        : menu.price;
+
+    return typeof effectivePrice === "number" && effectivePrice >= 0
+      ? Math.min(lowestPrice, effectivePrice)
+      : lowestPrice;
+  }, Number.POSITIVE_INFINITY);
   const orderPrice =
     typeof lowestMenuPrice === "number" && Number.isFinite(lowestMenuPrice)
       ? lowestMenuPrice
@@ -112,11 +117,6 @@ export default function StoreDetail() {
                 openTime={store.openTime}
                 phone={store.phone}
                 walkingMinutes={store.walkingMinutes}
-              />
-              <StoreDirections
-                latitude={store.latitude}
-                longitude={store.longitude}
-                name={store.name}
               />
             </>
           ) : (

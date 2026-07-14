@@ -56,6 +56,7 @@ const Container = styled.View`
   border-radius: 12px;
   border: 1px solid ${colors.neutral100};
   padding: 0px 20px;
+  
   flex-direction: row;
   align-items: center;
 `;

@@ -5,11 +5,11 @@ import { colors } from "@/constants/color";
 
 type StoreProfileProps = {
   address: string;
-  avgPrice: number;
+  avgPrice: number | null;
   closeTime: string;
   description: string;
   distanceMeters: number | null;
-  minOrderAmount: number;
+  minOrderAmount: number | null;
   openTime: string;
   phone: string;
   walkingMinutes: number | null;
@@ -54,11 +54,19 @@ export function StoreProfile({
         </InformationRow>
         <InformationRow>
           <Label>최소주문</Label>
-          <Value selectable>{minOrderAmount.toLocaleString()}원</Value>
+          <Value selectable>
+            {typeof minOrderAmount === "number"
+              ? `${minOrderAmount.toLocaleString()}원`
+              : "정보 없음"}
+          </Value>
         </InformationRow>
         <InformationRow>
           <Label>평균가격</Label>
-          <Value selectable>{avgPrice.toLocaleString()}원</Value>
+          <Value selectable>
+            {typeof avgPrice === "number"
+              ? `${avgPrice.toLocaleString()}원`
+              : "정보 없음"}
+          </Value>
         </InformationRow>
         <InformationRow>
           <Label>소개</Label>

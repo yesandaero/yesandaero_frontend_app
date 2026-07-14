@@ -15,7 +15,16 @@ export function StoreMenuSection({ menus }: StoreMenuSectionProps) {
       {menus.length > 0 ? (
         <MenuList>
           {menus.map((menu) => {
-            const isDiscounted = menu.discountedPrice < menu.price;
+            const hasPrice = typeof menu.price === "number";
+            const hasDiscountedPrice =
+              typeof menu.discountedPrice === "number";
+            const isDiscounted =
+              hasPrice &&
+              hasDiscountedPrice &&
+              menu.discountedPrice! < menu.price!;
+            const currentPrice = hasDiscountedPrice
+              ? menu.discountedPrice
+              : menu.price;
 
             return (
               <MenuRow key={menu.menuId}>
@@ -28,11 +37,13 @@ export function StoreMenuSection({ menus }: StoreMenuSectionProps) {
                 <PriceGroup>
                   {isDiscounted ? (
                     <OriginalPrice selectable>
-                      {menu.price.toLocaleString()}원
+                      {menu.price!.toLocaleString()}원
                     </OriginalPrice>
                   ) : null}
                   <CurrentPrice $discounted={isDiscounted} selectable>
-                    {menu.discountedPrice.toLocaleString()}원
+                    {typeof currentPrice === "number"
+                      ? `${currentPrice.toLocaleString()}원`
+                      : "가격 정보 없음"}
                   </CurrentPrice>
                 </PriceGroup>
               </MenuRow>

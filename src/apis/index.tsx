@@ -9,7 +9,7 @@ import Toast from "react-native-toast-message";
 
 import { useAuthSessionStore } from "@/stores/auth-session-store";
 
-const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL?.trim();
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 const ACCESS_TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 const REFRESH_PATH = "/auth/token/refresh";
@@ -127,7 +127,7 @@ const refreshAccessToken = async () => {
     `${BASE_URL ?? ""}${REFRESH_PATH}`,
     { refreshToken },
     {
-      timeout: 5000,
+      timeout: 10000,
       headers: { "Content-Type": "application/json" },
     },
   );

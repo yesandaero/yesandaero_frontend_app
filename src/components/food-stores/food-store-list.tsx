@@ -50,8 +50,8 @@ export function FoodStoreList({
                 <StoreName numberOfLines={1}>{store.name}</StoreName>
               </StoreTopRow>
               <StoreMeta>
-                {getCategoryLabel(store.category, categories)} · {store.openTime}
-                ~{store.closeTime}
+                {getCategoryLabel(store.category, categories)} ·{" "}
+                {store.openTime}~{store.closeTime}
               </StoreMeta>
               <StoreBottomRow>
                 <Distance>
